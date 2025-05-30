@@ -7,6 +7,7 @@
     <meta name="keywords" content="mortgage calculator, home loan calculator, payment calculator, interest calculator, amortization schedule">
     <title>Smart Mortgage Calculator | Calculate Your Home Loan Payments</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #2c3e50;
@@ -342,29 +343,66 @@
         .chart-container {
             margin-top: 30px;
             height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             background: white;
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             padding: 20px;
         }
         
-        .chart-placeholder {
-            width: 100%;
-            height: 100%;
+        .tabs {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #6c757d;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e1e5eb;
         }
         
-        .chart-placeholder i {
-            font-size: 3rem;
-            margin-bottom: 15px;
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
             color: var(--secondary);
+            border-bottom: 3px solid var(--secondary);
+        }
+        
+        .tab-content {
+            display: none;
+            height: calc(100% - 50px);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .amortization-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .amortization-table th {
+            background-color: #f8f9fa;
+            padding: 10px;
+            text-align: left;
+            border-bottom: 2px solid #e1e5eb;
+        }
+        
+        .amortization-table td {
+            padding: 10px;
+            border-bottom: 1px solid #e1e5eb;
+        }
+        
+        .amortization-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .amortization-table-container {
+            max-height: 300px;
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -463,10 +501,31 @@
                     </div>
                     
                     <div class="chart-container">
-                        <div class="chart-placeholder">
-                            <i class="fas fa-chart-pie"></i>
-                            <h3>Payment Breakdown</h3>
-                            <p>Principal vs. Interest Visualization</p>
+                        <div class="tabs">
+                            <div class="tab active" data-tab="chart">Payment Breakdown</div>
+                            <div class="tab" data-tab="amortization">Amortization Schedule</div>
+                        </div>
+                        
+                        <div class="tab-content active" id="chart-content">
+                            <canvas id="paymentChart"></canvas>
+                        </div>
+                        
+                        <div class="tab-content" id="amortization-content">
+                            <div class="amortization-table-container">
+                                <table class="amortization-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Year</th>
+                                            <th>Principal Paid</th>
+                                            <th>Interest Paid</th>
+                                            <th>Remaining Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="amortization-body">
+                                        <!-- Table rows will be generated here -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     
@@ -547,7 +606,11 @@
         const calculateBtn = document.getElementById('calculate-btn');
         const resultSummary = document.querySelector('.result-summary');
         const resultValues = document.querySelectorAll('.result-value');
-        
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const amortizationBody = document.getElementById('amortization-body');
+        let paymentChart = null;
+
         // Initialize values
         loanAmountSlider.value = loanAmountInput.value;
         interestRateSlider.value = interestRateInput.value;
@@ -640,11 +703,25 @@
                 formatCurrency(this.value);
         });
         
+        // Tab switching
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                const tabName = tab.getAttribute('data-tab');
+                document.getElementById(`${tabName}-content`).classList.add('active');
+            });
+        });
+        
         // Calculate mortgage
         function calculateMortgage() {
             const loanAmount = parseFloat(loanAmountInput.value) || 300000;
             const downPayment = parseFloat(downPaymentInput.value) || 60000;
-            const principal = loanAmount - downPayment;
+            const principal = Math.max(0, loanAmount - downPayment);
             const interestRate = parseFloat(interestRateInput.value) || 4.5;
             const loanTerm = parseFloat(loanTermInput.value) || 30;
             
@@ -664,18 +741,125 @@
             
             // Calculate pay-off date
             const currentDate = new Date();
-            const payoffDate = new Date(currentDate.setMonth(currentDate.getMonth() + payments));
+            const payoffDate = new Date(currentDate);
+            payoffDate.setMonth(payoffDate.getMonth() + payments);
             const payoffMonth = payoffDate.toLocaleString('default', { month: 'long' });
             const payoffYear = payoffDate.getFullYear();
+            
+            // Generate amortization schedule
+            generateAmortizationSchedule(principal, monthlyRate, payments, monthly);
+            
+            // Create chart
+            createPaymentChart(principal, totalInterest);
             
             // Update results summary
             resultSummary.textContent = `Based on a ${formatCurrency(loanAmount)} loan at ${interestRate}% for ${loanTerm} years`;
             
             // Update result boxes
-            resultValues[0].innerHTML = `<span>${formatCurrency(Math.floor(monthly))}</span>.${Math.round((monthly % 1) * 100).toString().padStart(2, '0')}`;
+            const dollars = Math.floor(monthly);
+            const cents = Math.round((monthly - dollars) * 100);
+            resultValues[0].innerHTML = `<span>${formatCurrency(dollars)}</span>.${cents.toString().padStart(2, '0')}`;
             resultValues[1].innerHTML = `<span>${formatCurrency(Math.round(totalInterest))}</span>.00`;
             resultValues[2].innerHTML = `<span>${formatCurrency(Math.round(totalPayment))}</span>.00`;
             resultValues[3].textContent = `${payoffMonth} ${payoffYear}`;
+        }
+        
+        // Generate amortization schedule
+        function generateAmortizationSchedule(principal, monthlyRate, payments, monthlyPayment) {
+            let balance = principal;
+            let amortizationData = [];
+            
+            // Calculate yearly amortization
+            for (let year = 1; year <= payments / 12; year++) {
+                let yearlyPrincipal = 0;
+                let yearlyInterest = 0;
+                
+                for (let month = 1; month <= 12; month++) {
+                    if (balance <= 0) break;
+                    
+                    const interestPayment = balance * monthlyRate;
+                    const principalPayment = monthlyPayment - interestPayment;
+                    
+                    yearlyPrincipal += principalPayment;
+                    yearlyInterest += interestPayment;
+                    balance -= principalPayment;
+                }
+                
+                amortizationData.push({
+                    year: year,
+                    principal: yearlyPrincipal,
+                    interest: yearlyInterest,
+                    balance: balance
+                });
+            }
+            
+            // Update table
+            amortizationBody.innerHTML = '';
+            amortizationData.forEach(data => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${data.year}</td>
+                    <td>${formatCurrency(data.principal)}</td>
+                    <td>${formatCurrency(data.interest)}</td>
+                    <td>${formatCurrency(data.balance)}</td>
+                `;
+                amortizationBody.appendChild(row);
+            });
+        }
+        
+        // Create payment chart
+        function createPaymentChart(principal, totalInterest) {
+            const ctx = document.getElementById('paymentChart').getContext('2d');
+            
+            // Destroy previous chart if exists
+            if (paymentChart) {
+                paymentChart.destroy();
+            }
+            
+            paymentChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Principal', 'Interest'],
+                    datasets: [{
+                        data: [principal, totalInterest],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.8)',
+                            'rgba(231, 76, 60, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(52, 152, 219, 1)',
+                            'rgba(231, 76, 60, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    label += formatCurrency(context.parsed);
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         }
         
         // Initial calculation
