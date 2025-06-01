@@ -850,28 +850,11 @@
             }
             
             .nav-links {
-                display: none; /* Will be toggled by JS */
+                display: none;
             }
             
             .mobile-menu-btn {
                 display: block;
-            }
-
-            /* Make nav-links flex for mobile when JS toggles it */
-            .nav-links.active-mobile {
-                display: flex;
-                flex-direction: column;
-                position: absolute;
-                top: 100%; /* Position below header */
-                left: 0;
-                width: 100%;
-                background-color: white;
-                box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-                padding: 1rem 0;
-            }
-            .nav-links.active-mobile li {
-                text-align: center;
-                padding: 0.5rem 0;
             }
         }
 
@@ -1020,16 +1003,13 @@
 
     <!-- Top Ad Space -->
     <div class="container">
-    <div class="ad-space">
-        <span class="ad-label">Advertisement</span>
-        <div class="ad-container leaderboard">
-            <a href="<script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=728x90&ga=g"></script>
-            <noscript><a href="https://yllix.com/publishers/772531" target="_blank"><img src="//ylx-aff.advertica-cdn.com/pub/728x90.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" /></a></noscript>" target="_blank" rel="nofollow">
-                <span>ylliX Leaderboard Ad (728x90)</span>
-            </a>
+        <div class="ad-space">
+            <span class="ad-label">Advertisement</span>
+            <div class="ad-container leaderboard">
+                <span>Adsterra Leaderboard Ad (728x90)</span>
+            </div>
         </div>
     </div>
-</div>
 
     <!-- Categories Section -->
     <section class="section" id="categories">
@@ -1248,14 +1228,16 @@
     </section>
 
     <!-- Middle Ad Space -->
-   <div class="container">
+    <div class="container">
     <div class="ad-space">
         <span class="ad-label">Advertisement</span>
         <div class="ad-container rectangle">
-            <a href="<script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=300x250&ga=g"></script>
-            <noscript><a href="https://yllix.com/publishers/772531" target="_blank"><img src="//ylx-aff.advertica-cdn.com/pub/300x250.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" /></a></noscript>" target="_blank" rel="nofollow">
-                <span>Yllix Rectangle Ad (300x250)</span>
-            </a>
+            <script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=300x250&ga=g"></script>
+            <noscript>
+                <a href="https://yllix.com/publishers/772531" target="_blank">
+                    <img src="//ylx-aff.advertica-cdn.com/pub/300x250.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" />
+                </a>
+            </noscript>
         </div>
     </div>
 </div>
@@ -1377,16 +1359,13 @@
 
     <!-- Bottom Ad Space -->
     <div class="container">
-    <div class="ad-space">
-        <span class="ad-label">Advertisement</span>
-        <div class="ad-container leaderboard">
-            <a href="<script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=728x90&ga=g"></script>
-            <noscript><a href="https://yllix.com/publishers/772531" target="_blank"><img src="//ylx-aff.advertica-cdn.com/pub/728x90.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" /></a></noscript>" target="_blank" rel="nofollow">
+        <div class="ad-space">
+            <span class="ad-label">Advertisement</span>
+            <div class="ad-container leaderboard">
                 <span>Adsterra Leaderboard Ad (728x90)</span>
-            </a>
+            </div>
         </div>
     </div>
-</div>
 
     <!-- View All Modal -->
     <div class="modal" id="viewAllModal">
@@ -1396,7 +1375,7 @@
                     <i class="fas fa-chart-line"></i>
                     Financial Calculators
                 </h3>
-                <button class="modal-close">×</button>
+                <button class="modal-close">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="modal-tools-grid" id="modalToolsGrid">
@@ -1414,7 +1393,7 @@
                     <i class="fas fa-calculator"></i>
                     All Calculators
                 </h3>
-                <button class="modal-close">×</button>
+                <button class="modal-close">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="category-tabs">
@@ -1470,7 +1449,6 @@
                         <li><a href="#popular"><i class="fas fa-chevron-right"></i> Popular Tools</a></li>
                         <li><a href="#"><i class="fas fa-chevron-right"></i> About Us</a></li>
                         <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
-                        <li><a href="#" id="downloadPageLinkFooter" title="Download this HTML page"><i class="fas fa-download"></i> Download Page Source</a></li>
                     </ul>
                 </div>
                 
@@ -1486,7 +1464,7 @@
             </div>
             
             <div class="copyright">
-                <p>© 2023 CalcHub. All rights reserved. Designed with <i class="fas fa-heart" style="color: #f72585;"></i> for professionals</p>
+                <p>&copy; 2023 CalcHub. All rights reserved. Designed with <i class="fas fa-heart" style="color: #f72585;"></i> for professionals</p>
             </div>
         </div>
     </footer>
@@ -1497,8 +1475,7 @@
         const navLinks = document.querySelector('.nav-links');
         
         mobileMenuBtn.addEventListener('click', () => {
-            // Instead of toggling display, toggle a class for more CSS control
-            navLinks.classList.toggle('active-mobile'); 
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
         });
         
         // Update year in footer
@@ -1508,21 +1485,13 @@
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
-                const href = this.getAttribute('href');
-                // Prevent default only if it's a page anchor, not for other # links like modal triggers
-                if (href.length > 1 && document.querySelector(href)) {
-                    e.preventDefault();
-                    const target = document.querySelector(href);
-                    if (target) {
-                        window.scrollTo({
-                            top: target.offsetTop - 100, // Adjusted for sticky header
-                            behavior: 'smooth'
-                        });
-                         // Close mobile menu if open after navigation
-                        if (navLinks.classList.contains('active-mobile')) {
-                            navLinks.classList.remove('active-mobile');
-                        }
-                    }
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
                 }
             });
         });
@@ -1778,10 +1747,6 @@
         });
         
         function openModal(category) {
-            if (!document.querySelector(`.${category} .category-title`)) {
-                console.error("Category title element not found for:", category);
-                return;
-            }
             modalTitle.innerHTML = `
                 <i class="fas ${categoryIcons[category]}"></i>
                 ${document.querySelector(`.${category} .category-title`).textContent}
@@ -1793,7 +1758,7 @@
                 const slug = toSlug(tool.name);
                 const toolElement = document.createElement('a');
                 toolElement.className = 'modal-tool-item';
-                toolElement.href = `${category}/${slug}.html`; // Ensure this path is correct
+                toolElement.href = `${category}/${slug}.html`;
                 toolElement.innerHTML = `
                     <div class="tool-icon">
                         <i class="fas ${tool.icon}"></i>
@@ -1806,11 +1771,9 @@
             modal.style.display = 'flex';
         }
         
-        if(modalClose) {
-            modalClose.addEventListener('click', function() {
-                modal.style.display = 'none';
-            });
-        }
+        modalClose.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
         
         window.addEventListener('click', function(e) {
             if (e.target === modal) {
@@ -1827,28 +1790,18 @@
         const footerAllCalculators = document.getElementById('footerAllCalculators');
         
         // Open modal from hero button
-        if(allCalculatorsBtn) {
-            allCalculatorsBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                allCalculatorsModal.style.display = 'flex';
-                showAllCalculators('financial'); // Default to financial
-                // Ensure the financial tab is marked active
-                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-                document.querySelector('.category-tab[data-category="financial"]').classList.add('active');
-            });
-        }
+        allCalculatorsBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            allCalculatorsModal.style.display = 'flex';
+            showAllCalculators('financial');
+        });
         
         // Open modal from footer link
-        if(footerAllCalculators) {
-            footerAllCalculators.addEventListener('click', function(e) {
-                e.preventDefault();
-                allCalculatorsModal.style.display = 'flex';
-                showAllCalculators('financial'); // Default to financial
-                 // Ensure the financial tab is marked active
-                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-                document.querySelector('.category-tab[data-category="financial"]').classList.add('active');
-            });
-        }
+        footerAllCalculators.addEventListener('click', function(e) {
+            e.preventDefault();
+            allCalculatorsModal.style.display = 'flex';
+            showAllCalculators('financial');
+        });
         
         function showAllCalculators(category) {
             allToolsGrid.innerHTML = '';
@@ -1857,7 +1810,7 @@
                 const slug = toSlug(tool.name);
                 const toolElement = document.createElement('a');
                 toolElement.className = 'modal-tool-item';
-                toolElement.href = `${category}/${slug}.html`; // Ensure this path is correct
+                toolElement.href = `${category}/${slug}.html`;
                 toolElement.innerHTML = `
                     <div class="tool-icon">
                         <i class="fas ${tool.icon}"></i>
@@ -1870,18 +1823,19 @@
         
         categoryTabs.forEach(tab => {
             tab.addEventListener('click', function() {
+                // Remove active class from all tabs
                 document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
                 this.classList.add('active');
+                
                 const category = this.getAttribute('data-category');
                 showAllCalculators(category);
             });
         });
         
-        if(allModalClose) {
-            allModalClose.addEventListener('click', function() {
-                allCalculatorsModal.style.display = 'none';
-            });
-        }
+        allModalClose.addEventListener('click', function() {
+            allCalculatorsModal.style.display = 'none';
+        });
         
         window.addEventListener('click', function(e) {
             if (e.target === allCalculatorsModal) {
@@ -1892,37 +1846,11 @@
         // Footer category links
         document.querySelectorAll('.footer-links a[data-category]').forEach(link => {
             link.addEventListener('click', function(e) {
+                e.preventDefault();
                 const category = this.getAttribute('data-category');
-                // Check if it's a valid category for the modal, otherwise let default scroll happen
-                if (toolData[category] && categoryIcons[category]) {
-                     e.preventDefault(); // Prevent scroll if it's a modal trigger
-                     openModal(category);
-                }
+                openModal(category);
             });
         });
-
-        // Add download page functionality
-        const downloadPageLinkFooter = document.getElementById('downloadPageLinkFooter');
-        if (downloadPageLinkFooter) {
-            downloadPageLinkFooter.addEventListener('click', function(e) {
-                e.preventDefault();
-                try {
-                    const currentHtml = document.documentElement.outerHTML;
-                    const blob = new Blob([currentHtml], { type: 'text/html;charset=utf-8' });
-                    const url = URL.createObjectURL(blob);
-                    const tempAnchor = document.createElement('a');
-                    tempAnchor.href = url;
-                    tempAnchor.download = 'calchub_page.html'; // Suggested filename
-                    document.body.appendChild(tempAnchor); // Required for Firefox
-                    tempAnchor.click();
-                    document.body.removeChild(tempAnchor);
-                    URL.revokeObjectURL(url);
-                } catch (error) {
-                    console.error("Error generating download:", error);
-                    alert("Sorry, could not generate download for this page.");
-                }
-            });
-        }
     </script>
 </body>
 </html>
