@@ -294,6 +294,7 @@
             height: 250px;
             width: 300px;
             margin: 0 auto;
+            background: transparent; /* Allow ad content to define background */
         }
 
         .ad-container.leaderboard {
@@ -301,6 +302,7 @@
             width: 728px;
             max-width: 100%;
             margin: 0 auto;
+            background: transparent; /* Allow ad content to define background */
         }
 
         .ad-container.skyscraper {
@@ -850,7 +852,37 @@
             }
             
             .nav-links {
-                display: none;
+                display: none; /* Keep this for initial state; JS will toggle */
+                position: absolute;
+                top: 100%; /* Position below header */
+                left: 0;
+                width: 100%;
+                background-color: white;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                flex-direction: column;
+                align-items: center;
+                padding: 1rem 0;
+                gap: 1rem; /* Adjust gap for vertical layout */
+            }
+
+            .nav-links.open { /* Class to show the menu */
+                display: flex;
+            }
+            
+            .nav-links li {
+                width: 100%;
+                text-align: center;
+            }
+
+            .nav-links a {
+                display: block;
+                width: 100%;
+                padding: 0.8rem 0;
+            }
+
+            .nav-links a:after { /* Adjust underline for mobile */
+                left: 50%;
+                transform: translateX(-50%);
             }
             
             .mobile-menu-btn {
@@ -902,7 +934,8 @@
             }
 
             .ad-container.rectangle {
-                width: 100%;
+                width: 100%; /* Make rectangle ad responsive */
+                height: auto; /* Adjust height based on content or keep 250px if Yllix handles it */
             }
         }
 
@@ -1006,9 +1039,8 @@
     <div class="ad-space">
         <span class="ad-label">Advertisement</span>
         <div class="ad-container leaderboard">
-            <a href="https://www.profitableratecpm.com/jqcytw6gn?key=732501cb4d7baf6416857507d26ee943" target="_blank" rel="nofollow">
-                <span>Adsterra Leaderboard Ad (728x90)</span>
-            </a>
+            <script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=728x90&ga=g"></script>
+            <noscript><a href="https://yllix.com/publishers/772531" target="_blank"><img src="//ylx-aff.advertica-cdn.com/pub/728x90.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" /></a></noscript>
         </div>
     </div>
 </div>
@@ -1031,7 +1063,7 @@
                         <h3 class="category-title">Financial Calculators</h3>
                     </div>
                     <div class="tools-grid">
-                        <a href="/CalcHub-1/Mo-Cal.html" class="tool-item">
+                        <a href="financial/mortgage-calculator.html" class="tool-item">
                             <div class="tool-icon">
                                 <i class="fas fa-home"></i>
                             </div>
@@ -1094,7 +1126,7 @@
                             </div>
                             <div class="tool-name">Calorie Calculator</div>
                         </a>
-                        <a href="health/calories-burned.html" class="tool-item">
+                        <a href="health/calories-burned-calculator.html" class="tool-item"> <!-- Slug fixed -->
                             <div class="tool-icon">
                                 <i class="fas fa-running"></i>
                             </div>
@@ -1106,7 +1138,7 @@
                             </div>
                             <div class="tool-name">Pregnancy Calculator</div>
                         </a>
-                        <a href="health/target-heart-rate.html" class="tool-item">
+                        <a href="health/target-heart-rate-calculator.html" class="tool-item"> <!-- Slug fixed -->
                             <div class="tool-icon">
                                 <i class="fas fa-heart"></i>
                             </div>
@@ -1231,18 +1263,18 @@
 
     <!-- Middle Ad Space -->
     <div class="container">
-    <div class="ad-space">
-        <span class="ad-label">Advertisement</span>
-        <div class="ad-container rectangle">
-            <script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=300x250&ga=g"></script>
-            <noscript>
-                <a href="https://yllix.com/publishers/772531" target="_blank">
-                    <img src="//ylx-aff.advertica-cdn.com/pub/300x250.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" />
-                </a>
-            </noscript>
+        <div class="ad-space">
+            <span class="ad-label">Advertisement</span>
+            <div class="ad-container rectangle">
+                <script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=300x250&ga=g"></script>
+                <noscript>
+                    <a href="https://yllix.com/publishers/772531" target="_blank">
+                        <img src="//ylx-aff.advertica-cdn.com/pub/300x250.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" />
+                    </a>
+                </noscript>
+            </div>
         </div>
     </div>
-</div>
 
     <!-- Popular Tools Section -->
     <section class="section popular-tools" id="popular">
@@ -1253,7 +1285,7 @@
             </div>
             
             <div class="tools-grid-large">
-                <a href="/CalcHub-1/Mo-Cal.html" class="tool-card">
+                <a href="financial/mortgage-calculator.html" class="tool-card">
                     <div class="tool-card-icon financial-bg">
                         <i class="fas fa-home"></i>
                     </div>
@@ -1285,7 +1317,7 @@
                     <p class="tool-card-desc">Calculate days between dates or add/subtract days from a date</p>
                 </a>
                 
-                <a href="financial/compound-interest-calculator.html" class="tool-card">
+                <a href="financial/compound-interest-calculator.html" class="tool-card"> <!-- Slug matches toolData -->
                     <div class="tool-card-icon financial-bg">
                         <i class="fas fa-coins"></i>
                     </div>
@@ -1361,14 +1393,15 @@
 
     <!-- Bottom Ad Space -->
     <div class="container">
-    <div class="ad-space">
-    <span class="ad-label">Advertisement</span>
-    <div class="ad-container leaderboard">
-        <a href="https://www.profitableratecpm.com/jqcytw6gn?key=732501cb4d7baf6416857507d26ee943" target="_blank" rel="nofollow">
-            <span>Adsterra Leaderboard Ad (728x90)</span>
-        </a>
+        <div class="ad-space">
+            <span class="ad-label">Advertisement</span>
+            <div class="ad-container leaderboard">
+                <script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=728x90&ga=g"></script>
+                <noscript><a href="https://yllix.com/publishers/772531" target="_blank"><img src="//ylx-aff.advertica-cdn.com/pub/728x90.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" /></a></noscript>
+            </div>
+        </div>
     </div>
-</div>
+
 
     <!-- View All Modal -->
     <div class="modal" id="viewAllModal">
@@ -1378,7 +1411,7 @@
                     <i class="fas fa-chart-line"></i>
                     Financial Calculators
                 </h3>
-                <button class="modal-close">&times;</button>
+                <button class="modal-close">×</button>
             </div>
             <div class="modal-body">
                 <div class="modal-tools-grid" id="modalToolsGrid">
@@ -1396,7 +1429,7 @@
                     <i class="fas fa-calculator"></i>
                     All Calculators
                 </h3>
-                <button class="modal-close">&times;</button>
+                <button class="modal-close">×</button>
             </div>
             <div class="modal-body">
                 <div class="category-tabs">
@@ -1467,7 +1500,7 @@
             </div>
             
             <div class="copyright">
-                <p>&copy; 2023 CalcHub. All rights reserved. Designed with <i class="fas fa-heart" style="color: #f72585;"></i> for professionals</p>
+                <p>© 2023 CalcHub. All rights reserved. Designed with <i class="fas fa-heart" style="color: #f72585;"></i> for professionals</p>
             </div>
         </div>
     </footer>
@@ -1478,7 +1511,7 @@
         const navLinks = document.querySelector('.nav-links');
         
         mobileMenuBtn.addEventListener('click', () => {
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            navLinks.classList.toggle('open'); // Use classList.toggle for cleaner state management
         });
         
         // Update year in footer
@@ -1489,12 +1522,29 @@
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                const targetId = this.getAttribute('href');
+                // Check if it's just "#" to prevent errors, scroll to top or do nothing
+                if (targetId === '#') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
+                }
+                const target = document.querySelector(targetId);
                 if (target) {
+                    let offset = 100; // Default offset
+                    // If the target is the contact (footer), reduce offset or make it 0
+                    if (targetId === '#contact') {
+                        offset = 0; 
+                    } else if (target.closest('header')) { // If target is in header (though unlikely for # links)
+                        offset = 0;
+                    }
                     window.scrollTo({
-                        top: target.offsetTop - 100,
+                        top: target.offsetTop - offset,
                         behavior: 'smooth'
                     });
+                     // Close mobile menu if open after clicking a nav link
+                    if (navLinks.classList.contains('open')) {
+                        navLinks.classList.remove('open');
+                    }
                 }
             });
         });
@@ -1504,6 +1554,8 @@
         searchInput.addEventListener('keyup', function(e) {
             if (e.key === 'Enter') {
                 alert(`Searching for: ${this.value}`);
+                // Implement actual search or redirect to a search results page:
+                // window.location.href = `/search?q=${encodeURIComponent(this.value)}`;
                 this.value = '';
             }
         });
@@ -1554,7 +1606,7 @@
                 {name: "VAT Calculator", icon: "fa-percentage"},
                 {name: "Cash Back or Low Interest Calculator", icon: "fa-money-bill"},
                 {name: "Auto Lease Calculator", icon: "fa-car"},
-                {name: "Depreciation Calculator", icon: "fa-chart-line-down"},
+                {name: "Depreciation Calculator", icon: "fa-chart-line-down"}, // Corrected: fa-chart-line-down or similar
                 {name: "Average Return Calculator", icon: "fa-chart-line"},
                 {name: "Margin Calculator", icon: "fa-percentage"},
                 {name: "Discount Calculator", icon: "fa-tag"},
@@ -1600,9 +1652,9 @@
                 {name: "Carbohydrate Calculator", icon: "fa-bread-slice"},
                 {name: "Lean Body Mass Calculator", icon: "fa-dumbbell"},
                 {name: "Healthy Weight Calculator", icon: "fa-weight"},
-                {name: "Calories Burned Calculator", icon: "fa-fire"},
+                {name: "Calories Burned Calculator", icon: "fa-fire"}, // Note: name in HTML card was "Calories Burned"
                 {name: "One Rep Max Calculator", icon: "fa-dumbbell"},
-                {name: "Target Heart Rate Calculator", icon: "fa-heart"},
+                {name: "Target Heart Rate Calculator", icon: "fa-heart"}, // Note: name in HTML card was "Target Heart Rate"
                 {name: "Protein Calculator", icon: "fa-drumstick-bite"},
                 {name: "Fat Intake Calculator", icon: "fa-bacon"},
                 {name: "TDEE Calculator", icon: "fa-calculator"},
@@ -1611,7 +1663,7 @@
                 {name: "Period Calculator", icon: "fa-calendar-alt"},
                 {name: "GFR Calculator", icon: "fa-heartbeat"},
                 {name: "Body Type Calculator", icon: "fa-user"},
-                {name: "Body Surface Area Calculator", icon: "fa-ruler"},
+                {name: "Body Surface Area Calculator", icon: "fa-ruler"}, // fa-ruler-combined more visual
                 {name: "BAC Calculator", icon: "fa-wine-glass"},
                 {name: "Anorexic BMI Calculator", icon: "fa-weight"},
                 {name: "Weight Watcher Points Calculator", icon: "fa-weight"},
@@ -1621,16 +1673,16 @@
                 {name: "Scientific Calculator", icon: "fa-calculator"},
                 {name: "Fraction Calculator", icon: "fa-divide"},
                 {name: "Percentage Calculator", icon: "fa-percent"},
-                {name: "Triangle Calculator", icon: "fa-shapes"},
+                {name: "Triangle Calculator", icon: "fa-shapes"}, // fa-play for triangle might be better
                 {name: "Volume Calculator", icon: "fa-cube"},
                 {name: "Standard Deviation Calculator", icon: "fa-chart-bar"},
                 {name: "Random Number Generator", icon: "fa-dice"},
-                {name: "Number Sequence Calculator", icon: "fa-sort-numeric-up"},
+                {name: "Number Sequence Calculator", icon: "fa-sort-numeric-up"}, // fa-sort-numeric-down-alt
                 {name: "Percent Error Calculator", icon: "fa-exclamation-circle"},
                 {name: "Exponent Calculator", icon: "fa-superscript"},
                 {name: "Binary Calculator", icon: "fa-code"},
                 {name: "Hex Calculator", icon: "fa-hashtag"},
-                {name: "Half-Life Calculator", icon: "fa-radiation"},
+                {name: "Half-Life Calculator", icon: "fa-radiation"}, // fa-atom or fa-flask might be better
                 {name: "Quadratic Formula Calculator", icon: "fa-square-root-alt"},
                 {name: "Slope Calculator", icon: "fa-chart-line"},
                 {name: "Log Calculator", icon: "fa-calculator"},
@@ -1643,11 +1695,11 @@
                 {name: "Z-score Calculator", icon: "fa-chart-line"},
                 {name: "Confidence Interval Calculator", icon: "fa-chart-area"},
                 {name: "Ratio Calculator", icon: "fa-divide"},
-                {name: "Distance Calculator", icon: "fa-ruler"},
-                {name: "Circle Calculator", icon: "fa-circle"},
+                {name: "Distance Calculator", icon: "fa-ruler"}, // fa-road or fa-route
+                {name: "Circle Calculator", icon: "fa-circle"}, // fa-circle-notch or fa-dot-circle
                 {name: "Surface Area Calculator", icon: "fa-vector-square"},
                 {name: "Pythagorean Theorem Calculator", icon: "fa-square-root-alt"},
-                {name: "Right Triangle Calculator", icon: "fa-triangle"},
+                {name: "Right Triangle Calculator", icon: "fa-play"}, // Using fa-play for triangle shape
                 {name: "Root Calculator", icon: "fa-square-root-alt"},
                 {name: "Least Common Multiple Calculator", icon: "fa-sort-numeric-up"},
                 {name: "Greatest Common Factor Calculator", icon: "fa-divide"},
@@ -1687,24 +1739,24 @@
                 {name: "GDP Calculator", icon: "fa-globe-americas"},
                 {name: "Gas Mileage Calculator", icon: "fa-gas-pump"},
                 {name: "Horsepower Calculator", icon: "fa-tachometer-alt"},
-                {name: "Stair Calculator", icon: "fa-stairs"},
+                {name: "Stair Calculator", icon: "fa-shoe-prints"}, // fa-shoe-prints or fa-level-up-alt for stairs
                 {name: "Resistor Calculator", icon: "fa-bolt"},
                 {name: "Ohm's Law Calculator", icon: "fa-bolt"},
                 {name: "Electricity Calculator", icon: "fa-bolt"},
                 {name: "Tip Calculator", icon: "fa-tag"},
                 {name: "Mileage Calculator", icon: "fa-road"},
-                {name: "Density Calculator", icon: "fa-weight"},
-                {name: "Mass Calculator", icon: "fa-weight"},
-                {name: "Weight Calculator", icon: "fa-weight"},
+                {name: "Density Calculator", icon: "fa-weight"}, // fa-balance-scale or fa-flask
+                {name: "Mass Calculator", icon: "fa-weight"}, // fa-balance-scale
+                {name: "Weight Calculator", icon: "fa-weight"}, // fa-balance-scale
                 {name: "Speed Calculator", icon: "fa-tachometer-alt"},
                 {name: "Molarity Calculator", icon: "fa-flask"},
                 {name: "Molecular Weight Calculator", icon: "fa-atom"},
                 {name: "Roman Numeral Converter", icon: "fa-history"},
                 {name: "Golf Handicap Calculator", icon: "fa-golf-ball"},
                 {name: "Sleep Calculator", icon: "fa-bed"},
-                {name: "Tire Size Calculator", icon: "fa-tire"},
+                {name: "Tire Size Calculator", icon: "fa-dot-circle"}, // fa-circle or fa-compact-disc
                 {name: "Roofing Calculator", icon: "fa-home"},
-                {name: "Tile Calculator", icon: "fa-border-style"},
+                {name: "Tile Calculator", icon: "fa-border-style"}, // fa-th
                 {name: "Mulch Calculator", icon: "fa-leaf"},
                 {name: "Gravel Calculator", icon: "fa-mountain"},
                 {name: "Wind Chill Calculator", icon: "fa-wind"},
@@ -1757,26 +1809,31 @@
             
             modalToolsGrid.innerHTML = '';
             
-            toolData[category].forEach(tool => {
-                const slug = toSlug(tool.name);
-                const toolElement = document.createElement('a');
-                toolElement.className = 'modal-tool-item';
-                toolElement.href = `${category}/${slug}.html`;
-                toolElement.innerHTML = `
-                    <div class="tool-icon">
-                        <i class="fas ${tool.icon}"></i>
-                    </div>
-                    <div class="tool-name">${tool.name}</div>
-                `;
-                modalToolsGrid.appendChild(toolElement);
-            });
+            if (toolData[category]) { // Check if category exists in toolData
+                toolData[category].forEach(tool => {
+                    const slug = toSlug(tool.name);
+                    const toolElement = document.createElement('a');
+                    toolElement.className = 'modal-tool-item';
+                    // All links are relative paths category/slug.html
+                    toolElement.href = `${category}/${slug}.html`; 
+                    toolElement.innerHTML = `
+                        <div class="tool-icon">
+                            <i class="fas ${tool.icon}"></i>
+                        </div>
+                        <div class="tool-name">${tool.name}</div>
+                    `;
+                    modalToolsGrid.appendChild(toolElement);
+                });
+            }
             
             modal.style.display = 'flex';
         }
         
-        modalClose.addEventListener('click', function() {
-            modal.style.display = 'none';
-        });
+        if (modalClose) { // Ensure modalClose exists before adding listener
+            modalClose.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+        }
         
         window.addEventListener('click', function(e) {
             if (e.target === modal) {
@@ -1792,53 +1849,62 @@
         const categoryTabs = document.querySelectorAll('.category-tab');
         const footerAllCalculators = document.getElementById('footerAllCalculators');
         
-        // Open modal from hero button
-        allCalculatorsBtn.addEventListener('click', function(e) {
-            e.preventDefault();
+        function openAllCalculatorsModal() {
             allCalculatorsModal.style.display = 'flex';
-            showAllCalculators('financial');
-        });
-        
-        // Open modal from footer link
-        footerAllCalculators.addEventListener('click', function(e) {
-            e.preventDefault();
-            allCalculatorsModal.style.display = 'flex';
-            showAllCalculators('financial');
-        });
+            // Default to first active tab or 'financial'
+            const activeTab = document.querySelector('.category-tab.active');
+            showAllCalculators(activeTab ? activeTab.getAttribute('data-category') : 'financial');
+        }
+
+        if (allCalculatorsBtn) {
+             allCalculatorsBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                openAllCalculatorsModal();
+            });
+        }
+       
+        if (footerAllCalculators) {
+            footerAllCalculators.addEventListener('click', function(e) {
+                e.preventDefault();
+                openAllCalculatorsModal();
+            });
+        }
         
         function showAllCalculators(category) {
             allToolsGrid.innerHTML = '';
             
-            toolData[category].forEach(tool => {
-                const slug = toSlug(tool.name);
-                const toolElement = document.createElement('a');
-                toolElement.className = 'modal-tool-item';
-                toolElement.href = `${category}/${slug}.html`;
-                toolElement.innerHTML = `
-                    <div class="tool-icon">
-                        <i class="fas ${tool.icon}"></i>
-                    </div>
-                    <div class="tool-name">${tool.name}</div>
-                `;
-                allToolsGrid.appendChild(toolElement);
-            });
+            if (toolData[category]) { // Check if category exists in toolData
+                toolData[category].forEach(tool => {
+                    const slug = toSlug(tool.name);
+                    const toolElement = document.createElement('a');
+                    toolElement.className = 'modal-tool-item';
+                     // All links are relative paths category/slug.html
+                    toolElement.href = `${category}/${slug}.html`;
+                    toolElement.innerHTML = `
+                        <div class="tool-icon">
+                            <i class="fas ${tool.icon}"></i>
+                        </div>
+                        <div class="tool-name">${tool.name}</div>
+                    `;
+                    allToolsGrid.appendChild(toolElement);
+                });
+            }
         }
         
         categoryTabs.forEach(tab => {
             tab.addEventListener('click', function() {
-                // Remove active class from all tabs
                 document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-                // Add active class to clicked tab
                 this.classList.add('active');
-                
                 const category = this.getAttribute('data-category');
                 showAllCalculators(category);
             });
         });
         
-        allModalClose.addEventListener('click', function() {
-            allCalculatorsModal.style.display = 'none';
-        });
+        if (allModalClose) { // Ensure allModalClose exists
+            allModalClose.addEventListener('click', function() {
+                allCalculatorsModal.style.display = 'none';
+            });
+        }
         
         window.addEventListener('click', function(e) {
             if (e.target === allCalculatorsModal) {
@@ -1851,9 +1917,62 @@
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 const category = this.getAttribute('data-category');
-                openModal(category);
+                openModal(category); // Re-use the existing openModal function
             });
         });
+
+        // Fix for hardcoded links in category cards to use slugified names from toolData for consistency
+        // This is more robust if tool names in toolData are the source of truth
+        document.querySelectorAll('.category-card').forEach(card => {
+            const category = Array.from(card.classList).find(cls => toolData[cls]);
+            if (category) {
+                const toolsGrid = card.querySelector('.tools-grid');
+                const toolItems = toolsGrid.querySelectorAll('.tool-item');
+                
+                toolItems.forEach((item, index) => {
+                    if (toolData[category][index]) {
+                        const toolNameFromData = toolData[category][index].name;
+                        const currentToolNameElement = item.querySelector('.tool-name');
+                        
+                        // If the display name in HTML is slightly different but refers to same tool,
+                        // we prioritize toolData for slug generation for consistency.
+                        // Or, if you want HTML display name to define slug, use currentToolNameElement.textContent
+                        const slug = toSlug(toolNameFromData); // Use toolData name for slug
+                        item.href = `${category}/${slug}.html`;
+                        
+                        // Optionally, update the displayed name if it should match toolData exactly
+                        // currentToolNameElement.textContent = toolNameFromData;
+                    }
+                });
+            }
+        });
+
+        // Same for popular tools section for consistency
+        document.querySelectorAll('.popular-tools .tool-card').forEach(card => {
+            const titleElement = card.querySelector('.tool-card-title');
+            if (titleElement) {
+                const toolName = titleElement.textContent;
+                let category = ''; // Determine category based on toolName or a data-attribute
+                
+                // This part is tricky without knowing the category for each popular tool explicitly
+                // For now, assuming financial for "Mortgage Calculator" and "Compound Interest"
+                // and health for "BMI Calculator" and "Calorie Calculator", etc.
+                // A more robust way would be to add data-category to these popular tool cards.
+                
+                // Example:
+                if (toolName === "Mortgage Calculator" || toolName === "Compound Interest") category = "financial";
+                else if (toolName === "BMI Calculator" || toolName === "Calorie Calculator") category = "health";
+                else if (toolName === "Percentage Calculator") category = "math";
+                else if (toolName === "Date Calculator") category = "other";
+
+                if (category) {
+                    const slug = toSlug(toolName);
+                    card.href = `${category}/${slug}.html`;
+                }
+            }
+        });
+
+
     </script>
 </body>
 </html>
