@@ -1,7 +1,6 @@
-1lostadmln<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CalcHub | Professional Calculation Tools</title>
@@ -58,6 +57,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 1.2rem 0;
+            position: relative;
         }
 
         .logo {
@@ -160,8 +160,9 @@
             font-size: 1.5rem;
             color: var(--dark);
             cursor: pointer;
+            z-index: 1001; /* Above nav links */
         }
-
+        
         /* Hero Section */
         .hero {
             padding: 6rem 0 4rem;
@@ -290,28 +291,7 @@
             color: var(--medium-gray);
             font-weight: 500;
         }
-
-        .ad-container.rectangle {
-            height: 250px;
-            width: 300px;
-            margin: 0 auto;
-            background: transparent; /* Allow ad content to define background */
-        }
-
-        .ad-container.leaderboard {
-            height: 90px;
-            width: 728px;
-            max-width: 100%;
-            margin: 0 auto;
-            background: transparent; /* Allow ad content to define background */
-        }
-
-        .ad-container.skyscraper {
-            height: 600px;
-            width: 160px;
-            margin: 0 auto;
-        }
-
+        
         /* Categories Section */
         .section {
             padding: 5rem 0;
@@ -691,7 +671,7 @@
             font-size: 0.95rem;
         }
 
-        /* View All Modal */
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -715,11 +695,13 @@
             overflow-y: auto;
             box-shadow: 0 25px 50px rgba(0,0,0,0.25);
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
         .modal-header {
             padding: 1.5rem 2rem;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            background: var(--gradient);
             color: white;
             display: flex;
             justify-content: space-between;
@@ -758,6 +740,7 @@
 
         .modal-body {
             padding: 2rem;
+            overflow-y: auto;
         }
 
         .modal-tools-grid {
@@ -790,6 +773,7 @@
             justify-content: center;
             gap: 1rem;
             margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
 
         .category-tab {
@@ -846,6 +830,8 @@
                 max-width: 500px;
                 margin: 3rem auto 0;
                 transform: none;
+                top: auto;
+                right: auto;
             }
             
             .hero-buttons {
@@ -853,37 +839,19 @@
             }
             
             .nav-links {
-                display: none; /* Keep this for initial state; JS will toggle */
+                display: none;
+                flex-direction: column;
                 position: absolute;
-                top: 100%; /* Position below header */
+                top: 100%;
                 left: 0;
                 width: 100%;
-                background-color: white;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                flex-direction: column;
-                align-items: center;
+                background: white;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.05);
                 padding: 1rem 0;
-                gap: 1rem; /* Adjust gap for vertical layout */
             }
 
-            .nav-links.open { /* Class to show the menu */
+            .nav-links.nav-active {
                 display: flex;
-            }
-            
-            .nav-links li {
-                width: 100%;
-                text-align: center;
-            }
-
-            .nav-links a {
-                display: block;
-                width: 100%;
-                padding: 0.8rem 0;
-            }
-
-            .nav-links a:after { /* Adjust underline for mobile */
-                left: 50%;
-                transform: translateX(-50%);
             }
             
             .mobile-menu-btn {
@@ -928,16 +896,6 @@
                 margin: 0;
                 border-radius: 0;
             }
-
-            .ad-container.leaderboard {
-                height: 90px;
-                width: 100%;
-            }
-
-            .ad-container.rectangle {
-                width: 100%; /* Make rectangle ad responsive */
-                height: auto; /* Adjust height based on content or keep 250px if Yllix handles it */
-            }
         }
 
         @media (max-width: 576px) {
@@ -967,7 +925,7 @@
             }
             
             .category-tabs {
-                flex-wrap: wrap;
+                gap: 0.5rem;
             }
         }
     </style>
@@ -984,13 +942,15 @@
                     <span>CalcHub</span>
                 </a>
                 
-                <ul class="nav-links">
-                    <li><a href="#" class="active">Home</a></li>
-                    <li><a href="#categories">Categories</a></li>
-                    <li><a href="#popular">Popular</a></li>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="#" class="active">Home</a></li>
+                        <li><a href="#categories">Categories</a></li>
+                        <li><a href="#popular">Popular</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
                 
                 <div class="header-actions">
                     <div class="search-bar">
@@ -1040,8 +1000,9 @@
     <div class="ad-space">
         <span class="ad-label">Advertisement</span>
         <div class="ad-container leaderboard">
-            <script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=728x90&ga=g"></script>
-            <noscript><a href="https://yllix.com/publishers/772531" target="_blank"><img src="//ylx-aff.advertica-cdn.com/pub/728x90.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" /></a></noscript>
+            <a href="https://www.profitableratecpm.com/jqcytw6gn?key=732501cb4d7baf6416857507d26ee943" target="_blank" rel="nofollow">
+                <span>Ad Placeholder (728x90)</span>
+            </a>
         </div>
     </div>
 </div>
@@ -1058,205 +1019,69 @@
                 <!-- Financial Calculators -->
                 <div class="category-card financial">
                     <div class="category-header">
-                        <div class="category-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
+                        <div class="category-icon"><i class="fas fa-chart-line"></i></div>
                         <h3 class="category-title">Financial Calculators</h3>
                     </div>
                     <div class="tools-grid">
-                        <a href="/CalcHub-1/Mo-Cal.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-home"></i>
-                            </div>
-                            <div class="tool-name">Mortgage Calculator</div>
-                        </a>
-                        <a href="financial/auto-loan-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-car"></i>
-                            </div>
-                            <div class="tool-name">Auto Loan Calculator</div>
-                        </a>
-                        <a href="financial/interest-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-percentage"></i>
-                            </div>
-                            <div class="tool-name">Interest Calculator</div>
-                        </a>
-                        <a href="financial/retirement-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-money-check"></i>
-                            </div>
-                            <div class="tool-name">Retirement Calculator</div>
-                        </a>
-                        <a href="financial/investment-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-coins"></i>
-                            </div>
-                            <div class="tool-name">Investment Calculator</div>
-                        </a>
-                        <a href="financial/income-tax-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-file-invoice-dollar"></i>
-                            </div>
-                            <div class="tool-name">Income Tax Calculator</div>
-                        </a>
+                        <a href="financial/mortgage-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-home"></i></div><div class="tool-name">Mortgage Calculator</div></a>
+                        <a href="financial/auto-loan-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-car"></i></div><div class="tool-name">Auto Loan Calculator</div></a>
+                        <a href="financial/interest-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-percentage"></i></div><div class="tool-name">Interest Calculator</div></a>
+                        <a href="financial/retirement-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-money-check"></i></div><div class="tool-name">Retirement Calculator</div></a>
+                        <a href="financial/investment-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-coins"></i></div><div class="tool-name">Investment Calculator</div></a>
+                        <a href="financial/income-tax-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-file-invoice-dollar"></i></div><div class="tool-name">Income Tax Calculator</div></a>
                     </div>
-                    <a href="#" class="view-all" data-category="financial">
-                        View All Financial Tools <i class="fas fa-arrow-right"></i>
-                    </a>
+                    <a href="#" class="view-all" data-category="financial">View All Financial Tools <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
                 <!-- Health Calculators -->
                 <div class="category-card health">
                     <div class="category-header">
-                        <div class="category-icon">
-                            <i class="fas fa-heartbeat"></i>
-                        </div>
+                        <div class="category-icon"><i class="fas fa-heartbeat"></i></div>
                         <h3 class="category-title">Fitness & Health</h3>
                     </div>
                     <div class="tools-grid">
-                        <a href="health/bmi-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-weight"></i>
-                            </div>
-                            <div class="tool-name">BMI Calculator</div>
-                        </a>
-                        <a href="health/calorie-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-fire"></i>
-                            </div>
-                            <div class="tool-name">Calorie Calculator</div>
-                        </a>
-                        <a href="health/calories-burned-calculator.html" class="tool-item"> <!-- Slug fixed -->
-                            <div class="tool-icon">
-                                <i class="fas fa-running"></i>
-                            </div>
-                            <div class="tool-name">Calories Burned</div>
-                        </a>
-                        <a href="health/pregnancy-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-baby"></i>
-                            </div>
-                            <div class="tool-name">Pregnancy Calculator</div>
-                        </a>
-                        <a href="health/target-heart-rate-calculator.html" class="tool-item"> <!-- Slug fixed -->
-                            <div class="tool-icon">
-                                <i class="fas fa-heart"></i>
-                            </div>
-                            <div class="tool-name">Target Heart Rate</div>
-                        </a>
-                        <a href="health/macro-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-apple-alt"></i>
-                            </div>
-                            <div class="tool-name">Macro Calculator</div>
-                        </a>
+                        <a href="health/bmi-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-weight"></i></div><div class="tool-name">BMI Calculator</div></a>
+                        <a href="health/calorie-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-fire"></i></div><div class="tool-name">Calorie Calculator</div></a>
+                        <a href="health/calories-burned-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-running"></i></div><div class="tool-name">Calories Burned</div></a>
+                        <a href="health/pregnancy-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-baby"></i></div><div class="tool-name">Pregnancy Calculator</div></a>
+                        <a href="health/target-heart-rate-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-heart"></i></div><div class="tool-name">Target Heart Rate</div></a>
+                        <a href="health/macro-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-apple-alt"></i></div><div class="tool-name">Macro Calculator</div></a>
                     </div>
-                    <a href="#" class="view-all" data-category="health">
-                        View All Health Tools <i class="fas fa-arrow-right"></i>
-                    </a>
+                    <a href="#" class="view-all" data-category="health">View All Health Tools <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
                 <!-- Math Calculators -->
                 <div class="category-card math">
                     <div class="category-header">
-                        <div class="category-icon">
-                            <i class="fas fa-square-root-alt"></i>
-                        </div>
+                        <div class="category-icon"><i class="fas fa-square-root-alt"></i></div>
                         <h3 class="category-title">Math Calculators</h3>
                     </div>
                     <div class="tools-grid">
-                        <a href="math/scientific-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-calculator"></i>
-                            </div>
-                            <div class="tool-name">Scientific Calculator</div>
-                        </a>
-                        <a href="math/fraction-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-divide"></i>
-                            </div>
-                            <div class="tool-name">Fraction Calculator</div>
-                        </a>
-                        <a href="math/percentage-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-percent"></i>
-                            </div>
-                            <div class="tool-name">Percentage Calculator</div>
-                        </a>
-                        <a href="math/geometry-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-shapes"></i>
-                            </div>
-                            <div class="tool-name">Geometry Calculator</div>
-                        </a>
-                        <a href="math/statistics-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-chart-bar"></i>
-                            </div>
-                            <div class="tool-name">Statistics Calculator</div>
-                        </a>
-                        <a href="math/algebra-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-superscript"></i>
-                            </div>
-                            <div class="tool-name">Algebra Calculator</div>
-                        </a>
+                        <a href="math/scientific-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-calculator"></i></div><div class="tool-name">Scientific Calculator</div></a>
+                        <a href="math/fraction-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-divide"></i></div><div class="tool-name">Fraction Calculator</div></a>
+                        <a href="math/percentage-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-percent"></i></div><div class="tool-name">Percentage Calculator</div></a>
+                        <a href="math/volume-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-cube"></i></div><div class="tool-name">Volume Calculator</div></a>
+                        <a href="math/statistics-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-chart-bar"></i></div><div class="tool-name">Statistics Calculator</div></a>
+                        <a href="math/quadratic-formula-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-superscript"></i></div><div class="tool-name">Quadratic Formula</div></a>
                     </div>
-                    <a href="#" class="view-all" data-category="math">
-                        View All Math Tools <i class="fas fa-arrow-right"></i>
-                    </a>
+                    <a href="#" class="view-all" data-category="math">View All Math Tools <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
                 <!-- Other Calculators -->
                 <div class="category-card other">
                     <div class="category-header">
-                        <div class="category-icon">
-                            <i class="fas fa-cogs"></i>
-                        </div>
+                        <div class="category-icon"><i class="fas fa-cogs"></i></div>
                         <h3 class="category-title">Other Calculators</h3>
                     </div>
                     <div class="tools-grid">
-                        <a href="other/age-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-birthday-cake"></i>
-                            </div>
-                            <div class="tool-name">Age Calculator</div>
-                        </a>
-                        <a href="other/date-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-calendar"></i>
-                            </div>
-                            <div class="tool-name">Date Calculator</div>
-                        </a>
-                        <a href="other/gpa-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-graduation-cap"></i>
-                            </div>
-                            <div class="tool-name">GPA Calculator</div>
-                        </a>
-                        <a href="other/conversion-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-exchange-alt"></i>
-                            </div>
-                            <div class="tool-name">Conversion Calculator</div>
-                        </a>
-                        <a href="other/tip-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-tag"></i>
-                            </div>
-                            <div class="tool-name">Tip Calculator</div>
-                        </a>
-                        <a href="other/fuel-cost-calculator.html" class="tool-item">
-                            <div class="tool-icon">
-                                <i class="fas fa-gas-pump"></i>
-                            </div>
-                            <div class="tool-name">Fuel Cost Calculator</div>
-                        </a>
+                        <a href="other/age-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-birthday-cake"></i></div><div class="tool-name">Age Calculator</div></a>
+                        <a href="other/date-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-calendar"></i></div><div class="tool-name">Date Calculator</div></a>
+                        <a href="other/gpa-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-graduation-cap"></i></div><div class="tool-name">GPA Calculator</div></a>
+                        <a href="other/conversion-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-exchange-alt"></i></div><div class="tool-name">Conversion Calculator</div></a>
+                        <a href="other/tip-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-tag"></i></div><div class="tool-name">Tip Calculator</div></a>
+                        <a href="other/fuel-cost-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-gas-pump"></i></div><div class="tool-name">Fuel Cost Calculator</div></a>
                     </div>
-                    <a href="#" class="view-all" data-category="other">
-                        View All Other Tools <i class="fas fa-arrow-right"></i>
-                    </a>
+                    <a href="#" class="view-all" data-category="other">View All Other Tools <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>
@@ -1268,11 +1093,7 @@
             <span class="ad-label">Advertisement</span>
             <div class="ad-container rectangle">
                 <script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=300x250&ga=g"></script>
-                <noscript>
-                    <a href="https://yllix.com/publishers/772531" target="_blank">
-                        <img src="//ylx-aff.advertica-cdn.com/pub/300x250.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" />
-                    </a>
-                </noscript>
+                <noscript><a href="https://yllix.com/publishers/772531" target="_blank"><img src="//ylx-aff.advertica-cdn.com/pub/300x250.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" /></a></noscript>
             </div>
         </div>
     </div>
@@ -1286,52 +1107,40 @@
             </div>
             
             <div class="tools-grid-large">
-                <a href="/CalcHub-1/Mo-Cal.html" class="tool-card">
-                    <div class="tool-card-icon financial-bg">
-                        <i class="fas fa-home"></i>
-                    </div>
+                <a href="financial/mortgage-calculator.html" class="tool-card">
+                    <div class="tool-card-icon financial-bg"><i class="fas fa-home"></i></div>
                     <h3 class="tool-card-title">Mortgage Calculator</h3>
-                    <p class="tool-card-desc">Calculate monthly payments, interest costs, and amortization schedules</p>
+                    <p class="tool-card-desc">Calculate monthly payments, interest, and amortization schedules.</p>
                 </a>
                 
                 <a href="health/bmi-calculator.html" class="tool-card">
-                    <div class="tool-card-icon health-bg">
-                        <i class="fas fa-weight"></i>
-                    </div>
+                    <div class="tool-card-icon health-bg"><i class="fas fa-weight"></i></div>
                     <h3 class="tool-card-title">BMI Calculator</h3>
-                    <p class="tool-card-desc">Determine your body mass index and healthy weight range</p>
+                    <p class="tool-card-desc">Determine your body mass index and healthy weight range.</p>
                 </a>
                 
                 <a href="math/percentage-calculator.html" class="tool-card">
-                    <div class="tool-card-icon math-bg">
-                        <i class="fas fa-percentage"></i>
-                    </div>
+                    <div class="tool-card-icon math-bg"><i class="fas fa-percentage"></i></div>
                     <h3 class="tool-card-title">Percentage Calculator</h3>
-                    <p class="tool-card-desc">Solve percentage problems and calculate increases/decreases</p>
+                    <p class="tool-card-desc">Solve percentage problems and calculate increases/decreases.</p>
                 </a>
                 
                 <a href="other/date-calculator.html" class="tool-card">
-                    <div class="tool-card-icon other-bg">
-                        <i class="fas fa-calendar"></i>
-                    </div>
+                    <div class="tool-card-icon other-bg"><i class="fas fa-calendar"></i></div>
                     <h3 class="tool-card-title">Date Calculator</h3>
-                    <p class="tool-card-desc">Calculate days between dates or add/subtract days from a date</p>
+                    <p class="tool-card-desc">Calculate days between dates or add/subtract from a date.</p>
                 </a>
                 
-                <a href="financial/compound-interest-calculator.html" class="tool-card"> <!-- Slug matches toolData -->
-                    <div class="tool-card-icon financial-bg">
-                        <i class="fas fa-coins"></i>
-                    </div>
+                <a href="financial/compound-interest-calculator.html" class="tool-card">
+                    <div class="tool-card-icon financial-bg"><i class="fas fa-coins"></i></div>
                     <h3 class="tool-card-title">Compound Interest</h3>
-                    <p class="tool-card-desc">Project investment growth with compound interest calculations</p>
+                    <p class="tool-card-desc">Project investment growth with compound interest calculations.</p>
                 </a>
                 
                 <a href="health/calorie-calculator.html" class="tool-card">
-                    <div class="tool-card-icon health-bg">
-                        <i class="fas fa-fire"></i>
-                    </div>
+                    <div class="tool-card-icon health-bg"><i class="fas fa-fire"></i></div>
                     <h3 class="tool-card-title">Calorie Calculator</h3>
-                    <p class="tool-card-desc">Determine daily calorie needs based on activity level and goals</p>
+                    <p class="tool-card-desc">Determine daily calorie needs based on activity and goals.</p>
                 </a>
             </div>
         </div>
@@ -1347,33 +1156,25 @@
             
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
+                    <div class="feature-icon"><i class="fas fa-bolt"></i></div>
                     <h3 class="feature-title">Lightning Fast</h3>
                     <p class="feature-desc">Get instant results with our optimized calculation engines that process complex formulas in milliseconds.</p>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-lock"></i>
-                    </div>
+                    <div class="feature-icon"><i class="fas fa-lock"></i></div>
                     <h3 class="feature-title">Secure & Private</h3>
                     <p class="feature-desc">Your data never leaves your browser. All calculations happen locally for maximum privacy and security.</p>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
+                    <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
                     <h3 class="feature-title">Fully Responsive</h3>
                     <p class="feature-desc">Access all tools from any device with our mobile-optimized interface that works flawlessly everywhere.</p>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-sync-alt"></i>
-                    </div>
+                    <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
                     <h3 class="feature-title">Always Updated</h3>
                     <p class="feature-desc">We regularly add new calculators and update existing ones with the latest formulas and regulations.</p>
                 </div>
@@ -1397,27 +1198,22 @@
         <div class="ad-space">
             <span class="ad-label">Advertisement</span>
             <div class="ad-container leaderboard">
-                <script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=728x90&ga=g"></script>
-                <noscript><a href="https://yllix.com/publishers/772531" target="_blank"><img src="//ylx-aff.advertica-cdn.com/pub/728x90.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" /></a></noscript>
+                <a href="https://www.profitableratecpm.com/jqcytw6gn?key=732501cb4d7baf6416857507d26ee943" target="_blank" rel="nofollow">
+                    <span>Ad Placeholder (728x90)</span>
+                </a>
             </div>
         </div>
     </div>
-
 
     <!-- View All Modal -->
     <div class="modal" id="viewAllModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="modalCategoryTitle">
-                    <i class="fas fa-chart-line"></i>
-                    Financial Calculators
-                </h3>
+                <h3 class="modal-title" id="modalCategoryTitle"><i class="fas fa-chart-line"></i>Financial Calculators</h3>
                 <button class="modal-close">×</button>
             </div>
             <div class="modal-body">
-                <div class="modal-tools-grid" id="modalToolsGrid">
-                    <!-- Tools will be populated here -->
-                </div>
+                <div class="modal-tools-grid" id="modalToolsGrid"></div>
             </div>
         </div>
     </div>
@@ -1426,10 +1222,7 @@
     <div class="modal" id="allCalculatorsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">
-                    <i class="fas fa-calculator"></i>
-                    All Calculators
-                </h3>
+                <h3 class="modal-title"><i class="fas fa-calculator"></i>All Calculators</h3>
                 <button class="modal-close">×</button>
             </div>
             <div class="modal-body">
@@ -1439,10 +1232,7 @@
                     <button class="category-tab" data-category="math">Math</button>
                     <button class="category-tab" data-category="other">Other</button>
                 </div>
-                
-                <div class="modal-tools-grid" id="allToolsGrid">
-                    <!-- All tools will be populated here -->
-                </div>
+                <div class="modal-tools-grid" id="allToolsGrid"></div>
             </div>
         </div>
     </div>
@@ -1453,9 +1243,7 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <div class="footer-logo">
-                        <div class="logo-icon">
-                            <i class="fas fa-calculator"></i>
-                        </div>
+                        <div class="logo-icon"><i class="fas fa-calculator"></i></div>
                         <span>CalcHub</span>
                     </div>
                     <p class="footer-about">Professional calculation tools for finance, health, math, and everyday tasks. Accurate, reliable, and always free.</p>
@@ -1466,18 +1254,15 @@
                         <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
-                
                 <div class="footer-col">
                     <h3>Categories</h3>
                     <ul class="footer-links">
-                        <li><a href="#categories" data-category="financial"><i class="fas fa-chevron-right"></i> Financial Calculators</a></li>
-                        <li><a href="#categories" data-category="health"><i class="fas fa-chevron-right"></i> Health & Fitness</a></li>
-                        <li><a href="#categories" data-category="math"><i class="fas fa-chevron-right"></i> Math Calculators</a></li>
-                        <li><a href="#categories"><i class="fas fa-chevron-right"></i> Conversion Tools</a></li>
-                        <li><a href="#categories"><i class="fas fa-chevron-right"></i> Date & Time Calculators</a></li>
+                        <li><a href="#" class="view-all-footer" data-category="financial"><i class="fas fa-chevron-right"></i> Financial Calculators</a></li>
+                        <li><a href="#" class="view-all-footer" data-category="health"><i class="fas fa-chevron-right"></i> Health & Fitness</a></li>
+                        <li><a href="#" class="view-all-footer" data-category="math"><i class="fas fa-chevron-right"></i> Math Calculators</a></li>
+                        <li><a href="#" class="view-all-footer" data-category="other"><i class="fas fa-chevron-right"></i> Other Tools</a></li>
                     </ul>
                 </div>
-                
                 <div class="footer-col">
                     <h3>Quick Links</h3>
                     <ul class="footer-links">
@@ -1488,18 +1273,15 @@
                         <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
                     </ul>
                 </div>
-                
                 <div class="footer-col">
                     <h3>Legal</h3>
                     <ul class="footer-links">
                         <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
                         <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
                         <li><a href="#"><i class="fas fa-chevron-right"></i> Disclaimer</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Cookie Policy</a></li>
                     </ul>
                 </div>
             </div>
-            
             <div class="copyright">
                 <p>© 2023 CalcHub. All rights reserved. Designed with <i class="fas fa-heart" style="color: #f72585;"></i> for professionals</p>
             </div>
@@ -1507,473 +1289,1573 @@
     </footer>
 
     <script>
-        // Mobile menu toggle
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('open'); // Use classList.toggle for cleaner state management
-        });
-        
-        // Update year in footer
-        document.querySelector('.copyright p').innerHTML = 
-            document.querySelector('.copyright p').innerHTML.replace('2023', new Date().getFullYear());
-        
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                // Check if it's just "#" to prevent errors, scroll to top or do nothing
-                if (targetId === '#') {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    return;
-                }
-                const target = document.querySelector(targetId);
-                if (target) {
-                    let offset = 100; // Default offset
-                    // If the target is the contact (footer), reduce offset or make it 0
-                    if (targetId === '#contact') {
-                        offset = 0; 
-                    } else if (target.closest('header')) { // If target is in header (though unlikely for # links)
-                        offset = 0;
-                    }
-                    window.scrollTo({
-                        top: target.offsetTop - offset,
-                        behavior: 'smooth'
-                    });
-                     // Close mobile menu if open after clicking a nav link
-                    if (navLinks.classList.contains('open')) {
-                        navLinks.classList.remove('open');
-                    }
-                }
-            });
-        });
-        
-        // Search functionality
-        const searchInput = document.querySelector('.search-bar input');
-        searchInput.addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') {
-                alert(`Searching for: ${this.value}`);
-                // Implement actual search or redirect to a search results page:
-                // window.location.href = `/search?q=${encodeURIComponent(this.value)}`;
-                this.value = '';
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- DATA SOURCE ---
+            const toolData = {
+                financial: [
+                    {name: "Mortgage Calculator", icon: "fa-home"}, {name: "Loan Calculator", icon: "fa-hand-holding-usd"}, {name: "Auto Loan Calculator", icon: "fa-car"}, {name: "Interest Calculator", icon: "fa-percentage"}, {name: "Payment Calculator", icon: "fa-credit-card"}, {name: "Retirement Calculator", icon: "fa-piggy-bank"}, {name: "Amortization Calculator", icon: "fa-calculator"}, {name: "Investment Calculator", icon: "fa-chart-line"}, {name: "Currency Calculator", icon: "fa-money-bill-wave"}, {name: "Inflation Calculator", icon: "fa-chart-pie"}, {name: "Finance Calculator", icon: "fa-file-invoice-dollar"}, {name: "Mortgage Payoff Calculator", icon: "fa-home"}, {name: "Income Tax Calculator", icon: "fa-file-alt"}, {name: "Compound Interest Calculator", icon: "fa-coins"}, {name: "Salary Calculator", icon: "fa-money-check"}, {name: "401K Calculator", icon: "fa-university"}, {name: "Interest Rate Calculator", icon: "fa-percent"}, {name: "Sales Tax Calculator", icon: "fa-receipt"}, {name: "House Affordability Calculator", icon: "fa-house-user"}, {name: "Savings Calculator", icon: "fa-piggy-bank"}, {name: "Rent Calculator", icon: "fa-key"}, {name: "Marriage Tax Calculator", icon: "fa-ring"}, {name: "Estate Tax Calculator", icon: "fa-landmark"}, {name: "Pension Calculator", icon: "fa-user-tie"}, {name: "Social Security Calculator", icon: "fa-shield-alt"}, {name: "Annuity Calculator", icon: "fa-money-check-alt"}, {name: "Annuity Payout Calculator", icon: "fa-money-bill-alt"}, {name: "Credit Card Calculator", icon: "fa-credit-card"}, {name: "Credit Cards Payoff Calculator", icon: "fa-credit-card"}, {name: "Debt Payoff Calculator", icon: "fa-money-bill-wave"}, {name: "Debt Consolidation Calculator", icon: "fa-compress-alt"}, {name: "Repayment Calculator", icon: "fa-undo-alt"}, {name: "Student Loan Calculator", icon: "fa-graduation-cap"}, {name: "College Cost Calculator", icon: "fa-university"}, {name: "Simple Interest Calculator", icon: "fa-coins"}, {name: "CD Calculator", icon: "fa-compact-disc"}, {name: "Bond Calculator", icon: "fa-file-contract"}, {name: "Roth IRA Calculator", icon: "fa-piggy-bank"}, {name: "IRA Calculator", icon: "fa-university"}, {name: "RMD Calculator", icon: "fa-calculator"}, {name: "VAT Calculator", icon: "fa-percentage"}, {name: "Cash Back or Low Interest Calculator", icon: "fa-money-bill"}, {name: "Auto Lease Calculator", icon: "fa-car"}, {name: "Depreciation Calculator", icon: "fa-chart-line"}, {name: "Average Return Calculator", icon: "fa-chart-line"}, {name: "Margin Calculator", icon: "fa-percentage"}, {name: "Discount Calculator", icon: "fa-tag"}, {name: "Business Loan Calculator", icon: "fa-briefcase"}, {name: "Debt-to-Income Ratio Calculator", icon: "fa-balance-scale"}, {name: "Real Estate Calculator", icon: "fa-building"}, {name: "Take-Home-Paycheck Calculator", icon: "fa-money-check"}, {name: "Personal Loan Calculator", icon: "fa-user"}, {name: "Boat Loan Calculator", icon: "fa-ship"}, {name: "Lease Calculator", icon: "fa-file-contract"}, {name: "Refinance Calculator", icon: "fa-sync-alt"}, {name: "Budget Calculator", icon: "fa-chart-pie"}, {name: "Rental Property Calculator", icon: "fa-home"}, {name: "IRR Calculator", icon: "fa-percentage"}, {name: "ROI Calculator", icon: "fa-chart-line"}, {name: "APR Calculator", icon: "fa-percent"}, {name: "FHA Loan Calculator", icon: "fa-home"}, {name: "VA Mortgage Calculator", icon: "fa-home"}, {name: "Down Payment Calculator", icon: "fa-money-bill"}, {name: "Rent vs. Buy Calculator", icon: "fa-balance-scale"}, {name: "Payback Period Calculator", icon: "fa-calendar-alt"}, {name: "Present Value Calculator", icon: "fa-money-bill"}, {name: "Future Value Calculator", icon: "fa-money-bill"}, {name: "Commission Calculator", icon: "fa-percentage"}, {name: "Mortgage Calculator UK", icon: "fa-home"}, {name: "Canadian Mortgage Calculator", icon: "fa-home"}, {name: "Mortgage Amortization Calculator", icon: "fa-calculator"}, {name: "Percent Off Calculator", icon: "fa-tag"}
+                ],
+                health: [
+                    {name: "BMI Calculator", icon: "fa-weight"}, {name: "Calorie Calculator", icon: "fa-fire"}, {name: "Body Fat Calculator", icon: "fa-user"}, {name: "BMR Calculator", icon: "fa-heartbeat"}, {name: "Macro Calculator", icon: "fa-apple-alt"}, {name: "Ideal Weight Calculator", icon: "fa-balance-scale"}, {name: "Pregnancy Calculator", icon: "fa-baby"}, {name: "Pregnancy Weight Gain Calculator", icon: "fa-weight"}, {name: "Due Date Calculator", icon: "fa-calendar-check"}, {name: "Army Body Fat Calculator", icon: "fa-user-shield"}, {name: "Lean Body Mass Calculator", icon: "fa-dumbbell"}, {name: "Calories Burned Calculator", icon: "fa-fire"}, {name: "Target Heart Rate Calculator", icon: "fa-heart"}, {name: "Fat Intake Calculator", icon: "fa-bacon"}, {name: "Ovulation Calculator", icon: "fa-calendar"}, {name: "Period Calculator", icon: "fa-calendar-alt"}, {name: "Body Type Calculator", icon: "fa-user"}, {name: "BAC Calculator", icon: "fa-wine-glass"}, {name: "Weight Watcher Points Calculator", icon: "fa-weight"}
+                ],
+                math: [
+                    {name: "Scientific Calculator", icon: "fa-calculator"}, {name: "Fraction Calculator", icon: "fa-divide"}, {name: "Percentage Calculator", icon: "fa-percent"}, {name: "Triangle Calculator", icon: "fa-shapes"}, {name: "Volume Calculator", icon: "fa-cube"}, {name: "Standard Deviation Calculator", icon: "fa-chart-bar"}, {name: "Random Number Generator", icon: "fa-dice"}, {name: "Percent Error Calculator", icon: "fa-exclamation-circle"}, {name: "Binary Calculator", icon: "fa-code"}, {name: "Half-Life Calculator", icon: "fa-radiation"}, {name: "Quadratic Formula Calculator", icon: "fa-square-root-alt"}, {name: "Slope Calculator", icon: "fa-chart-line"}, {name: "Area Calculator", icon: "fa-vector-square"}, {name: "Probability Calculator", icon: "fa-dice"}, {name: "Mean, Median, Mode, Range Calculator", icon: "fa-calculator"}, {name: "Z-score Calculator", icon: "fa-chart-line"}, {name: "Ratio Calculator", icon: "fa-divide"}, {name: "Circle Calculator", icon: "fa-circle"}, {name: "Pythagorean Theorem Calculator", icon: "fa-square-root-alt"}, {name: "Root Calculator", icon: "fa-square-root-alt"}, {name: "Greatest Common Factor Calculator", icon: "fa-divide"}, {name: "Rounding Calculator", icon: "fa-calculator"}, {name: "Scientific Notation Calculator", icon: "fa-superscript"}, {name: "Prime Factorization Calculator", icon: "fa-divide"}, {name: "Basic Calculator", icon: "fa-calculator"}, {name: "Average Calculator", icon: "fa-calculator"}
+                ],
+                other: [
+                    {name: "Age Calculator", icon: "fa-birthday-cake"}, {name: "Date Calculator", icon: "fa-calendar"}, {name: "Time Calculator", icon: "fa-clock"}, {name: "Hours Calculator", icon: "fa-business-time"}, {name: "GPA Calculator", icon: "fa-graduation-cap"}, {name: "Grade Calculator", icon: "fa-book"}, {name: "Height Calculator", icon: "fa-ruler-vertical"}, {name: "Concrete Calculator", icon: "fa-hard-hat"}, {name: "IP Subnet Calculator", icon: "fa-network-wired"}, {name: "Bra Size Calculator", icon: "fa-tshirt"}, {name: "Password Generator", icon: "fa-key"}, {name: "Dice Roller", icon: "fa-dice"}, {name: "Conversion Calculator", icon: "fa-exchange-alt"}, {name: "Fuel Cost Calculator", icon: "fa-gas-pump"}, {name: "Voltage Drop Calculator", icon: "fa-bolt"}, {name: "BTU Calculator", icon: "fa-temperature-high"}, {name: "Square Footage Calculator", icon: "fa-ruler-combined"}, {name: "Time Card Calculator", icon: "fa-clock"}, {name: "Time Zone Calculator", icon: "fa-globe"}, {name: "Love Calculator", icon: "fa-heart"}, {name: "GDP Calculator", icon: "fa-globe-americas"}, {name: "Gas Mileage Calculator", icon: "fa-gas-pump"}, {name: "Horsepower Calculator", icon: "fa-tachometer-alt"}, {name: "Stair Calculator", icon: "fa-stairs"}, {name: "Resistor Calculator", icon: "fa-bolt"}, {name: "Ohm's Law Calculator", icon: "fa-bolt"}, {name: "Electricity Calculator", icon: "fa-bolt"}, {name: "Tip Calculator", icon: "fa-tag"}, {name: "Mileage Calculator", icon: "fa-road"}, {name: "Density Calculator", icon: "fa-weight"}, {name: "Mass Calculator", icon: "fa-weight"}, {name: "Weight Calculator", icon: "fa-weight"}, {name: "Speed Calculator", icon: "fa-tachometer-alt"}, {name: "Molarity Calculator", icon: "fa-flask"}, {name: "Molecular Weight Calculator", icon: "fa-atom"}, {name: "Roman Numeral Converter", icon: "fa-history"}, {name: "Golf Handicap Calculator", icon: "fa-golf-ball"}, {name: "Sleep Calculator", icon: "fa-bed"}, {name: "Tire Size Calculator", icon: "fa-tire"}, {name: "Roofing Calculator", icon: "fa-home"}, {name: "Tile Calculator", icon: "fa-border-style"}, {name: "Mulch Calculator", icon: "fa-leaf"}, {name: "Gravel Calculator", icon: "fa-mountain"}, {name: "Wind Chill Calculator", icon: "fa-wind"}, {name: "Heat Index Calculator", icon: "fa-temperature-high"}, {name: "Dew Point Calculator", icon: "fa-tint"}, {name: "Bandwidth Calculator", icon: "fa-network-wired"}, {name: "Time Duration Calculator", icon: "fa-clock"}, {name: "Day Counter", icon: "fa-calendar-alt"}, {name: "Day of the Week Calculator", icon: "fa-calendar-day"}
+                ]
+            };
+
+            const categoryIcons = {
+                financial: "fa-chart-line", health: "fa-heartbeat", math: "fa-square-root-alt", other: "fa-cogs"
+            };
+
+            // --- HELPERS ---
+            function toSlug(str) {
+                return str.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
             }
-        });
-        
-        // Tool data for each category
-        const toolData = {
-            financial: [
-                {name: "Mortgage Calculator", icon: "fa-home", link: "Mortgage Calculator/CalcHub-1/Mo-Cal.html"},
-                {name: "Loan Calculator", icon: "fa-hand-holding-usd"},
-                {name: "Auto Loan Calculator", icon: "fa-car"},
-                {name: "Interest Calculator", icon: "fa-percentage"},
-                {name: "Payment Calculator", icon: "fa-credit-card"},
-                {name: "Retirement Calculator", icon: "fa-piggy-bank"},
-                {name: "Amortization Calculator", icon: "fa-calculator"},
-                {name: "Investment Calculator", icon: "fa-chart-line"},
-                {name: "Currency Calculator", icon: "fa-money-bill-wave"},
-                {name: "Inflation Calculator", icon: "fa-chart-pie"},
-                {name: "Finance Calculator", icon: "fa-file-invoice-dollar"},
-                {name: "Mortgage Payoff Calculator", icon: "fa-home"},
-                {name: "Income Tax Calculator", icon: "fa-file-alt"},
-                {name: "Compound Interest Calculator", icon: "fa-coins"},
-                {name: "Salary Calculator", icon: "fa-money-check"},
-                {name: "401K Calculator", icon: "fa-university"},
-                {name: "Interest Rate Calculator", icon: "fa-percent"},
-                {name: "Sales Tax Calculator", icon: "fa-receipt"},
-                {name: "House Affordability Calculator", icon: "fa-house-user"},
-                {name: "Savings Calculator", icon: "fa-piggy-bank"},
-                {name: "Rent Calculator", icon: "fa-key"},
-                {name: "Marriage Tax Calculator", icon: "fa-ring"},
-                {name: "Estate Tax Calculator", icon: "fa-landmark"},
-                {name: "Pension Calculator", icon: "fa-user-tie"},
-                {name: "Social Security Calculator", icon: "fa-shield-alt"},
-                {name: "Annuity Calculator", icon: "fa-money-check-alt"},
-                {name: "Annuity Payout Calculator", icon: "fa-money-bill-alt"},
-                {name: "Credit Card Calculator", icon: "fa-credit-card"},
-                {name: "Credit Cards Payoff Calculator", icon: "fa-credit-card"},
-                {name: "Debt Payoff Calculator", icon: "fa-money-bill-wave"},
-                {name: "Debt Consolidation Calculator", icon: "fa-compress-alt"},
-                {name: "Repayment Calculator", icon: "fa-undo-alt"},
-                {name: "Student Loan Calculator", icon: "fa-graduation-cap"},
-                {name: "College Cost Calculator", icon: "fa-university"},
-                {name: "Simple Interest Calculator", icon: "fa-coins"},
-                {name: "CD Calculator", icon: "fa-compact-disc"},
-                {name: "Bond Calculator", icon: "fa-file-contract"},
-                {name: "Roth IRA Calculator", icon: "fa-piggy-bank"},
-                {name: "IRA Calculator", icon: "fa-university"},
-                {name: "RMD Calculator", icon: "fa-calculator"},
-                {name: "VAT Calculator", icon: "fa-percentage"},
-                {name: "Cash Back or Low Interest Calculator", icon: "fa-money-bill"},
-                {name: "Auto Lease Calculator", icon: "fa-car"},
-                {name: "Depreciation Calculator", icon: "fa-chart-line-down"}, // Corrected: fa-chart-line-down or similar
-                {name: "Average Return Calculator", icon: "fa-chart-line"},
-                {name: "Margin Calculator", icon: "fa-percentage"},
-                {name: "Discount Calculator", icon: "fa-tag"},
-                {name: "Business Loan Calculator", icon: "fa-briefcase"},
-                {name: "Debt-to-Income Ratio Calculator", icon: "fa-balance-scale"},
-                {name: "Real Estate Calculator", icon: "fa-building"},
-                {name: "Take-Home-Paycheck Calculator", icon: "fa-money-check"},
-                {name: "Personal Loan Calculator", icon: "fa-user"},
-                {name: "Boat Loan Calculator", icon: "fa-ship"},
-                {name: "Lease Calculator", icon: "fa-file-contract"},
-                {name: "Refinance Calculator", icon: "fa-sync-alt"},
-                {name: "Budget Calculator", icon: "fa-chart-pie"},
-                {name: "Rental Property Calculator", icon: "fa-home"},
-                {name: "IRR Calculator", icon: "fa-percentage"},
-                {name: "ROI Calculator", icon: "fa-chart-line"},
-                {name: "APR Calculator", icon: "fa-percent"},
-                {name: "FHA Loan Calculator", icon: "fa-home"},
-                {name: "VA Mortgage Calculator", icon: "fa-home"},
-                {name: "Down Payment Calculator", icon: "fa-money-bill"},
-                {name: "Rent vs. Buy Calculator", icon: "fa-balance-scale"},
-                {name: "Payback Period Calculator", icon: "fa-calendar-alt"},
-                {name: "Present Value Calculator", icon: "fa-money-bill"},
-                {name: "Future Value Calculator", icon: "fa-money-bill"},
-                {name: "Commission Calculator", icon: "fa-percentage"},
-                {name: "Mortgage Calculator UK", icon: "fa-home"},
-                {name: "Canadian Mortgage Calculator", icon: "fa-home"},
-                {name: "Mortgage Amortization Calculator", icon: "fa-calculator"},
-                {name: "Percent Off Calculator", icon: "fa-tag"}
-            ],
-            health: [
-                {name: "BMI Calculator", icon: "fa-weight"},
-                {name: "Calorie Calculator", icon: "fa-fire"},
-                {name: "Body Fat Calculator", icon: "fa-user"},
-                {name: "BMR Calculator", icon: "fa-heartbeat"},
-                {name: "Macro Calculator", icon: "fa-apple-alt"},
-                {name: "Ideal Weight Calculator", icon: "fa-balance-scale"},
-                {name: "Pregnancy Calculator", icon: "fa-baby"},
-                {name: "Pregnancy Weight Gain Calculator", icon: "fa-weight"},
-                {name: "Pregnancy Conception Calculator", icon: "fa-calendar"},
-                {name: "Due Date Calculator", icon: "fa-calendar-check"},
-                {name: "Pace Calculator", icon: "fa-running"},
-                {name: "Army Body Fat Calculator", icon: "fa-user-shield"},
-                {name: "Carbohydrate Calculator", icon: "fa-bread-slice"},
-                {name: "Lean Body Mass Calculator", icon: "fa-dumbbell"},
-                {name: "Healthy Weight Calculator", icon: "fa-weight"},
-                {name: "Calories Burned Calculator", icon: "fa-fire"}, // Note: name in HTML card was "Calories Burned"
-                {name: "One Rep Max Calculator", icon: "fa-dumbbell"},
-                {name: "Target Heart Rate Calculator", icon: "fa-heart"}, // Note: name in HTML card was "Target Heart Rate"
-                {name: "Protein Calculator", icon: "fa-drumstick-bite"},
-                {name: "Fat Intake Calculator", icon: "fa-bacon"},
-                {name: "TDEE Calculator", icon: "fa-calculator"},
-                {name: "Ovulation Calculator", icon: "fa-calendar"},
-                {name: "Conception Calculator", icon: "fa-calendar"},
-                {name: "Period Calculator", icon: "fa-calendar-alt"},
-                {name: "GFR Calculator", icon: "fa-heartbeat"},
-                {name: "Body Type Calculator", icon: "fa-user"},
-                {name: "Body Surface Area Calculator", icon: "fa-ruler"}, // fa-ruler-combined more visual
-                {name: "BAC Calculator", icon: "fa-wine-glass"},
-                {name: "Anorexic BMI Calculator", icon: "fa-weight"},
-                {name: "Weight Watcher Points Calculator", icon: "fa-weight"},
-                {name: "Overweight Calculator", icon: "fa-weight"}
-            ],
-            math: [
-                {name: "Scientific Calculator", icon: "fa-calculator"},
-                {name: "Fraction Calculator", icon: "fa-divide"},
-                {name: "Percentage Calculator", icon: "fa-percent"},
-                {name: "Triangle Calculator", icon: "fa-shapes"}, // fa-play for triangle might be better
-                {name: "Volume Calculator", icon: "fa-cube"},
-                {name: "Standard Deviation Calculator", icon: "fa-chart-bar"},
-                {name: "Random Number Generator", icon: "fa-dice"},
-                {name: "Number Sequence Calculator", icon: "fa-sort-numeric-up"}, // fa-sort-numeric-down-alt
-                {name: "Percent Error Calculator", icon: "fa-exclamation-circle"},
-                {name: "Exponent Calculator", icon: "fa-superscript"},
-                {name: "Binary Calculator", icon: "fa-code"},
-                {name: "Hex Calculator", icon: "fa-hashtag"},
-                {name: "Half-Life Calculator", icon: "fa-radiation"}, // fa-atom or fa-flask might be better
-                {name: "Quadratic Formula Calculator", icon: "fa-square-root-alt"},
-                {name: "Slope Calculator", icon: "fa-chart-line"},
-                {name: "Log Calculator", icon: "fa-calculator"},
-                {name: "Area Calculator", icon: "fa-vector-square"},
-                {name: "Sample Size Calculator", icon: "fa-chart-area"},
-                {name: "Probability Calculator", icon: "fa-dice"},
-                {name: "Statistics Calculator", icon: "fa-chart-bar"},
-                {name: "Mean, Median, Mode, Range Calculator", icon: "fa-calculator"},
-                {name: "Permutation and Combination Calculator", icon: "fa-superscript"},
-                {name: "Z-score Calculator", icon: "fa-chart-line"},
-                {name: "Confidence Interval Calculator", icon: "fa-chart-area"},
-                {name: "Ratio Calculator", icon: "fa-divide"},
-                {name: "Distance Calculator", icon: "fa-ruler"}, // fa-road or fa-route
-                {name: "Circle Calculator", icon: "fa-circle"}, // fa-circle-notch or fa-dot-circle
-                {name: "Surface Area Calculator", icon: "fa-vector-square"},
-                {name: "Pythagorean Theorem Calculator", icon: "fa-square-root-alt"},
-                {name: "Right Triangle Calculator", icon: "fa-play"}, // Using fa-play for triangle shape
-                {name: "Root Calculator", icon: "fa-square-root-alt"},
-                {name: "Least Common Multiple Calculator", icon: "fa-sort-numeric-up"},
-                {name: "Greatest Common Factor Calculator", icon: "fa-divide"},
-                {name: "Factor Calculator", icon: "fa-divide"},
-                {name: "Rounding Calculator", icon: "fa-calculator"},
-                {name: "Matrix Calculator", icon: "fa-th"},
-                {name: "Scientific Notation Calculator", icon: "fa-superscript"},
-                {name: "Big Number Calculator", icon: "fa-calculator"},
-                {name: "Prime Factorization Calculator", icon: "fa-divide"},
-                {name: "Common Factor Calculator", icon: "fa-divide"},
-                {name: "Basic Calculator", icon: "fa-calculator"},
-                {name: "Long Division Calculator", icon: "fa-divide"},
-                {name: "Average Calculator", icon: "fa-calculator"},
-                {name: "P-value Calculator", icon: "fa-percent"}
-            ],
-            other: [
-                {name: "Age Calculator", icon: "fa-birthday-cake"},
-                {name: "Date Calculator", icon: "fa-calendar"},
-                {name: "Time Calculator", icon: "fa-clock"},
-                {name: "Hours Calculator", icon: "fa-business-time"},
-                {name: "GPA Calculator", icon: "fa-graduation-cap"},
-                {name: "Grade Calculator", icon: "fa-book"},
-                {name: "Height Calculator", icon: "fa-ruler-vertical"},
-                {name: "Concrete Calculator", icon: "fa-hard-hat"},
-                {name: "IP Subnet Calculator", icon: "fa-network-wired"},
-                {name: "Bra Size Calculator", icon: "fa-tshirt"},
-                {name: "Password Generator", icon: "fa-key"},
-                {name: "Dice Roller", icon: "fa-dice"},
-                {name: "Conversion Calculator", icon: "fa-exchange-alt"},
-                {name: "Fuel Cost Calculator", icon: "fa-gas-pump"},
-                {name: "Voltage Drop Calculator", icon: "fa-bolt"},
-                {name: "BTU Calculator", icon: "fa-temperature-high"},
-                {name: "Square Footage Calculator", icon: "fa-ruler-combined"},
-                {name: "Time Card Calculator", icon: "fa-clock"},
-                {name: "Time Zone Calculator", icon: "fa-globe"},
-                {name: "Love Calculator", icon: "fa-heart"},
-                {name: "GDP Calculator", icon: "fa-globe-americas"},
-                {name: "Gas Mileage Calculator", icon: "fa-gas-pump"},
-                {name: "Horsepower Calculator", icon: "fa-tachometer-alt"},
-                {name: "Stair Calculator", icon: "fa-shoe-prints"}, // fa-shoe-prints or fa-level-up-alt for stairs
-                {name: "Resistor Calculator", icon: "fa-bolt"},
-                {name: "Ohm's Law Calculator", icon: "fa-bolt"},
-                {name: "Electricity Calculator", icon: "fa-bolt"},
-                {name: "Tip Calculator", icon: "fa-tag"},
-                {name: "Mileage Calculator", icon: "fa-road"},
-                {name: "Density Calculator", icon: "fa-weight"}, // fa-balance-scale or fa-flask
-                {name: "Mass Calculator", icon: "fa-weight"}, // fa-balance-scale
-                {name: "Weight Calculator", icon: "fa-weight"}, // fa-balance-scale
-                {name: "Speed Calculator", icon: "fa-tachometer-alt"},
-                {name: "Molarity Calculator", icon: "fa-flask"},
-                {name: "Molecular Weight Calculator", icon: "fa-atom"},
-                {name: "Roman Numeral Converter", icon: "fa-history"},
-                {name: "Golf Handicap Calculator", icon: "fa-golf-ball"},
-                {name: "Sleep Calculator", icon: "fa-bed"},
-                {name: "Tire Size Calculator", icon: "fa-dot-circle"}, // fa-circle or fa-compact-disc
-                {name: "Roofing Calculator", icon: "fa-home"},
-                {name: "Tile Calculator", icon: "fa-border-style"}, // fa-th
-                {name: "Mulch Calculator", icon: "fa-leaf"},
-                {name: "Gravel Calculator", icon: "fa-mountain"},
-                {name: "Wind Chill Calculator", icon: "fa-wind"},
-                {name: "Heat Index Calculator", icon: "fa-temperature-high"},
-                {name: "Dew Point Calculator", icon: "fa-tint"},
-                {name: "Bandwidth Calculator", icon: "fa-network-wired"},
-                {name: "Time Duration Calculator", icon: "fa-clock"},
-                {name: "Day Counter", icon: "fa-calendar-alt"},
-                {name: "Day of the Week Calculator", icon: "fa-calendar-day"}
-            ]
-        };
-        
-        // Helper function to generate slugs
-        function toSlug(str) {
-            return str
-                .toLowerCase()
-                .replace(/[^a-z0-9\s-]/g, '') 
-                .replace(/\s+/g, '-')          
-                .replace(/-+/g, '-');          
-        }
-        
-        // Icon mapping for categories
-        const categoryIcons = {
-            financial: "fa-chart-line",
-            health: "fa-heartbeat",
-            math: "fa-square-root-alt",
-            other: "fa-cogs"
-        };
-        
-        // View All functionality for categories
-        const viewAllButtons = document.querySelectorAll('.view-all');
-        const modal = document.getElementById('viewAllModal');
-        const modalClose = document.querySelector('#viewAllModal .modal-close');
-        const modalTitle = document.getElementById('modalCategoryTitle');
-        const modalToolsGrid = document.getElementById('modalToolsGrid');
-        
-        viewAllButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const category = this.getAttribute('data-category');
-                openModal(category);
-            });
-        });
-        
-        function openModal(category) {
-            modalTitle.innerHTML = `
-                <i class="fas ${categoryIcons[category]}"></i>
-                ${document.querySelector(`.${category} .category-title`).textContent}
-            `;
-            
-            modalToolsGrid.innerHTML = '';
-            
-            if (toolData[category]) { // Check if category exists in toolData
+
+            function populateToolsGrid(gridElement, category) {
+                gridElement.innerHTML = '';
                 toolData[category].forEach(tool => {
                     const slug = toSlug(tool.name);
                     const toolElement = document.createElement('a');
                     toolElement.className = 'modal-tool-item';
-                    // All links are relative paths category/slug.html
-                    toolElement.href = `${category}/${slug}.html`; 
-                    toolElement.innerHTML = `
-                        <div class="tool-icon">
-                            <i class="fas ${tool.icon}"></i>
-                        </div>
-                        <div class="tool-name">${tool.name}</div>
-                    `;
-                    modalToolsGrid.appendChild(toolElement);
+                    toolElement.href = `${category}/${slug}.html`; // The URL is relative
+                    toolElement.innerHTML = `<div class="tool-icon"><i class="fas ${tool.icon}"></i></div><div class="tool-name">${tool.name}</div>`;
+                    gridElement.appendChild(toolElement);
                 });
             }
-            
-            modal.style.display = 'flex';
-        }
-        
-        if (modalClose) { // Ensure modalClose exists before adding listener
-            modalClose.addEventListener('click', function() {
-                modal.style.display = 'none';
+
+            // --- EVENT LISTENERS & LOGIC ---
+            // Mobile menu toggle
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('nav-active');
             });
-        }
-        
-        window.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                modal.style.display = 'none';
+
+            // Update footer year
+            document.querySelector('.copyright p').innerHTML = document.querySelector('.copyright p').innerHTML.replace('2023', new Date().getFullYear());
+
+            // Smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({ top: targetElement.offsetTop - 80, behavior: 'smooth' });
+                    }
+                });
+            });
+            
+            // --- MODAL LOGIC ---
+            const viewAllModal = document.getElementById('viewAllModal');
+            const allCalculatorsModal = document.getElementById('allCalculatorsModal');
+
+            // Function to open a modal
+            function openModal(modalElement) {
+                if (modalElement) modalElement.style.display = 'flex';
             }
+
+            // Function to close a modal
+            function closeModal(modalElement) {
+                if (modalElement) modalElement.style.display = 'none';
+            }
+
+            // Category "View All" modal
+            const modalCategoryTitle = document.getElementById('modalCategoryTitle');
+            const modalToolsGrid = document.getElementById('modalToolsGrid');
+            
+            document.querySelectorAll('.view-all').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const category = this.getAttribute('data-category');
+                    const categoryTitle = this.closest('.category-card').querySelector('.category-title').textContent;
+                    modalCategoryTitle.innerHTML = `<i class="fas ${categoryIcons[category]}"></i> ${categoryTitle}`;
+                    populateToolsGrid(modalToolsGrid, category);
+                    openModal(viewAllModal);
+                });
+            });
+
+            // "All Calculators" modal
+            const allToolsGrid = document.getElementById('allToolsGrid');
+            document.querySelectorAll('#allCalculatorsBtn, #footerAllCalculators').forEach(btn => {
+                btn.addEventListener('click', e => {
+                    e.preventDefault();
+                    // Activate financial tab by default
+                    document.querySelector('.category-tab[data-category="financial"]').click();
+                    openModal(allCalculatorsModal);
+                });
+            });
+
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    populateToolsGrid(allToolsGrid, this.getAttribute('data-category'));
+                });
+            });
+            
+            // Footer "View All" links
+            document.querySelectorAll('.view-all-footer').forEach(link => {
+                link.addEventListener('click', function(e){
+                    e.preventDefault();
+                    const category = this.getAttribute('data-category');
+                    const categoryTitle = this.textContent.replace('→', '').trim();
+                    modalCategoryTitle.innerHTML = `<i class="fas ${categoryIcons[category]}"></i> ${categoryTitle}`;
+                    populateToolsGrid(modalToolsGrid, category);
+                    openModal(viewAllModal);
+                });
+            });
+
+            // General modal close logic
+            document.querySelectorAll('.modal-close').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    closeModal(viewAllModal);
+                    closeModal(allCalculatorsModal);
+                });
+            });
+
+            window.addEventListener('click', e => {
+                if (e.target === viewAllModal) closeModal(viewAllModal);
+                if (e.target === allCalculatorsModal) closeModal(allCalculatorsModal);
+            });
+            
+            // Initialize the "All Calculators" modal with the financial category
+            document.querySelector('.category-tab[data-category="financial"]').click();
         });
-        
-        // All Calculators functionality
-        const allCalculatorsModal = document.getElementById('allCalculatorsModal');
-        const allModalClose = document.querySelector('#allCalculatorsModal .modal-close');
-        const allToolsGrid = document.getElementById('allToolsGrid');
-        const allCalculatorsBtn = document.getElementById('allCalculatorsBtn');
-        const categoryTabs = document.querySelectorAll('.category-tab');
-        const footerAllCalculators = document.getElementById('footerAllCalculators');
-        
-        function openAllCalculatorsModal() {
-            allCalculatorsModal.style.display = 'flex';
-            // Default to first active tab or 'financial'
-            const activeTab = document.querySelector('.category-tab.active');
-            showAllCalculators(activeTab ? activeTab.getAttribute('data-category') : 'financial');
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalcHub | Professional Calculation Tools</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --dark-gray: #343a40;
+            --medium-gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
         }
 
-        if (allCalculatorsBtn) {
-             allCalculatorsBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                openAllCalculatorsModal();
-            });
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-       
-        if (footerAllCalculators) {
-            footerAllCalculators.addEventListener('click', function(e) {
-                e.preventDefault();
-                openAllCalculatorsModal();
-            });
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: var(--gradient);
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.8rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--dark-gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            transition: var(--transition);
+            border-radius: 10px;
+        }
+
+        .nav-links a:hover, 
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover:after,
+        .nav-links a.active:after {
+            width: 100%;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-bar {
+            position: relative;
+        }
+
+        .search-bar input {
+            padding: 0.8rem 1.2rem 0.8rem 3rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 30px;
+            font-family: inherit;
+            width: 240px;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            width: 280px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--medium-gray);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
+            z-index: 1001; /* Above nav links */
         }
         
-        function showAllCalculators(category) {
-            allToolsGrid.innerHTML = '';
+        /* Hero Section */
+        .hero {
+            padding: 6rem 0 4rem;
+            background: linear-gradient(120deg, #f0f7ff 0%, #f8fafc 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero:before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: var(--gradient);
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 650px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--dark-gray);
+            margin-bottom: 2rem;
+            max-width: 550px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.9rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: var(--transition);
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--light-gray);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background-color: #f0f7ff;
+        }
+
+        .hero-image {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45%;
+            max-width: 600px;
+            z-index: 0;
+        }
+
+        /* Ad Space Styling */
+        .ad-space {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            text-align: center;
+            margin: 2rem auto;
+            border: 1px solid var(--light-gray);
+            overflow: hidden;
+            max-width: 1000px;
+        }
+
+        .ad-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--medium-gray);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .ad-container {
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border-radius: 8px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--medium-gray);
+            font-weight: 500;
+        }
+        
+        /* Categories Section */
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--medium-gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            overflow: hidden;
+            border: 1px solid var(--light-gray);
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+
+        .category-header {
+            padding: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: linear-gradient(90deg, #f8fafc, white);
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .financial .category-icon { background: linear-gradient(135deg, #4361ee, #3a56d4); }
+        .health .category-icon { background: linear-gradient(135deg, #f72585, #b5179e); }
+        .math .category-icon { background: linear-gradient(135deg, #4cc9f0, #4895ef); }
+        .other .category-icon { background: linear-gradient(135deg, #7209b7, #560bad); }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            padding: 1.8rem;
+            gap: 1.2rem;
+        }
+
+        .tool-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            border-radius: 10px;
+            transition: var(--transition);
+            color: var(--dark-gray);
+            text-decoration: none;
+        }
+
+        .tool-item:hover {
+            background-color: #f0f7ff;
+            color: var(--primary);
+        }
+
+        .tool-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: #f0f7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .tool-name {
+            font-weight: 500;
+        }
+
+        .view-all {
+            display: block;
+            text-align: center;
+            padding: 1.2rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            border-top: 1px solid var(--light-gray);
+            transition: var(--transition);
+        }
+
+        .view-all:hover {
+            background-color: #f0f7ff;
+        }
+
+        /* Popular Tools Section */
+        .popular-tools {
+            background: linear-gradient(120deg, #f8fafc 0%, #f0f7ff 100%);
+        }
+
+        .tools-grid-large {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            transition: var(--transition);
+            text-align: center;
+            border: 1px solid var(--light-gray);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .tool-card-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .financial-bg { background: linear-gradient(135deg, #4361ee, #3a56d4); }
+        .health-bg { background: linear-gradient(135deg, #f72585, #b5179e); }
+        .math-bg { background: linear-gradient(135deg, #4cc9f0, #4895ef); }
+        .other-bg { background: linear-gradient(135deg, #7209b7, #560bad); }
+
+        .tool-card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--dark);
+        }
+
+        .tool-card-desc {
+            color: var(--medium-gray);
+            font-size: 0.95rem;
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2.5rem 2rem;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid var(--light-gray);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.8rem;
+            font-size: 2rem;
+            color: white;
+            background: var(--gradient);
+        }
+
+        .feature-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .feature-desc {
+            color: var(--medium-gray);
+            font-size: 1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--gradient);
+            padding: 5rem 0;
+            text-align: center;
+            color: white;
+            border-radius: var(--border-radius);
+            margin: 2rem;
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .btn-light {
+            background: white;
+            color: var(--primary);
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .btn-light:hover {
+            background: rgba(255,255,255,0.9);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 5rem 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-col h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.8rem;
+            position: relative;
+            padding-bottom: 0.8rem;
+        }
+
+        .footer-col h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-about {
+            color: #adb5bd;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.9rem;
+        }
+
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-links a i {
+            font-size: 0.8rem;
+            color: var(--accent);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #6c757d;
+            font-size: 0.95rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            max-width: 1000px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 1.5rem 2rem;
+            background: var(--gradient);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .modal-body {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .modal-tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .modal-tool-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+            transition: var(--transition);
+            color: var(--dark-gray);
+            text-decoration: none;
+            border: 1px solid var(--light-gray);
+        }
+
+        .modal-tool-item:hover {
+            background-color: #f0f7ff;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Category tabs for all calculators */
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .category-tab {
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            background: var(--light-gray);
+            color: var(--dark-gray);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-family: inherit;
+        }
+
+        .category-tab:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .category-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .hero-image {
+                width: 40%;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero {
+                padding: 4rem 0;
+            }
             
-            if (toolData[category]) { // Check if category exists in toolData
+            .hero-content {
+                max-width: 100%;
+                text-align: center;
+                margin: 0 auto;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero p {
+                margin: 0 auto 2rem;
+            }
+            
+            .hero-image {
+                position: relative;
+                width: 80%;
+                max-width: 500px;
+                margin: 3rem auto 0;
+                transform: none;
+                top: auto;
+                right: auto;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+                padding: 1rem 0;
+            }
+
+            .nav-links.nav-active {
+                display: flex;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 1rem 0;
+            }
+            
+            .search-bar input {
+                width: 180px;
+            }
+            
+            .search-bar input:focus {
+                width: 200px;
+            }
+            
+            .hero h1 {
+                font-size: 2.3rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section {
+                padding: 4rem 0;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .cta-title {
+                font-size: 2rem;
+            }
+            
+            .cta-section {
+                margin: 0;
+                border-radius: 0;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo span {
+                font-size: 1.5rem;
+            }
+            
+            .search-bar {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .category-tabs {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-container">
+                <a href="#" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <span>CalcHub</span>
+                </a>
+                
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="#" class="active">Home</a></li>
+                        <li><a href="#categories">Categories</a></li>
+                        <li><a href="#popular">Popular</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" placeholder="Search calculators...">
+                    </div>
+                    <button class="mobile-menu-btn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Advanced Calculation Tools for Professionals</h1>
+                <p>Access over 150 specialized calculators for finance, health, math, and everyday tasks. Precision-engineered tools for accurate results.</p>
+                <div class="hero-buttons">
+                    <a href="#categories" class="btn btn-primary">Explore Tools</a>
+                    <a href="#" class="btn btn-secondary" id="allCalculatorsBtn">View All Calculators</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="50" width="500" height="300" rx="20" fill="#4361ee" opacity="0.1"/>
+                    <rect x="80" y="80" width="440" height="60" rx="10" fill="#4361ee" opacity="0.2"/>
+                    <circle cx="100" cy="110" r="15" fill="#4cc9f0"/>
+                    <circle cx="140" cy="110" r="15" fill="#7209b7"/>
+                    <circle cx="180" cy="110" r="15" fill="#f72585"/>
+                    <rect x="100" y="170" width="120" height="40" rx="8" fill="#4361ee" opacity="0.3"/>
+                    <rect x="250" y="170" width="120" height="40" rx="8" fill="#7209b7" opacity="0.3"/>
+                    <rect x="400" y="170" width="120" height="40" rx="8" fill="#f72585" opacity="0.3"/>
+                    <rect x="100" y="230" width="120" height="40" rx="8" fill="#4cc9f0" opacity="0.3"/>
+                    <rect x="250" y="230" width="120" height="40" rx="8" fill="#3a56d4" opacity="0.3"/>
+                    <rect x="400" y="230" width="120" height="40" rx="8" fill="#b5179e" opacity="0.3"/>
+                    <rect x="100" y="290" width="420" height="60" rx="10" fill="#212529" opacity="0.1"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top Ad Space -->
+   <div class="container">
+    <div class="ad-space">
+        <span class="ad-label">Advertisement</span>
+        <div class="ad-container leaderboard">
+            <a href="https://www.profitableratecpm.com/jqcytw6gn?key=732501cb4d7baf6416857507d26ee943" target="_blank" rel="nofollow">
+                <span>Ad Placeholder (728x90)</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+    <!-- Categories Section -->
+    <section class="section" id="categories">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Calculator Categories</h2>
+                <p class="section-subtitle">Organized tools for every professional need</p>
+            </div>
+            
+            <div class="categories-grid">
+                <!-- Financial Calculators -->
+                <div class="category-card financial">
+                    <div class="category-header">
+                        <div class="category-icon"><i class="fas fa-chart-line"></i></div>
+                        <h3 class="category-title">Financial Calculators</h3>
+                    </div>
+                    <div class="tools-grid">
+                        <a href="financial/mortgage-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-home"></i></div><div class="tool-name">Mortgage Calculator</div></a>
+                        <a href="financial/auto-loan-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-car"></i></div><div class="tool-name">Auto Loan Calculator</div></a>
+                        <a href="financial/interest-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-percentage"></i></div><div class="tool-name">Interest Calculator</div></a>
+                        <a href="financial/retirement-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-money-check"></i></div><div class="tool-name">Retirement Calculator</div></a>
+                        <a href="financial/investment-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-coins"></i></div><div class="tool-name">Investment Calculator</div></a>
+                        <a href="financial/income-tax-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-file-invoice-dollar"></i></div><div class="tool-name">Income Tax Calculator</div></a>
+                    </div>
+                    <a href="#" class="view-all" data-category="financial">View All Financial Tools <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <!-- Health Calculators -->
+                <div class="category-card health">
+                    <div class="category-header">
+                        <div class="category-icon"><i class="fas fa-heartbeat"></i></div>
+                        <h3 class="category-title">Fitness & Health</h3>
+                    </div>
+                    <div class="tools-grid">
+                        <a href="health/bmi-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-weight"></i></div><div class="tool-name">BMI Calculator</div></a>
+                        <a href="health/calorie-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-fire"></i></div><div class="tool-name">Calorie Calculator</div></a>
+                        <a href="health/calories-burned-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-running"></i></div><div class="tool-name">Calories Burned</div></a>
+                        <a href="health/pregnancy-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-baby"></i></div><div class="tool-name">Pregnancy Calculator</div></a>
+                        <a href="health/target-heart-rate-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-heart"></i></div><div class="tool-name">Target Heart Rate</div></a>
+                        <a href="health/macro-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-apple-alt"></i></div><div class="tool-name">Macro Calculator</div></a>
+                    </div>
+                    <a href="#" class="view-all" data-category="health">View All Health Tools <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <!-- Math Calculators -->
+                <div class="category-card math">
+                    <div class="category-header">
+                        <div class="category-icon"><i class="fas fa-square-root-alt"></i></div>
+                        <h3 class="category-title">Math Calculators</h3>
+                    </div>
+                    <div class="tools-grid">
+                        <a href="math/scientific-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-calculator"></i></div><div class="tool-name">Scientific Calculator</div></a>
+                        <a href="math/fraction-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-divide"></i></div><div class="tool-name">Fraction Calculator</div></a>
+                        <a href="math/percentage-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-percent"></i></div><div class="tool-name">Percentage Calculator</div></a>
+                        <a href="math/volume-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-cube"></i></div><div class="tool-name">Volume Calculator</div></a>
+                        <a href="math/statistics-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-chart-bar"></i></div><div class="tool-name">Statistics Calculator</div></a>
+                        <a href="math/quadratic-formula-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-superscript"></i></div><div class="tool-name">Quadratic Formula</div></a>
+                    </div>
+                    <a href="#" class="view-all" data-category="math">View All Math Tools <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <!-- Other Calculators -->
+                <div class="category-card other">
+                    <div class="category-header">
+                        <div class="category-icon"><i class="fas fa-cogs"></i></div>
+                        <h3 class="category-title">Other Calculators</h3>
+                    </div>
+                    <div class="tools-grid">
+                        <a href="other/age-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-birthday-cake"></i></div><div class="tool-name">Age Calculator</div></a>
+                        <a href="other/date-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-calendar"></i></div><div class="tool-name">Date Calculator</div></a>
+                        <a href="other/gpa-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-graduation-cap"></i></div><div class="tool-name">GPA Calculator</div></a>
+                        <a href="other/conversion-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-exchange-alt"></i></div><div class="tool-name">Conversion Calculator</div></a>
+                        <a href="other/tip-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-tag"></i></div><div class="tool-name">Tip Calculator</div></a>
+                        <a href="other/fuel-cost-calculator.html" class="tool-item"><div class="tool-icon"><i class="fas fa-gas-pump"></i></div><div class="tool-name">Fuel Cost Calculator</div></a>
+                    </div>
+                    <a href="#" class="view-all" data-category="other">View All Other Tools <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Middle Ad Space -->
+    <div class="container">
+        <div class="ad-space">
+            <span class="ad-label">Advertisement</span>
+            <div class="ad-container rectangle">
+                <script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=300x250&ga=g"></script>
+                <noscript><a href="https://yllix.com/publishers/772531" target="_blank"><img src="//ylx-aff.advertica-cdn.com/pub/300x250.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" /></a></noscript>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popular Tools Section -->
+    <section class="section popular-tools" id="popular">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Most Popular Tools</h2>
+                <p class="section-subtitle">Trusted by professionals worldwide</p>
+            </div>
+            
+            <div class="tools-grid-large">
+                <a href="financial/mortgage-calculator.html" class="tool-card">
+                    <div class="tool-card-icon financial-bg"><i class="fas fa-home"></i></div>
+                    <h3 class="tool-card-title">Mortgage Calculator</h3>
+                    <p class="tool-card-desc">Calculate monthly payments, interest, and amortization schedules.</p>
+                </a>
+                
+                <a href="health/bmi-calculator.html" class="tool-card">
+                    <div class="tool-card-icon health-bg"><i class="fas fa-weight"></i></div>
+                    <h3 class="tool-card-title">BMI Calculator</h3>
+                    <p class="tool-card-desc">Determine your body mass index and healthy weight range.</p>
+                </a>
+                
+                <a href="math/percentage-calculator.html" class="tool-card">
+                    <div class="tool-card-icon math-bg"><i class="fas fa-percentage"></i></div>
+                    <h3 class="tool-card-title">Percentage Calculator</h3>
+                    <p class="tool-card-desc">Solve percentage problems and calculate increases/decreases.</p>
+                </a>
+                
+                <a href="other/date-calculator.html" class="tool-card">
+                    <div class="tool-card-icon other-bg"><i class="fas fa-calendar"></i></div>
+                    <h3 class="tool-card-title">Date Calculator</h3>
+                    <p class="tool-card-desc">Calculate days between dates or add/subtract from a date.</p>
+                </a>
+                
+                <a href="financial/compound-interest-calculator.html" class="tool-card">
+                    <div class="tool-card-icon financial-bg"><i class="fas fa-coins"></i></div>
+                    <h3 class="tool-card-title">Compound Interest</h3>
+                    <p class="tool-card-desc">Project investment growth with compound interest calculations.</p>
+                </a>
+                
+                <a href="health/calorie-calculator.html" class="tool-card">
+                    <div class="tool-card-icon health-bg"><i class="fas fa-fire"></i></div>
+                    <h3 class="tool-card-title">Calorie Calculator</h3>
+                    <p class="tool-card-desc">Determine daily calorie needs based on activity and goals.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose CalcHub?</h2>
+                <p class="section-subtitle">Professional tools for accurate results</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                    <h3 class="feature-title">Lightning Fast</h3>
+                    <p class="feature-desc">Get instant results with our optimized calculation engines that process complex formulas in milliseconds.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-lock"></i></div>
+                    <h3 class="feature-title">Secure & Private</h3>
+                    <p class="feature-desc">Your data never leaves your browser. All calculations happen locally for maximum privacy and security.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3 class="feature-title">Fully Responsive</h3>
+                    <p class="feature-desc">Access all tools from any device with our mobile-optimized interface that works flawlessly everywhere.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
+                    <h3 class="feature-title">Always Updated</h3>
+                    <p class="feature-desc">We regularly add new calculators and update existing ones with the latest formulas and regulations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <div class="container">
+        <div class="cta-section">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Simplify Your Calculations?</h2>
+                <p class="cta-text">Join thousands of professionals who trust CalcHub for accurate, reliable calculation tools.</p>
+                <a href="#categories" class="btn btn-light">Get Started Now</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Ad Space -->
+    <div class="container">
+        <div class="ad-space">
+            <span class="ad-label">Advertisement</span>
+            <div class="ad-container leaderboard">
+                <a href="https://www.profitableratecpm.com/jqcytw6gn?key=732501cb4d7baf6416857507d26ee943" target="_blank" rel="nofollow">
+                    <span>Ad Placeholder (728x90)</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- View All Modal -->
+    <div class="modal" id="viewAllModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalCategoryTitle"><i class="fas fa-chart-line"></i>Financial Calculators</h3>
+                <button class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-tools-grid" id="modalToolsGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Calculators Modal -->
+    <div class="modal" id="allCalculatorsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-calculator"></i>All Calculators</h3>
+                <button class="modal-close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="category-tabs">
+                    <button class="category-tab active" data-category="financial">Financial</button>
+                    <button class="category-tab" data-category="health">Health & Fitness</button>
+                    <button class="category-tab" data-category="math">Math</button>
+                    <button class="category-tab" data-category="other">Other</button>
+                </div>
+                <div class="modal-tools-grid" id="allToolsGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <div class="logo-icon"><i class="fas fa-calculator"></i></div>
+                        <span>CalcHub</span>
+                    </div>
+                    <p class="footer-about">Professional calculation tools for finance, health, math, and everyday tasks. Accurate, reliable, and always free.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" class="view-all-footer" data-category="financial"><i class="fas fa-chevron-right"></i> Financial Calculators</a></li>
+                        <li><a href="#" class="view-all-footer" data-category="health"><i class="fas fa-chevron-right"></i> Health & Fitness</a></li>
+                        <li><a href="#" class="view-all-footer" data-category="math"><i class="fas fa-chevron-right"></i> Math Calculators</a></li>
+                        <li><a href="#" class="view-all-footer" data-category="other"><i class="fas fa-chevron-right"></i> Other Tools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="#" id="footerAllCalculators"><i class="fas fa-chevron-right"></i> All Calculators</a></li>
+                        <li><a href="#popular"><i class="fas fa-chevron-right"></i> Popular Tools</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                        <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Disclaimer</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2023 CalcHub. All rights reserved. Designed with <i class="fas fa-heart" style="color: #f72585;"></i> for professionals</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- DATA SOURCE ---
+            const toolData = {
+                financial: [
+                    {name: "Mortgage Calculator", icon: "fa-home"}, {name: "Loan Calculator", icon: "fa-hand-holding-usd"}, {name: "Auto Loan Calculator", icon: "fa-car"}, {name: "Interest Calculator", icon: "fa-percentage"}, {name: "Payment Calculator", icon: "fa-credit-card"}, {name: "Retirement Calculator", icon: "fa-piggy-bank"}, {name: "Amortization Calculator", icon: "fa-calculator"}, {name: "Investment Calculator", icon: "fa-chart-line"}, {name: "Currency Calculator", icon: "fa-money-bill-wave"}, {name: "Inflation Calculator", icon: "fa-chart-pie"}, {name: "Finance Calculator", icon: "fa-file-invoice-dollar"}, {name: "Mortgage Payoff Calculator", icon: "fa-home"}, {name: "Income Tax Calculator", icon: "fa-file-alt"}, {name: "Compound Interest Calculator", icon: "fa-coins"}, {name: "Salary Calculator", icon: "fa-money-check"}, {name: "401K Calculator", icon: "fa-university"}, {name: "Interest Rate Calculator", icon: "fa-percent"}, {name: "Sales Tax Calculator", icon: "fa-receipt"}, {name: "House Affordability Calculator", icon: "fa-house-user"}, {name: "Savings Calculator", icon: "fa-piggy-bank"}, {name: "Rent Calculator", icon: "fa-key"}, {name: "Marriage Tax Calculator", icon: "fa-ring"}, {name: "Estate Tax Calculator", icon: "fa-landmark"}, {name: "Pension Calculator", icon: "fa-user-tie"}, {name: "Social Security Calculator", icon: "fa-shield-alt"}, {name: "Annuity Calculator", icon: "fa-money-check-alt"}, {name: "Annuity Payout Calculator", icon: "fa-money-bill-alt"}, {name: "Credit Card Calculator", icon: "fa-credit-card"}, {name: "Credit Cards Payoff Calculator", icon: "fa-credit-card"}, {name: "Debt Payoff Calculator", icon: "fa-money-bill-wave"}, {name: "Debt Consolidation Calculator", icon: "fa-compress-alt"}, {name: "Repayment Calculator", icon: "fa-undo-alt"}, {name: "Student Loan Calculator", icon: "fa-graduation-cap"}, {name: "College Cost Calculator", icon: "fa-university"}, {name: "Simple Interest Calculator", icon: "fa-coins"}, {name: "CD Calculator", icon: "fa-compact-disc"}, {name: "Bond Calculator", icon: "fa-file-contract"}, {name: "Roth IRA Calculator", icon: "fa-piggy-bank"}, {name: "IRA Calculator", icon: "fa-university"}, {name: "RMD Calculator", icon: "fa-calculator"}, {name: "VAT Calculator", icon: "fa-percentage"}, {name: "Cash Back or Low Interest Calculator", icon: "fa-money-bill"}, {name: "Auto Lease Calculator", icon: "fa-car"}, {name: "Depreciation Calculator", icon: "fa-chart-line"}, {name: "Average Return Calculator", icon: "fa-chart-line"}, {name: "Margin Calculator", icon: "fa-percentage"}, {name: "Discount Calculator", icon: "fa-tag"}, {name: "Business Loan Calculator", icon: "fa-briefcase"}, {name: "Debt-to-Income Ratio Calculator", icon: "fa-balance-scale"}, {name: "Real Estate Calculator", icon: "fa-building"}, {name: "Take-Home-Paycheck Calculator", icon: "fa-money-check"}, {name: "Personal Loan Calculator", icon: "fa-user"}, {name: "Boat Loan Calculator", icon: "fa-ship"}, {name: "Lease Calculator", icon: "fa-file-contract"}, {name: "Refinance Calculator", icon: "fa-sync-alt"}, {name: "Budget Calculator", icon: "fa-chart-pie"}, {name: "Rental Property Calculator", icon: "fa-home"}, {name: "IRR Calculator", icon: "fa-percentage"}, {name: "ROI Calculator", icon: "fa-chart-line"}, {name: "APR Calculator", icon: "fa-percent"}, {name: "FHA Loan Calculator", icon: "fa-home"}, {name: "VA Mortgage Calculator", icon: "fa-home"}, {name: "Down Payment Calculator", icon: "fa-money-bill"}, {name: "Rent vs. Buy Calculator", icon: "fa-balance-scale"}, {name: "Payback Period Calculator", icon: "fa-calendar-alt"}, {name: "Present Value Calculator", icon: "fa-money-bill"}, {name: "Future Value Calculator", icon: "fa-money-bill"}, {name: "Commission Calculator", icon: "fa-percentage"}, {name: "Mortgage Calculator UK", icon: "fa-home"}, {name: "Canadian Mortgage Calculator", icon: "fa-home"}, {name: "Mortgage Amortization Calculator", icon: "fa-calculator"}, {name: "Percent Off Calculator", icon: "fa-tag"}
+                ],
+                health: [
+                    {name: "BMI Calculator", icon: "fa-weight"}, {name: "Calorie Calculator", icon: "fa-fire"}, {name: "Body Fat Calculator", icon: "fa-user"}, {name: "BMR Calculator", icon: "fa-heartbeat"}, {name: "Macro Calculator", icon: "fa-apple-alt"}, {name: "Ideal Weight Calculator", icon: "fa-balance-scale"}, {name: "Pregnancy Calculator", icon: "fa-baby"}, {name: "Pregnancy Weight Gain Calculator", icon: "fa-weight"}, {name: "Due Date Calculator", icon: "fa-calendar-check"}, {name: "Army Body Fat Calculator", icon: "fa-user-shield"}, {name: "Lean Body Mass Calculator", icon: "fa-dumbbell"}, {name: "Calories Burned Calculator", icon: "fa-fire"}, {name: "Target Heart Rate Calculator", icon: "fa-heart"}, {name: "Fat Intake Calculator", icon: "fa-bacon"}, {name: "Ovulation Calculator", icon: "fa-calendar"}, {name: "Period Calculator", icon: "fa-calendar-alt"}, {name: "Body Type Calculator", icon: "fa-user"}, {name: "BAC Calculator", icon: "fa-wine-glass"}, {name: "Weight Watcher Points Calculator", icon: "fa-weight"}
+                ],
+                math: [
+                    {name: "Scientific Calculator", icon: "fa-calculator"}, {name: "Fraction Calculator", icon: "fa-divide"}, {name: "Percentage Calculator", icon: "fa-percent"}, {name: "Triangle Calculator", icon: "fa-shapes"}, {name: "Volume Calculator", icon: "fa-cube"}, {name: "Standard Deviation Calculator", icon: "fa-chart-bar"}, {name: "Random Number Generator", icon: "fa-dice"}, {name: "Percent Error Calculator", icon: "fa-exclamation-circle"}, {name: "Binary Calculator", icon: "fa-code"}, {name: "Half-Life Calculator", icon: "fa-radiation"}, {name: "Quadratic Formula Calculator", icon: "fa-square-root-alt"}, {name: "Slope Calculator", icon: "fa-chart-line"}, {name: "Area Calculator", icon: "fa-vector-square"}, {name: "Probability Calculator", icon: "fa-dice"}, {name: "Mean, Median, Mode, Range Calculator", icon: "fa-calculator"}, {name: "Z-score Calculator", icon: "fa-chart-line"}, {name: "Ratio Calculator", icon: "fa-divide"}, {name: "Circle Calculator", icon: "fa-circle"}, {name: "Pythagorean Theorem Calculator", icon: "fa-square-root-alt"}, {name: "Root Calculator", icon: "fa-square-root-alt"}, {name: "Greatest Common Factor Calculator", icon: "fa-divide"}, {name: "Rounding Calculator", icon: "fa-calculator"}, {name: "Scientific Notation Calculator", icon: "fa-superscript"}, {name: "Prime Factorization Calculator", icon: "fa-divide"}, {name: "Basic Calculator", icon: "fa-calculator"}, {name: "Average Calculator", icon: "fa-calculator"}
+                ],
+                other: [
+                    {name: "Age Calculator", icon: "fa-birthday-cake"}, {name: "Date Calculator", icon: "fa-calendar"}, {name: "Time Calculator", icon: "fa-clock"}, {name: "Hours Calculator", icon: "fa-business-time"}, {name: "GPA Calculator", icon: "fa-graduation-cap"}, {name: "Grade Calculator", icon: "fa-book"}, {name: "Height Calculator", icon: "fa-ruler-vertical"}, {name: "Concrete Calculator", icon: "fa-hard-hat"}, {name: "IP Subnet Calculator", icon: "fa-network-wired"}, {name: "Bra Size Calculator", icon: "fa-tshirt"}, {name: "Password Generator", icon: "fa-key"}, {name: "Dice Roller", icon: "fa-dice"}, {name: "Conversion Calculator", icon: "fa-exchange-alt"}, {name: "Fuel Cost Calculator", icon: "fa-gas-pump"}, {name: "Voltage Drop Calculator", icon: "fa-bolt"}, {name: "BTU Calculator", icon: "fa-temperature-high"}, {name: "Square Footage Calculator", icon: "fa-ruler-combined"}, {name: "Time Card Calculator", icon: "fa-clock"}, {name: "Time Zone Calculator", icon: "fa-globe"}, {name: "Love Calculator", icon: "fa-heart"}, {name: "GDP Calculator", icon: "fa-globe-americas"}, {name: "Gas Mileage Calculator", icon: "fa-gas-pump"}, {name: "Horsepower Calculator", icon: "fa-tachometer-alt"}, {name: "Stair Calculator", icon: "fa-stairs"}, {name: "Resistor Calculator", icon: "fa-bolt"}, {name: "Ohm's Law Calculator", icon: "fa-bolt"}, {name: "Electricity Calculator", icon: "fa-bolt"}, {name: "Tip Calculator", icon: "fa-tag"}, {name: "Mileage Calculator", icon: "fa-road"}, {name: "Density Calculator", icon: "fa-weight"}, {name: "Mass Calculator", icon: "fa-weight"}, {name: "Weight Calculator", icon: "fa-weight"}, {name: "Speed Calculator", icon: "fa-tachometer-alt"}, {name: "Molarity Calculator", icon: "fa-flask"}, {name: "Molecular Weight Calculator", icon: "fa-atom"}, {name: "Roman Numeral Converter", icon: "fa-history"}, {name: "Golf Handicap Calculator", icon: "fa-golf-ball"}, {name: "Sleep Calculator", icon: "fa-bed"}, {name: "Tire Size Calculator", icon: "fa-tire"}, {name: "Roofing Calculator", icon: "fa-home"}, {name: "Tile Calculator", icon: "fa-border-style"}, {name: "Mulch Calculator", icon: "fa-leaf"}, {name: "Gravel Calculator", icon: "fa-mountain"}, {name: "Wind Chill Calculator", icon: "fa-wind"}, {name: "Heat Index Calculator", icon: "fa-temperature-high"}, {name: "Dew Point Calculator", icon: "fa-tint"}, {name: "Bandwidth Calculator", icon: "fa-network-wired"}, {name: "Time Duration Calculator", icon: "fa-clock"}, {name: "Day Counter", icon: "fa-calendar-alt"}, {name: "Day of the Week Calculator", icon: "fa-calendar-day"}
+                ]
+            };
+
+            const categoryIcons = {
+                financial: "fa-chart-line", health: "fa-heartbeat", math: "fa-square-root-alt", other: "fa-cogs"
+            };
+
+            // --- HELPERS ---
+            function toSlug(str) {
+                return str.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+            }
+
+            function populateToolsGrid(gridElement, category) {
+                gridElement.innerHTML = '';
                 toolData[category].forEach(tool => {
                     const slug = toSlug(tool.name);
                     const toolElement = document.createElement('a');
                     toolElement.className = 'modal-tool-item';
-                     // All links are relative paths category/slug.html
-                    toolElement.href = `${category}/${slug}.html`;
-                    toolElement.innerHTML = `
-                        <div class="tool-icon">
-                            <i class="fas ${tool.icon}"></i>
-                        </div>
-                        <div class="tool-name">${tool.name}</div>
-                    `;
-                    allToolsGrid.appendChild(toolElement);
+                    toolElement.href = `${category}/${slug}.html`; // The URL is relative
+                    toolElement.innerHTML = `<div class="tool-icon"><i class="fas ${tool.icon}"></i></div><div class="tool-name">${tool.name}</div>`;
+                    gridElement.appendChild(toolElement);
                 });
             }
-        }
-        
-        categoryTabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                const category = this.getAttribute('data-category');
-                showAllCalculators(category);
-            });
-        });
-        
-        if (allModalClose) { // Ensure allModalClose exists
-            allModalClose.addEventListener('click', function() {
-                allCalculatorsModal.style.display = 'none';
-            });
-        }
-        
-        window.addEventListener('click', function(e) {
-            if (e.target === allCalculatorsModal) {
-                allCalculatorsModal.style.display = 'none';
-            }
-        });
-        
-        // Footer category links
-        document.querySelectorAll('.footer-links a[data-category]').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const category = this.getAttribute('data-category');
-                openModal(category); // Re-use the existing openModal function
-            });
-        });
 
-        // Fix for hardcoded links in category cards to use slugified names from toolData for consistency
-        // This is more robust if tool names in toolData are the source of truth
-        document.querySelectorAll('.category-card').forEach(card => {
-            const category = Array.from(card.classList).find(cls => toolData[cls]);
-            if (category) {
-                const toolsGrid = card.querySelector('.tools-grid');
-                const toolItems = toolsGrid.querySelectorAll('.tool-item');
-                
-                toolItems.forEach((item, index) => {
-                    if (toolData[category][index]) {
-                        const toolNameFromData = toolData[category][index].name;
-                        const currentToolNameElement = item.querySelector('.tool-name');
-                        
-                        // If the display name in HTML is slightly different but refers to same tool,
-                        // we prioritize toolData for slug generation for consistency.
-                        // Or, if you want HTML display name to define slug, use currentToolNameElement.textContent
-                        const slug = toSlug(toolNameFromData); // Use toolData name for slug
-                        item.href = `${category}/${slug}.html`;
-                        
-                        // Optionally, update the displayed name if it should match toolData exactly
-                        // currentToolNameElement.textContent = toolNameFromData;
+            // --- EVENT LISTENERS & LOGIC ---
+            // Mobile menu toggle
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('nav-active');
+            });
+
+            // Update footer year
+            document.querySelector('.copyright p').innerHTML = document.querySelector('.copyright p').innerHTML.replace('2023', new Date().getFullYear());
+
+            // Smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({ top: targetElement.offsetTop - 80, behavior: 'smooth' });
                     }
                 });
+            });
+            
+            // --- MODAL LOGIC ---
+            const viewAllModal = document.getElementById('viewAllModal');
+            const allCalculatorsModal = document.getElementById('allCalculatorsModal');
+
+            // Function to open a modal
+            function openModal(modalElement) {
+                if (modalElement) modalElement.style.display = 'flex';
             }
-        });
 
-        // Same for popular tools section for consistency
-        document.querySelectorAll('.popular-tools .tool-card').forEach(card => {
-            const titleElement = card.querySelector('.tool-card-title');
-            if (titleElement) {
-                const toolName = titleElement.textContent;
-                let category = ''; // Determine category based on toolName or a data-attribute
-                
-                // This part is tricky without knowing the category for each popular tool explicitly
-                // For now, assuming financial for "Mortgage Calculator" and "Compound Interest"
-                // and health for "BMI Calculator" and "Calorie Calculator", etc.
-                // A more robust way would be to add data-category to these popular tool cards.
-                
-                // Example:
-                if (toolName === "Mortgage Calculator" || toolName === "Compound Interest") category = "financial";
-                else if (toolName === "BMI Calculator" || toolName === "Calorie Calculator") category = "health";
-                else if (toolName === "Percentage Calculator") category = "math";
-                else if (toolName === "Date Calculator") category = "other";
-
-                if (category) {
-                    const slug = toSlug(toolName);
-                    card.href = `${category}/${slug}.html`;
-                }
+            // Function to close a modal
+            function closeModal(modalElement) {
+                if (modalElement) modalElement.style.display = 'none';
             }
+
+            // Category "View All" modal
+            const modalCategoryTitle = document.getElementById('modalCategoryTitle');
+            const modalToolsGrid = document.getElementById('modalToolsGrid');
+            
+            document.querySelectorAll('.view-all').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const category = this.getAttribute('data-category');
+                    const categoryTitle = this.closest('.category-card').querySelector('.category-title').textContent;
+                    modalCategoryTitle.innerHTML = `<i class="fas ${categoryIcons[category]}"></i> ${categoryTitle}`;
+                    populateToolsGrid(modalToolsGrid, category);
+                    openModal(viewAllModal);
+                });
+            });
+
+            // "All Calculators" modal
+            const allToolsGrid = document.getElementById('allToolsGrid');
+            document.querySelectorAll('#allCalculatorsBtn, #footerAllCalculators').forEach(btn => {
+                btn.addEventListener('click', e => {
+                    e.preventDefault();
+                    // Activate financial tab by default
+                    document.querySelector('.category-tab[data-category="financial"]').click();
+                    openModal(allCalculatorsModal);
+                });
+            });
+
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    populateToolsGrid(allToolsGrid, this.getAttribute('data-category'));
+                });
+            });
+            
+            // Footer "View All" links
+            document.querySelectorAll('.view-all-footer').forEach(link => {
+                link.addEventListener('click', function(e){
+                    e.preventDefault();
+                    const category = this.getAttribute('data-category');
+                    const categoryTitle = this.textContent.replace('→', '').trim();
+                    modalCategoryTitle.innerHTML = `<i class="fas ${categoryIcons[category]}"></i> ${categoryTitle}`;
+                    populateToolsGrid(modalToolsGrid, category);
+                    openModal(viewAllModal);
+                });
+            });
+
+            // General modal close logic
+            document.querySelectorAll('.modal-close').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    closeModal(viewAllModal);
+                    closeModal(allCalculatorsModal);
+                });
+            });
+
+            window.addEventListener('click', e => {
+                if (e.target === viewAllModal) closeModal(viewAllModal);
+                if (e.target === allCalculatorsModal) closeModal(allCalculatorsModal);
+            });
+            
+            // Initialize the "All Calculators" modal with the financial category
+            document.querySelector('.category-tab[data-category="financial"]').click();
         });
-
-
     </script>
 </body>
 </html>
