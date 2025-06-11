@@ -13,18 +13,18 @@
     <!-- =================================================================== -->
     <!-- SEO OPTIMIZATION -->
     <!-- =================================================================== -->
-    <title>401(k) Retirement Savings Calculator - Mega Calculator Suite</title>
-    <meta name="description" content="Calculate your projected 401(k) balance at retirement with inflation-adjusted returns. Plan your future with our secure and user-friendly retirement planner.">
-    <meta name="keywords" content="401k calculator, retirement calculator, pension calculator, investment planner, financial planning, compound interest, free online calculator">
-    <link rel="canonical" href="https://your-website-url.com/401k-calculator.html"> <!-- IMPORTANT: Update canonical URL specific to this calculator page -->
+    <title>Loan Amortization Schedule Calculator - Mega Calculator Suite</title>
+    <meta name="description" content="Generate a detailed loan amortization schedule, calculate monthly payments, total interest, and visualize your debt repayment plan for mortgages, car loans, and more.">
+    <meta name="keywords" content="amortization calculator, loan payment, loan schedule, interest breakdown, principal payment, debt calculator, financial planning, free online calculator">
+    <link rel="canonical" href="https://your-website-url.com/amortization-calculator.html"> <!-- IMPORTANT: Update canonical URL specific to this calculator page -->
 
     <!-- Structured Data (JSON-LD) for SEO -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "401(k) Retirement Savings Calculator",
-      "description": "A tool to project your 401(k) balance at retirement, considering contributions, employer match, investment returns, and inflation.",
+      "name": "Loan Amortization Schedule Calculator",
+      "description": "A tool to create a detailed amortization schedule for various types of loans.",
       "applicationCategory": "BrowserApplication",
       "operatingSystem": "All",
       "offers": {
@@ -50,7 +50,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacMacFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
             background-color: #f9f9f9;
@@ -273,6 +273,53 @@
             font-weight: bold;
             margin: 0;
         }
+        .results-401k #k401-projected-balance-inflation-adj {
+            font-size: 1em; /* Smaller for sub-text */
+            font-weight: normal;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Amortization specific results layout */
+        .amort-schedule-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .amort-schedule-container h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .amort-schedule-container table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        .amort-schedule-container th, .amort-schedule-container td {
+            padding: 8px 12px;
+            border: 1px solid #eee;
+            text-align: left;
+            white-space: nowrap; /* Prevent breaking numeric data */
+        }
+        .amort-schedule-container thead th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            position: sticky;
+            top: -10px; /* Adjust if padding pushes it off */
+            z-index: 1;
+        }
+        .amort-schedule-container tbody tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+
 
         .chart-container {
             margin-top: 30px;
@@ -380,6 +427,9 @@
             }
             .results-401k {
                 grid-template-columns: 1fr; /* Stack results on smaller screens */
+            }
+            .amort-schedule-container table {
+                font-size: 0.8em; /* Smaller font for readability on mobile */
             }
         }
 
@@ -680,7 +730,77 @@
 
                 <!-- 
                 ====================================================================
-                NEW: 401(k) Retirement Calculator (Financial)
+                IMPLEMENTED: Amortization Calculator (Financial)
+                ====================================================================
+                -->
+                <div id="calc-amortization" class="calculator-wrapper">
+                    <h2>Amortization Calculator <a href="#" class="home-button" onclick="return goHome()">Home</a></h2>
+                    <p class="calc-description">Visualize your loan repayment journey with a detailed amortization schedule, showing how much principal and interest you pay with each installment.</p>
+
+                    <!-- ===== ADVERTISEMENT SLOT for YLLIX Banner (can be inside specific calculators) ===== -->
+                    <div class="ad-slot ad-yllix-banner">
+                        <p class="ad-label">Advertisement (Yllix Banner 728x90 or responsive)</p>
+                        <!-- Place your Yllix banner ad code here -->
+                        <!-- EXAMPLE Placeholder - REPLACE WITH REAL CODE -->
+                        <img src="https://via.placeholder.com/728x90?text=Yllix+Ad+Amortization" alt="Yllix Banner Ad" style="max-width:100%; height:auto; display:block;">
+                        <!-- /EXAMPLE Placeholder -->
+                    </div>
+                    <!-- ============================================================== -->
+
+                    <div class="calc-form">
+                        <div class="form-group">
+                            <label for="amort-amount" title="The total amount of the loan.">Loan Amount ($)</label>
+                            <input type="number" id="amort-amount" value="200000" min="0" oninput="calculateAmortization()">
+                        </div>
+                        <div class="form-group">
+                            <label for="amort-interest" title="The annual interest rate for the loan.">Interest Rate (%)</label>
+                            <input type="number" id="amort-interest" value="6.5" min="0" step="0.01" oninput="calculateAmortization()">
+                        </div>
+                        <div class="form-group">
+                            <label for="amort-term" title="The total number of years over which the loan will be repaid.">Loan Term (Years)</label>
+                            <input type="number" id="amort-term" value="30" min="1" max="60" oninput="calculateAmortization()">
+                        </div>
+                    </div>
+
+                    <div class="calc-result">
+                        <h3>Summary:</h3>
+                        <p id="amort-monthly-payment">Monthly Payment: $0.00</p>
+                        <p id="amort-total-interest">Total Interest Paid: $0.00</p>
+                        <p id="amort-total-payments">Total Payments: $0.00</p>
+                    </div>
+
+                    <div class="amort-schedule-container" role="region" aria-labelledby="amort-schedule-table-title" tabindex="0">
+                        <h3 id="amort-schedule-table-title">Amortization Schedule:</h3>
+                        <table id="amort-schedule-table">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Payment No.</th>
+                                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Payment</th>
+                                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Principal</th>
+                                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Interest</th>
+                                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody id="amort-schedule-tbody">
+                                <!-- Schedule rows will be inserted here by JavaScript -->
+                            </tbody>
+                        </table>
+                        <p id="amort-no-results-msg" style="text-align: center; color: #777; margin-top: 15px;">Enter loan details to generate schedule.</p>
+                    </div>
+
+                    <div class="export-buttons">
+                        <button onclick="window.print()">Print Schedule</button>
+                        <button onclick="copyAmortizationResults()">Copy Results</button>
+                    </div>
+
+                    <div class="security-notice" role="alert" aria-live="polite">
+                        <p><strong>Privacy and Security Notice:</strong> This Amortization Calculator operates entirely on your web browser. All calculations are performed client-side, meaning your personal financial data is <strong>never stored on our servers, transmitted, or shared with third parties</strong>. Your input stays confidential to your browser session. For sensitive data input, please ensure you are using a secure internet connection (HTTPS, which this site provides). This tool offers estimates only and should not replace professional financial advice.</p>
+                    </div>
+                </div>
+
+                <!-- 
+                ====================================================================
+                IMPLEMENTED: 401(k) Retirement Calculator (Financial)
                 ====================================================================
                 -->
                 <div id="calc-401k" class="calculator-wrapper">
@@ -694,8 +814,7 @@
                     <div class="ad-slot ad-yllix-banner">
                         <p class="ad-label">Advertisement (Yllix Banner 728x90 or responsive)</p>
                         <!-- Place your Yllix banner ad code here -->
-                        <!-- EXAMPLE Placeholder - REPLACE WITH REAL CODE --> <script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=728x90&ga=g"></script>
-<noscript><a href="https://yllix.com/publishers/772531" target="_blank"><img src="//ylx-aff.advertica-cdn.com/pub/728x90.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" /></a></noscript>
+                        <!-- EXAMPLE Placeholder - REPLACE WITH REAL CODE -->
                         <img src="https://via.placeholder.com/728x90?text=Yllix+Ad+728x90" alt="Yllix Banner Ad" style="max-width:100%; height:auto; display:block;">
                         <!-- /EXAMPLE Placeholder -->
                     </div>
@@ -728,18 +847,18 @@
                         </div>
                         <div class="form-group">
                             <label for="k401-expected-return" title="Expected annual return on investments (e.g., 7 for 7%). This is a nominal rate.">Expected Annual Return (%)</label>
-                            <input type="number" id="k401-expected-return" value="7" min="0" max="30" step="0.1" oninput="calculate401k()">
+                            <input type="number" id="k401-expected-return" value="7" min="-50" max="50" step="0.1" oninput="calculate401k()">
                         </div>
                         <div class="form-group">
                             <label for="k401-inflation-rate" title="Expected average annual inflation rate (e.g., 2.5 for 2.5%). Used for real return calculations.">Inflation Rate (%)</label>
-                            <input type="number" id="k401-inflation-rate" value="2.5" min="0" max="10" step="0.1" oninput="calculate401k()">
+                            <input type="number" id="k401-inflation-rate" value="2.5" min="-10" max="10" step="0.1" oninput="calculate401k()">
                         </div>
                     </div>
 
                     <div class="calc-result">
                         <h3>Projected Balance at Retirement:</h3>
                         <p id="k401-projected-balance">$0.00</p>
-                        <p id="k401-projected-balance-inflation-adj" class="small-text"></p>
+                        <p id="k401-projected-balance-inflation-adj">( $0.00 in today's dollars )</p>
                     </div>
 
                     <div class="results-401k">
@@ -760,7 +879,7 @@
                     <div class="chart-container">
                         <h3>Growth Projection Chart</h3>
                         <canvas id="k401Chart" aria-label="401k Growth Projection Chart" role="img"></canvas>
-                        <p style="font-size:0.8em; color:#777; margin-top:10px;">This chart illustrates the growth of your 401(k) balance over time, adjusted for the specified inflation rate.</p>
+                        <p style="font-size:0.8em; color:#777; margin-top:10px;">This chart illustrates the growth of your 401(k) balance over time, displaying both nominal value and inflation-adjusted (real) value.</p>
                     </div>
 
                     <div class="export-buttons">
@@ -844,7 +963,9 @@
                 <!-- All existing placeholders are intentionally omitted here for brevity to keep the focus on the new 401K calculator, but assume they exist as per your last request. -->
 
                 <!-- Placeholder structure for other calculators -->
+                <!-- This placeholder will now be replaced by the implemented Amortization calculator above
                 <div id="calc-amortization" class="calculator-wrapper"><h2>Amortization Calculator <a href="#" class="home-button" onclick="return goHome()">Home</a></h2><p class="calc-description">Visualize your loan repayment journey with an amortization schedule showing principal and interest breakdowns.</p><p>The form and logic for this calculator need to be implemented.</p></div>
+                -->
                 <!-- ... many more placeholders ... -->
                 <div id="calc-vat" class="calculator-wrapper"><h2>VAT Calculator <a href="#" class="home-button" onclick="return goHome()">Home</a></h2><p class="calc-description">Quickly calculate Value Added Tax (VAT) to determine prices with or without tax included.</p><p>The form and logic for this calculator need to be implemented.</p></div>
                 
@@ -853,8 +974,7 @@
             <div class="ad-slot ad-slot-banner ad-yllix-bottom-banner">
                 <p class="ad-label">Advertisement (Yllix Banner 728x90)</p>
                 <!-- Place your Yllix banner ad code here -->
-                <!-- EXAMPLE Placeholder - REPLACE WITH REAL CODE --><script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=728x90&ga=g"></script>
-<noscript><a href="https://yllix.com/publishers/772531" target="_blank"><img src="//ylx-aff.advertica-cdn.com/pub/728x90.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" /></a></noscript>ad
+                <!-- EXAMPLE Placeholder - REPLACE WITH REAL CODE -->
                 <img src="https://via.placeholder.com/728x90?text=Yllix+Bottom+Ad" alt="Yllix Bottom Banner Ad" style="max-width:100%; height:auto; display:block;">
                 <!-- /EXAMPLE Placeholder -->
             </div>
@@ -887,7 +1007,9 @@
             selectedCalculator.classList.add('active');
             // If the 401k calculator is activated, ensure it calculates on load and updates the chart
             if (calculatorId === 'calc-401k') {
-                calculate401k(); // Ensure initial calculation/chart load
+                calculate401k(); // Ensure initial calculation/chart load with default values
+            } else if (calculatorId === 'calc-amortization') { // NEW: for amortization
+                calculateAmortization(); // Ensure initial calculation for amortization table
             }
             // Scroll to the calculator for better UX on mobile
             if (window.innerWidth < 900) {
@@ -917,43 +1039,168 @@
     //  CALCULATOR LOGIC IMPLEMENTATIONS
     // ===================================================================
 
+    // --- NEW: Amortization Calculator ---
+    function calculateAmortization() {
+        // Get Inputs
+        const loanAmount = parseFloat(document.getElementById('amort-amount').value);
+        const annualInterestRate = parseFloat(document.getElementById('amort-interest').value);
+        const loanTermYears = parseFloat(document.getElementById('amort-term').value);
+
+        // Get Output Elements
+        const monthlyPaymentElem = document.getElementById('amort-monthly-payment');
+        const totalInterestElem = document.getElementById('amort-total-interest');
+        const totalPaymentsElem = document.getElementById('amort-total-payments');
+        const scheduleTbody = document.getElementById('amort-schedule-tbody');
+        const noResultsMsg = document.getElementById('amort-no-results-msg');
+
+        // Clear previous results
+        scheduleTbody.innerHTML = '';
+        monthlyPaymentElem.textContent = 'Monthly Payment: $0.00';
+        totalInterestElem.textContent = 'Total Interest Paid: $0.00';
+        totalPaymentsElem.textContent = 'Total Payments: $0.00';
+        noResultsMsg.style.display = 'block';
+
+        // Input Validation
+        if (isNaN(loanAmount) || loanAmount <= 0) {
+            alert('Please enter a valid Loan Amount greater than 0.');
+            return;
+        }
+        if (isNaN(annualInterestRate) || annualInterestRate < 0) { // Interest rate can be 0
+            alert('Please enter a valid Interest Rate (0% or more).');
+            return;
+        }
+        if (isNaN(loanTermYears) || loanTermYears <= 0) {
+            alert('Please enter a valid Loan Term in Years (1 or more).');
+            return;
+        }
+
+        // Calculations
+        const monthlyInterestRate = (annualInterestRate / 100) / 12;
+        const numberOfPayments = loanTermYears * 12;
+
+        let monthlyPayment;
+
+        if (monthlyInterestRate === 0) {
+            // Handle 0% interest separately to avoid division by zero
+            monthlyPayment = loanAmount / numberOfPayments;
+        } else {
+            monthlyPayment = loanAmount * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
+                             (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+        }
+        
+        let remainingBalance = loanAmount;
+        let totalInterestPaid = 0;
+        let scheduleRows = [];
+
+        // Generate Amortization Schedule
+        for (let i = 1; i <= numberOfPayments; i++) {
+            const interestForMonth = remainingBalance * monthlyInterestRate;
+            let principalForMonth = monthlyPayment - interestForMonth;
+
+            // Adjust last payment to account for floating point inaccuracies
+            if (i === numberOfPayments) {
+                principalForMonth = remainingBalance; // Ensure balance goes to exactly zero
+                monthlyPayment = interestForMonth + principalForMonth; // Recalculate payment to match final principal
+            }
+
+            remainingBalance -= principalForMonth;
+            totalInterestPaid += interestForMonth;
+
+            // Format values for display
+            const paymentNoFormatted = i.toLocaleString();
+            const paymentFormatted = `$${monthlyPayment.toFixed(2)}`;
+            const principalFormatted = `$${principalForMonth.toFixed(2)}`;
+            const interestFormatted = `$${interestForMonth.toFixed(2)}`;
+            const balanceFormatted = `$${Math.max(0, remainingBalance).toFixed(2)}`; // Ensure balance doesn't show negative zero
+
+            scheduleRows.push(`
+                <tr>
+                    <td>${paymentNoFormatted}</td>
+                    <td>${paymentFormatted}</td>
+                    <td>${principalFormatted}</td>
+                    <td>${interestFormatted}</td>
+                    <td>${balanceFormatted}</td>
+                </tr>
+            `);
+        }
+
+        // Update Summary
+        monthlyPaymentElem.textContent = `Monthly Payment: $${monthlyPayment.toFixed(2)}`;
+        totalInterestElem.textContent = `Total Interest Paid: $${totalInterestPaid.toFixed(2)}`;
+        totalPaymentsElem.textContent = `Total Payments: $${(monthlyPayment * numberOfPayments).toFixed(2)}`; // Use final payment value for true total
+
+        // Display Schedule
+        scheduleTbody.innerHTML = scheduleRows.join('');
+        noResultsMsg.style.display = 'none';
+    }
+
+    function copyAmortizationResults() {
+        const loanAmount = parseFloat(document.getElementById('amort-amount').value);
+        const annualInterestRate = parseFloat(document.getElementById('amort-interest').value);
+        const loanTermYears = parseFloat(document.getElementById('amort-term').value);
+
+        let resultsText = "Loan Amortization Calculator Results:\n";
+        resultsText += "--------------------------------------\n";
+        resultsText += `Loan Amount: $${loanAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n`;
+        resultsText += `Annual Interest Rate: ${annualInterestRate.toFixed(2)}%\n`;
+        resultsText += `Loan Term: ${loanTermYears} Years\n\n`;
+        resultsText += `${document.getElementById('amort-monthly-payment').textContent}\n`;
+        resultsText += `${document.getElementById('amort-total-interest').textContent}\n`;
+        resultsText += `${document.getElementById('amort-total-payments').textContent}\n\n`;
+
+        resultsText += "Amortization Schedule:\n";
+        resultsText += "Payment No.\tPayment\tPrincipal\tInterest\tBalance\n";
+
+        const rows = document.getElementById('amort-schedule-tbody').querySelectorAll('tr');
+        rows.forEach(row => {
+            const cols = row.querySelectorAll('td');
+            resultsText += `${cols[0].textContent}\t${cols[1].textContent}\t${cols[2].textContent}\t${cols[3].textContent}\t${cols[4].textContent}\n`;
+        });
+
+        navigator.clipboard.writeText(resultsText).then(() => {
+            alert('Amortization schedule copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy results: ', err);
+            alert('Failed to copy results. Please try again or manually select/copy.');
+        });
+    }
+
+
     // --- NEW: 401(k) Retirement Calculator ---
     function calculate401k() {
         // 1. Get Inputs and Sanitize
         const currentAge = parseInt(document.getElementById('k401-current-age').value);
         const retirementAge = parseInt(document.getElementById('k401-retirement-age').value);
-        let currentBalance = parseFloat(document.getElementById('k401-current-balance').value);
+        const initialBalance = parseFloat(document.getElementById('k401-current-balance').value);
         const annualSalary = parseFloat(document.getElementById('k401-annual-salary').value);
         const employeeContributionPerc = parseFloat(document.getElementById('k401-contribution-perc').value) / 100;
         const employerMatchPerc = parseFloat(document.getElementById('k401-employer-match-perc').value) / 100;
         const expectedReturn = parseFloat(document.getElementById('k401-expected-return').value) / 100; // Nominal annual return
         const inflationRate = parseFloat(document.getElementById('k401-inflation-rate').value) / 100;
 
-        // Reset if any critical input is invalid or less than zero (except balance can be zero)
-        if (isNaN(currentAge) || isNaN(retirementAge) || isNaN(currentBalance) || isNaN(annualSalary) ||
+        // Reset/Handle Invalid Inputs (Robust Check)
+        if (isNaN(currentAge) || isNaN(retirementAge) || isNaN(initialBalance) || isNaN(annualSalary) ||
             isNaN(employeeContributionPerc) || isNaN(employerMatchPerc) || isNaN(expectedReturn) || isNaN(inflationRate) ||
-            currentAge < 0 || retirementAge < 0 || annualSalary < 0 || employeeContributionPerc < 0 || employerMatchPerc < 0 || expectedReturn < 0 || inflationRate < 0) {
-            
+            currentAge <= 0 || retirementAge <= 0 || annualSalary < 0 || initialBalance < 0 || // Ages > 0, others >= 0
+            employeeContributionPerc < 0 || employerMatchPerc < 0
+        ) {
             document.getElementById('k401-projected-balance').textContent = '$0.00';
-            document.getElementById('k401-projected-balance-inflation-adj').textContent = '';
+            document.getElementById('k401-projected-balance-inflation-adj').textContent = '( $0.00 in today\'s dollars )';
             document.getElementById('k401-total-contributions').textContent = '$0.00';
             document.getElementById('k401-total-earnings').textContent = '$0.00';
             document.getElementById('k401-years-to-retirement').textContent = '0 Years';
-            update401kChart([], [], k401ChartInstance); // Clear chart
+            update401kChart([], [], []); // Clear chart
             return;
         }
 
-        // Handle negative balance
-        currentBalance = Math.max(0, currentBalance);
-
         const yearsToRetirement = retirementAge - currentAge;
         if (yearsToRetirement < 0) {
-            document.getElementById('k401-projected-balance').textContent = 'Invalid Ages';
-            document.getElementById('k401-projected-balance-inflation-adj').textContent = 'Retirement age must be greater than current age.';
+            document.getElementById('k401-projected-balance').textContent = 'N/A';
+            document.getElementById('k401-projected-balance-inflation-adj').textContent = '( Retirement age must be greater than current age )';
             document.getElementById('k401-total-contributions').textContent = '$0.00';
             document.getElementById('k401-total-earnings').textContent = '$0.00';
-            document.getElementById('k401-years-to-retirement').textContent = 'N/A';
-            update401kChart([], [], k401ChartInstance); // Clear chart
+            document.getElementById('k401-years-to-retirement').textContent = 'Invalid';
+            update401kChart([], [], []); // Clear chart
             return;
         }
 
@@ -963,127 +1210,51 @@
         // Calculate total annual contribution
         const totalAnnualContribution = (annualSalary * employeeContributionPerc) + (annualSalary * employerMatchPerc);
 
-        // Calculate real return for inflation-adjusted projection
-        let realReturn;
-        if (inflationRate >= -1 && expectedReturn >= -1) { // Prevent division by zero and illogical values for rates
-             realReturn = ((1 + expectedReturn) / (1 + inflationRate)) - 1;
-        } else {
-             realReturn = expectedReturn; // Fallback to nominal if inflation is undefined or unrealistic
-        }
-
-
         // --- Simulation for Projected Balance (Year by Year for Charting) ---
-        let currentBalanceNominal = currentBalance;
-        let currentBalanceReal = currentBalance;
-        let totalContributions = 0;
-        let totalEarnings = 0;
+        let currentBalanceNominal = initialBalance; // Balance that will compound
+        let totalContributionsDuringPeriod = 0; // Only contributions made *during* the projection
 
         const chartLabels = [];
         const chartDataNominal = [];
         const chartDataReal = []; // For inflation-adjusted chart
 
-        for (let year = 0; year <= yearsToRetirement; year++) {
-            const ageAtYearEnd = currentAge + year;
-            chartLabels.push(ageAtYearEnd); // Age on X-axis
+        // Initial point (Year 0 / Current Age)
+        chartLabels.push(currentAge);
+        chartDataNominal.push(initialBalance);
+        chartDataReal.push(initialBalance); // At currentAge, the balance is already in "today's dollars"
 
-            if (year === 0) {
-                // Initial state
-                chartDataNominal.push(currentBalanceNominal);
-                chartDataReal.push(currentBalanceReal);
-                continue;
-            }
-
-            // Calculations for the *current* year
-            let beginningBalanceNominal = currentBalanceNominal;
-            let beginningBalanceReal = currentBalanceReal;
-
-            // Add annual contribution for the year (assuming end of year for simplicity in this calculation loop)
+        for (let yearElapsed = 1; yearElapsed <= yearsToRetirement; yearElapsed++) {
+            // Add current year's contribution (assuming beginning of the year)
             currentBalanceNominal += totalAnnualContribution;
-            totalContributions += totalAnnualContribution;
+            totalContributionsDuringPeriod += totalAnnualContribution;
 
-            // Apply nominal return to the current balance *before* inflation adjustment
-            // The return is applied to beginning balance + contributions throughout the year.
-            // A common simplification is to apply to average balance or beginning balance + half contributions
-            // For a continuous growth effect: apply interest to prior balance + current year's contribution
-            // This is a simpler way for general growth:
-            currentBalanceNominal *= (1 + expectedReturn); // Apply interest to accumulated funds
+            // Apply annual growth to the entire balance
+            currentBalanceNominal *= (1 + expectedReturn);
 
-            // Adjust real balance for inflation each year for the growth chart.
-            // Real balance after nominal growth, before *this year's* contributions (if contributions were mid-year)
-            // But if contributions were end of year, they grow from *next year*.
-            // For simplicity and clarity in calculation: contributions *added* to balance, then *whole balance* grows by nominal rate.
-            // Then the final nominal balance is adjusted for inflation for *this year*.
-
-            // Let's refine for a clear year-by-year calculation:
-            // 1. Balance from previous year (already matured).
-            // 2. Add this year's contribution.
-            // 3. Apply growth to the total.
-            // 4. Adjust for inflation for the real balance.
-
-            // Resetting for a better year-by-year step:
-            // balance from previous year (already holds growth from last year)
-            // add this year's new contribution
-            let yearStartBalanceNominal = chartDataNominal[year -1];
-            let yearStartBalanceReal = chartDataReal[year - 1];
-
-            // Add contributions *before* applying interest for simplified yearly growth
-            let balanceAfterContributionNominal = yearStartBalanceNominal + totalAnnualContribution;
-            
-            // Calculate real balance from nominal balance
-            let factorForReal = 1 / Math.pow(1 + inflationRate, year); // Cumulative inflation adjustment
-
-            let endBalanceNominal = balanceAfterContributionNominal * (1 + expectedReturn); // Nominal balance grows
-            let endBalanceReal = yearStartBalanceReal * (1 + realReturn) + (totalAnnualContribution / (1 + inflationRate)); // Real balance (approximation)
-
-            // Simpler and clearer for a compound interest projection:
-            // Project the balance *at the end of each year*, starting with currentBalance and adding contributions.
-            
-            currentBalanceNominal = (currentBalanceNominal + totalAnnualContribution) * (1 + expectedReturn);
-            
-            // Re-calculate the real balance for charting at each step more precisely:
-            // Real balance is nominal balance adjusted for cumulative inflation
-            currentBalanceReal = currentBalanceNominal / Math.pow(1 + inflationRate, year); // Not ideal for chart, better to apply real_return iteratively.
-
-            // Simpler method for charting the *value* of the pot, adjusting it for real buying power each year:
-            // Previous real balance + current contribution adjusted for THIS YEAR's inflation, all multiplied by real_return.
-            // The logic can be tricky if exact historical 'real' values are needed, but for projection, the simple real return works.
-            
-            // Let's calculate growth purely on the nominal path first, and then translate the *final* balance to real terms for presentation.
-            // The chart will show NOMINAL growth for clarity against user input nominal rates,
-            // with a secondary line showing inflation-adjusted value.
-            
+            // Store results for the end of this elapsed year
+            chartLabels.push(currentAge + yearElapsed); // Age for this year
             chartDataNominal.push(currentBalanceNominal);
-            // Re-calculating the inflation adjusted for charting step:
-            // Current real balance = Previous real balance * (1 + real_return) + annual_contribution / (1 + inflationRate) (approximation of year-end real value)
-            currentBalanceReal = currentBalanceReal * (1 + realReturn) + (totalAnnualContribution * (1 + realReturn / 2)); // Slightly better for annuity portion
-
-            // To get *correct* real values in the chart, it's: `nominal_value / (1 + inflation_rate)^years_passed`
-            chartDataReal.push(currentBalanceNominal / Math.pow(1 + inflationRate, year + 1)); // Correct real value for end of year `year+1`
-
-            // Update running total earnings for nominal values (easier)
-            // Earnings are: (Current Balance - Beginning Balance - Contributions this year)
-            totalEarnings = currentBalanceNominal - (currentBalance + (totalAnnualContribution * year)); // Simple way, assumes uniform earnings.
+            // Calculate the 'real' value: nominal value divided by cumulative inflation from Year 0
+            chartDataReal.push(currentBalanceNominal / Math.pow(1 + inflationRate, yearElapsed));
         }
 
-        const finalNominalBalance = chartDataNominal[chartDataNominal.length - 1];
-        const finalRealBalance = chartDataNominal[chartDataNominal.length - 1] / Math.pow(1 + inflationRate, yearsToRetirement);
+        const finalNominalBalance = currentBalanceNominal;
+        const finalRealBalance = finalNominalBalance / Math.pow(1 + inflationRate, yearsToRetirement); 
 
+        // Display results
         document.getElementById('k401-projected-balance').textContent = `$${finalNominalBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        document.getElementById('k401-projected-balance-inflation-adj').textContent = `($${finalRealBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} in today's dollars)`;
+        document.getElementById('k401-projected-balance-inflation-adj').textContent = `( $${finalRealBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} in today's dollars )`;
         
-        // Sum total contributions for total annual contribution calculation
-        let totalContributionsToRetirement = totalAnnualContribution * yearsToRetirement;
-        document.getElementById('k401-total-contributions').textContent = `$${totalContributionsToRetirement.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        document.getElementById('k401-total-contributions').textContent = `$${totalContributionsDuringPeriod.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-        // Total earnings is total final balance minus initial balance and total contributions
-        const totalInvestmentEarnings = finalNominalBalance - currentBalance - totalContributionsToRetirement;
+        const totalInvestmentEarnings = finalNominalBalance - (initialBalance + totalContributionsDuringPeriod);
         document.getElementById('k401-total-earnings').textContent = `$${totalInvestmentEarnings.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
         // Update the chart
         update401kChart(chartLabels, chartDataNominal, chartDataReal);
     }
 
-    // Chart.js initialization and update function
+    // Chart.js initialization and update function for 401K
     function update401kChart(labels, nominalData, realData) {
         const ctx = document.getElementById('k401Chart').getContext('2d');
 
@@ -1092,29 +1263,37 @@
             k401ChartInstance.destroy();
         }
 
+        // Check if data is valid before creating chart
+        if (!labels || labels.length === 0 || !nominalData || nominalData.length === 0) {
+            return; // Don't draw if no data
+        }
+
         k401ChartInstance = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: labels, // Ages
+                labels: labels, // Ages on X-axis
                 datasets: [{
                     label: 'Projected Balance (Nominal)',
                     data: nominalData,
                     borderColor: varToRgb('--primary-color'),
-                    backgroundColor: 'rgba(0, 90, 156, 0.2)',
+                    backgroundColor: 'rgba(0, 90, 156, 0.2)', // Light blue fill
                     fill: true,
-                    tension: 0.1
+                    tension: 0.1, // Smooth lines
+                    pointRadius: 3 // Smaller points
                 },
                 {
                     label: 'Projected Balance (Inflation-Adjusted)',
                     data: realData,
                     borderColor: '#4CAF50', /* Green color for real value */
-                    backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                    backgroundColor: 'rgba(76, 175, 80, 0.2)', // Light green fill
                     fill: true,
-                    tension: 0.1
+                    tension: 0.1, // Smooth lines
+                    pointRadius: 3 // Smaller points
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false, // Allows chart to take up available height better
                 plugins: {
                     tooltip: {
                         callbacks: {
@@ -1124,27 +1303,37 @@
                         }
                     },
                     title: {
-                        display: false,
-                        text: '401(k) Growth Projection'
+                        display: false, // Title is handled by H3 above chart
+                    },
+                    legend: {
+                        labels: {
+                            color: varToRgb('--font-color')
+                        }
                     }
                 },
                 scales: {
                     x: {
                         title: {
                             display: true,
-                            text: 'Age'
+                            text: 'Age',
+                            color: varToRgb('--font-color')
+                        },
+                        ticks: {
+                             color: varToRgb('--font-color')
                         }
                     },
                     y: {
                         title: {
                             display: true,
-                            text: 'Balance ($)'
+                            text: 'Balance ($)',
+                            color: varToRgb('--font-color')
                         },
                         beginAtZero: true,
                         ticks: {
                             callback: function(value, index, values) {
-                                return '$' + value.toLocaleString();
-                            }
+                                return '$' + value.toLocaleString(); // Format Y-axis ticks as currency
+                            },
+                            color: varToRgb('--font-color')
                         }
                     }
                 }
@@ -1155,7 +1344,6 @@
     // Helper to convert CSS variable to RGB string for Chart.js
     function varToRgb(varName) {
         const color = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
-        // Handle potential hex values if you switch primary color
         if (color.startsWith('#')) {
             const hex = color.slice(1);
             const r = parseInt(hex.substring(0,2), 16);
@@ -1167,20 +1355,20 @@
     }
 
 
-    // --- General Export/Print Functionality ---
+    // --- General Export/Print Functionality (401K Specific) ---
     function copyResults() {
         let resultsText = "401(k) Retirement Calculator Results:\n";
         resultsText += "--------------------------------------\n";
         resultsText += `Projected Balance at Retirement: ${document.getElementById('k401-projected-balance').textContent}\n`;
         resultsText += `Inflation-Adjusted Balance: ${document.getElementById('k401-projected-balance-inflation-adj').textContent}\n`;
-        resultsText += `Total Contributions: ${document.getElementById('k401-total-contributions').textContent}\n`;
-        resultsText += `Total Earnings: ${document.getElementById('k401-total-earnings').textContent}\n`;
+        resultsText += `Total Contributions (during projection): ${document.getElementById('k401-total-contributions').textContent}\n`;
+        resultsText += `Total Investment Earnings: ${document.getElementById('k401-total-earnings').textContent}\n`;
         resultsText += `Years Until Retirement: ${document.getElementById('k401-years-to-retirement').textContent}\n\n`;
         resultsText += "Inputs:\n";
         resultsText += `Current Age: ${document.getElementById('k401-current-age').value} years\n`;
         resultsText += `Retirement Age: ${document.getElementById('k401-retirement-age').value} years\n`;
-        resultsText += `Current 401(k) Balance: $${document.getElementById('k401-current-balance').value}\n`;
-        resultsText += `Annual Salary: $${document.getElementById('k401-annual-salary').value}\n`;
+        resultsText += `Current 401(k) Balance: $${parseFloat(document.getElementById('k401-current-balance').value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n`;
+        resultsText += `Annual Salary: $${parseFloat(document.getElementById('k401-annual-salary').value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n`;
         resultsText += `Employee Contribution: ${document.getElementById('k401-contribution-perc').value}%\n`;
         resultsText += `Employer Match: ${document.getElementById('k401-employer-match-perc').value}%\n`;
         resultsText += `Expected Annual Return: ${document.getElementById('k401-expected-return').value}%\n`;
@@ -1261,21 +1449,20 @@
 
         ageResult.textContent = `${years} years, ${months} months, ${days} days`;
     }
-
-    // Initial load check: if calc-401k is set as active by default or from a previous session, calculate it.
-    // For single-page apps like this, typically the welcome message is active first.
-    // However, if direct navigation to /401k.html was simulated, you'd add:
-    /*
+    
+    // Ensure 401k calculator computes when first made visible (e.g., page load if directly navigated or first click)
     document.addEventListener('DOMContentLoaded', () => {
         const currentActiveCalc = document.querySelector('.calculator-wrapper.active');
         if (currentActiveCalc && currentActiveCalc.id === 'calc-401k') {
             calculate401k();
-        } else {
-            // Default to welcome message if no hash or invalid
+        } else if (currentActiveCalc && currentActiveCalc.id === 'calc-amortization') { // NEW: Handle direct load for amortization
+            calculateAmortization();
+        } 
+        else {
+            // Default to welcome message if no calculator is explicitly active
             showCalculator('welcome-message'); 
         }
     });
-    */
 
     </script>
 
