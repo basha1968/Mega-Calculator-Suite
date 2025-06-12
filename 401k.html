@@ -1,567 +1,1379 @@
-<script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=728x90&ga=g"></script>
-<noscript><a href="https://yllix.com/publishers/772531" target="_blank"><img src="//ylx-aff.advertica-cdn.com/pub/728x90.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" /></a></noscript>
-<script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=728x90&ga=g"></script>
-<noscript><a href="https://yllix.com/publishers/772531" target="_blank"><img src="//ylx-aff.advertica-cdn.com/pub/728x90.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" /></a></noscript>
-<br>
-<br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced 401K Calculator | Fintech Solutions</title>
+    <meta name="description" content="Secure and advanced 401K retirement planning calculator with tax implications, detailed reports, and save/print options.">
 
-<style>
-    #repaymentCalculatorContainer {
-        font-family: 'Arial', sans-serif;
-        background-color: #f9fafb; /* Light, clean background */
-        padding: 25px;
-        border-radius: 10px;
-        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
-        max-width: 750px; /* Wider for table */
-        margin: 30px auto;
-        border: 1px solid #e4e7eb;
-    }
+    <!-- Chart.js for visualizations (using latest recommended CDN for UMD bundle) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- Chart.js Plugin for Datalabels (optional, for showing values on bars/lines) -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <!-- SheetJS (xlsx.mini.min.js) for Excel (XLSX) file generation -->
+    <script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.mini.min.js"></script>
 
-    #repaymentCalculatorContainer h2 {
-        text-align: center;
-        color: #2c3e50; /* Dark Slate Blue */
-        margin-bottom: 15px;
-        font-weight: 600;
-    }
-     #repaymentCalculatorContainer .rc-intro {
-        font-size: 0.95em;
-        color: #4a5568;
-        text-align: center;
-        margin-bottom: 25px;
-        line-height: 1.5;
-    }
-    #repaymentCalculatorContainer h3 {
-        color: #34495e; /* Medium Slate Blue */
-        margin-top: 20px;
-        margin-bottom: 15px;
-        font-size: 1.1em;
-        border-bottom: 1px solid #d1d9e3;
-        padding-bottom: 8px;
-        font-weight: 500;
-    }
-
-    .rc-input-group {
-        margin-bottom: 18px;
-    }
-
-    .rc-input-group label {
-        display: block;
-        margin-bottom: 7px;
-        font-weight: bold;
-        color: #3498db; /* Bright Blue for labels */
-        font-size: 0.9em;
-    }
-    .rc-input-group .tooltip-icon {
-        display: inline-block; width: 15px; height: 15px; background-color: #7f8c8d; color: white;
-        border-radius: 50%; text-align: center; font-size: 10px; line-height: 15px; cursor: help;
-        margin-left: 5px; font-style: normal;
-    }
-
-    .rc-input-group input[type="number"],
-    .rc-input-group select {
-        width: calc(100% - 22px);
-        padding: 10px;
-        border: 1px solid #a9cce3; /* Light Blue Border */
-        border-radius: 5px;
-        box-sizing: border-box;
-        font-size: 1em;
-        background-color: #fff;
-    }
-     .rc-input-group input[type="number"]:focus,
-     .rc-input-group select:focus {
-        border-color: #3498db; /* Bright Blue Focus */
-        outline: none;
-        box-shadow: 0 0 0 0.18rem rgba(52,152,219,.2);
-    }
-
-    .rc-button-group {
-        display: flex;
-        gap: 10px;
-        margin-top: 25px;
-    }
-    .rc-button-group button {
-        flex-grow: 1;
-        padding: 11px;
-        border: none;
-        border-radius: 5px;
-        font-size: 1em;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.2s ease, transform 0.1s ease;
-    }
-    #rcCalculateButton {
-        background-color: #3498db; /* Primary Blue */
-        color: white;
-    }
-    #rcCalculateButton:hover {
-        background-color: #2980b9; /* Darker Blue */
-        transform: translateY(-1px);
-    }
-    #rcResetButton {
-        background-color: #e9ecef; /* Light Gray */
-        color: #495057;
-        border: 1px solid #ced4da;
-    }
-     #rcResetButton:hover {
-        background-color: #ced4da; /* Medium Gray */
-        transform: translateY(-1px);
-    }
-
-    .rc-results-section {
-        margin-top: 25px;
-        padding: 15px;
-        border-radius: 8px;
-        background-color: #f0f8ff; /* AliceBlue for results background */
-        border: 1px solid #cce5ff;
-    }
-     .rc-results-section h4 {
-        color: #2c3e50;
-        margin-top:0;
-        margin-bottom:10px;
-        font-size: 1.05em;
-        text-align: center;
-     }
-     .rc-results-section p {
-        margin-bottom: 8px;
-        font-size: 0.95em;
-        line-height: 1.5;
-        color: #333;
-        display: flex;
-        justify-content: space-between;
-     }
-     .rc-results-section p strong { font-weight: 600; color: #0056b3; }
-     .rc-results-section .highlight { font-weight: bold; color: #2980b9; }
-     .rc-results-section .savings-highlight { color: #28a745 !important; font-weight:bold; }
-
-    #rcAmortizationTableContainer {
-        margin-top: 15px;
-        max-height: 350px;
-        overflow-y: auto;
-        border: 1px solid #cce5ff;
-        border-radius: 4px;
-    }
-    #rcAmortizationTable {
-        width: 100%;
-        font-size: 0.85em;
-        border-collapse: collapse;
-    }
-    #rcAmortizationTable th, #rcAmortizationTable td {
-        text-align: right;
-        padding: 6px 8px;
-        border: 1px solid #e0f0ff;
-    }
-    #rcAmortizationTable th {
-        background-color: #cce5ff; color: #2c3e50; font-weight:bold;
-        position: sticky; top: 0; z-index: 1;
-    }
-     #rcAmortizationTable td:first-child { text-align: center;} /* Month number */
-
-
-    #rc-calc-error-message, .rc-calc-warning {
-        margin-bottom: 15px;
-        padding: 10px;
-        border-radius: 5px;
-        text-align: left;
-        font-size: 0.9em;
-        display: none; /* Hidden by default */
-    }
-    #rc-calc-error-message {
-        color: #721c24;
-        background-color: #f8d7da;
-        border: 1px solid #f5c6cb;
-        font-weight: bold;
-    }
-    .rc-calc-warning {
-        background-color: #fff3cd;
-        border-color: #ffeeba;
-        color: #856404;
-    }
-
-    .rc-instructions-disclaimer {
-        font-size: 0.85em; color: #495057; margin-top: 20px; padding: 10px;
-        background-color: #e9ecef; border-left: 3px solid #adb5bd; border-radius: 4px;
-    }
-    .rc-instructions-disclaimer ul {list-style-type: disc; padding-left: 20px; margin-top: 5px;}
-    .rc-instructions-disclaimer li {margin-bottom: 4px;}
-
-    /* Print Styles */
-    @media print {
-        body * {
-            visibility: hidden; /* Hide everything by default */
+    <style>
+        /*
+        * CSS STYLING
+        * Responsive, clean, and user-friendly design.
+        */
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #007bff;
+            --accent-color: #28a745;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --border-color: #ddd;
+            --shadow-light: rgba(0, 0, 0, 0.1);
         }
-        #repaymentCalculatorContainer, #repaymentCalculatorContainer * {
-            visibility: visible; /* Show only the calculator and its children */
-        }
-        #repaymentCalculatorContainer {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 10px;
-            box-shadow: none;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 2px 4px var(--shadow-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative; /* Essential for positioning the absolute home button */
+            min-height: 120px; /* Ensure enough height for button and ad slot */
+        }
+        
+        /* Styles for the "Go to Home Page" button */
+        .home-nav-button {
+            position: absolute;
+            top: 15px; /* Adjust as needed */
+            left: 15px; /* Adjust as needed */
+            background-color: #f0f0f0; /* Light grey, stands out on dark blue */
+            color: var(--primary-color); /* Dark blue text */
+            padding: 0.6rem 1.2rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000; /* Ensure it's above other elements */
+            display: inline-flex; /* Use flex for potential icon if added */
+            align-items: center;
+            gap: 0.3em;
+        }
+        .home-nav-button:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-1px);
+        }
+        .home-nav-button:active {
+            transform: translateY(0);
+        }
+        /* Media query for smaller screens: move button to top center */
+        @media (max-width: 767px) {
+            .home-nav-button {
+                position: static; /* Remove absolute positioning */
+                margin-top: 0.5rem;
+                margin-left: auto;
+                margin-right: auto;
+                order: -2; /* Place it logically before h1 */
+            }
+            header {
+                 min-height: 100px; /* Smaller min-height without absolute positioning */
+            }
+            header h1 {
+                margin-top: 1rem; /* Adjust margin if button moves */
+            }
+        }
+
+
+        header h1 {
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .header-ad-slot, .footer-ad-slot, .yllix-ad-spot {
+            width: 100%;
+            max-width: 728px;
+            margin: 0.5rem auto;
+            min-height: 90px;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            color: #6c757d;
+            font-size: 0.9rem;
+            text-align: center;
+            box-sizing: border-box;
+            overflow: hidden;
+            border: 1px solid #dcdcdc; /* Added for clearer visual boundary */
+            order: -1; /* Place before h1 in flex container */
+        }
+        @media (max-width: 767px) { /* Adjust ad slot on small screens */
+            .header-ad-slot, .footer-ad-slot {
+                max-width: 320px; /* Common mobile banner size */
+                min-height: 50px;
+            }
+        }
+
+        .yllix-ad-spot {
+            min-height: 250px;
+            margin-top: 2rem;
+            border: 1px dashed var(--border-color);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 1.5rem auto;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--shadow-light);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                grid-template-columns: 1fr 2fr;
+                gap: 2rem;
+            }
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+
+        .calculator-input-section {
+            background-color: #f2f5f9;
+            padding: 1.2rem;
+            border-radius: 6px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-group input[type="number"], .form-group select {
+            width: calc(100% - 20px);
+            padding: 0.6rem 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-group label {
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .radio-group input[type="radio"] {
+            transform: scale(1.1);
+        }
+
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem; /* Space between buttons */
+            margin-top: 1rem;
+        }
+        .btn-group button, .btn-group a.button {
+            flex: 1 1 48%; /* Allows two buttons per row on larger screens */
+            min-width: 140px; /* Ensures minimum size */
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
             border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.05rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-sizing: border-box;
+            -webkit-appearance: none;
         }
-        .rc-button-group, .rc-instructions-disclaimer h4:first-child, .tooltip-icon, #rc-calc-error-message, .rc-calc-warning, .rc-intro {
-            display: none !important; /* Hide buttons and non-essential elements */
-        }
-        .rc-input-group input, .rc-input-group select {
-            border: 1px solid #ccc !important; /* Simplify borders for print */
-            background-color: #fff !important;
-        }
-        .rc-results-section, #rcAmortizationTableContainer {
-            border: 1px solid #ccc !important;
-            background-color: #fff !important;
-            max-height: none !important; /* Allow full table to print */
-            overflow: visible !important;
-        }
-         #rcAmortizationTable th {
-            background-color: #eee !important;
-            color: #000 !important;
-            position: static !important; /* No sticky header for print */
-        }
-        #rcAmortizationTable td, #rcAmortizationTable th {
-             border: 1px solid #ddd !important;
-        }
-        .rc-disclaimer-instructions {
-            border-left: none !important;
-            background-color: transparent !important;
-            padding: 5px 0 !important;
-        }
-    }
-
-</style>
-
-<div id="repaymentCalculatorContainer">
-    <h2>Loan Repayment & Amortization Calculator</h2>
-    <p class="rc-intro">
-        Estimate your loan payments, see how much interest you'll pay, and explore how extra payments can help you become debt-free faster.
-    </p>
-    <div id="rc-calc-error-message"></div>
-    <div id="rcMinPaymentWarning" class="rc-calc-warning"></div> <!-- For payment too low warnings -->
-
-
-    <form id="repaymentFormEl">
-        <h3>Loan Details</h3>
-        <div class="rc-input-group">
-            <label for="rcLoanAmount">Loan Amount (£/$/€):
-                 <i class="tooltip-icon" title="The total amount you are borrowing or the current outstanding balance of your loan.">?</i>
-            </label>
-            <input type="number" id="rcLoanAmount" placeholder="e.g., 15000" aria-label="Loan Amount">
-        </div>
-        <div class="rc-input-group">
-            <label for="rcAnnualRateRepay">Annual Interest Rate (%):
-                <i class="tooltip-icon" title="The yearly interest rate for your loan. Enter as a percentage, e.g., 5 for 5%.">?</i>
-            </label>
-            <input type="number" id="rcAnnualRateRepay" placeholder="e.g., 5.0" aria-label="Annual Interest Rate">
-        </div>
-        <div class="rc-input-group">
-            <label for="rcLoanTermRepay">Loan Term (Years):
-                 <i class="tooltip-icon" title="The total length of your loan in years.">?</i>
-            </label>
-            <input type="number" id="rcLoanTermRepay" placeholder="e.g., 5" aria-label="Loan Term in Years">
-        </div>
-
-        <h3>Your Repayment Plan</h3>
-        <div class="rc-input-group">
-            <label for="rcExtraPaymentRepay">(Optional) Additional Monthly Payment (£/$/€):
-                <i class="tooltip-icon" title="Any extra amount you want to add to your regular monthly payment to pay off the loan faster and save on interest.">?</i>
-            </label>
-            <input type="number" id="rcExtraPaymentRepay" placeholder="e.g., 100" value="0" aria-label="Additional Monthly Payment">
-        </div>
-
-        <div class="rc-button-group">
-            <button type="button" id="rcCalculateButton" onclick="calculateRepayment()">Calculate Repayment</button>
-            <button type="button" id="rcResetButton" onclick="resetRepaymentCalculator()">Reset</button>
-        </div>
-    </form>
-
-    <div id="rcResultsSection" class="rc-results-section" style="display:none;">
-        <h4>Loan Repayment Summary</h4>
-        <p><span>Scheduled Monthly Payment (P&I):</span> <strong id="resScheduledMonthlyPayment"></strong></p>
-        <p><span>Your Total Monthly Payment (with extra):</span> <strong id="resActualTotalMonthlyPayment"></strong></p>
-        <p><span>Estimated Payoff Timeline:</span> <strong id="resRepayPayoffTimeline" class="highlight"></strong></p>
-        <p><span>Total Interest Paid:</span> <strong id="resRepayTotalInterestPaid"></strong></p>
-        <p><span>Total Amount Paid (Loan + Interest):</span> <strong id="resRepayTotalAmountPaid"></strong></p>
-        <div id="rcSavingsInfo" style="display:none; margin-top:15px; padding-top:10px; border-top: 1px dashed #cce5ff;">
-             <p style="font-weight:bold; text-align:center; color:#0056b3;">Impact of Your Extra Payments:</p>
-             <p><span>You could pay off the loan:</span> <strong id="resRepayTimeSaved" class="savings-highlight"></strong> sooner!</p>
-             <p><span>You could save:</span> <strong id="resRepayInterestSaved" class="savings-highlight"></strong> in interest!</p>
-        </div>
-    </div>
-    <div id="rcAmortizationTableContainer" style="display:none;">
-        <h4 style="text-align:center; margin-top:20px; margin-bottom:5px;">Monthly Amortization Schedule (First & Last Year Shown)</h4>
-        <table id="rcAmortizationTable">
-            <thead><tr><th>Month #</th><th>Payment</th><th>Extra Pmt</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead>
-            <tbody></tbody>
-        </table>
-    </div>
-
-
-    <div class="rc-instructions-disclaimer">
-        <h4>Instructions & Safe Usage:</h4>
-        <ul>
-            <li><strong>Accessing:</strong> Use a modern web browser. Ensure your internet connection is stable if this page relies on external resources (not typical for a self-contained calculator). For this online version, no special downloads are needed.</li>
-            <li><strong>Input Safely:</strong> Enter only non-sensitive financial data for the loan (amount, rate, term). Never include personal identifiers like Social Security numbers or bank account details. This calculator does not require them.</li>
-            <li><strong>Precautions:</strong>
-                <ul>
-                    <li>Verify all inputs are numeric (e.g., enter "10000" not "$10,000" or "£10,000").</li>
-                    <li>Double-check interest rate formatting (e.g., enter "5" for 5%).</li>
-                    <li>When using online tools, always ensure the website URL begins with "https://" for a secure connection (this is managed by the website hosting the calculator, e.g., Blogger).</li>
-                </ul>
-            </li>
-        </ul>
-        <h4>Disclaimers:</h4>
-        <ul>
-            <li><strong>Accuracy Warning:</strong> Results are estimates based on the information you provide and standard loan amortization formulas. Actual payments may vary due to additional fees, changes in interest rates (if variable), lender-specific terms, or escrow adjustments for taxes and insurance (which are not included in this P&I calculation).</li>
-            <li><strong>Professional Advice:</strong> This tool is for informational purposes only and does not constitute financial advice. Always consult with a qualified financial advisor or lender before making significant repayment decisions or taking out a loan.</li>
-            <li><strong>Data Security:</strong> No user data you enter is stored or shared by this calculator. All calculations occur locally within your web browser.</li>
-        </ul>
-         <p style="margin-top:10px;">🔒 <strong>Stay Safe:</strong> Avoid using public or shared devices for detailed financial planning. This calculator doesn't store data, but good practice dictates caution with financial information input anywhere.</p>
-    </div>
-</div>
-
-<script>
-    function rcFormatCurrency(value) {
-        if (isNaN(value) || !isFinite(value)) return "£0.00"; // Default currency, adjust if needed
-        return "£" + value.toFixed(2);
-    }
-    function rcFormatYearsMonths(totalMonths) {
-        if (isNaN(totalMonths) || totalMonths <= 0) return "N/A";
-        if (totalMonths === Infinity) return "Effectively Never (Payment too low)";
-
-        const years = Math.floor(totalMonths / 12);
-        const months = Math.round(totalMonths % 12);
-        let result = "";
-        if (years > 0) result += `${years} year${years > 1 ? 's' : ''}`;
-        if (months > 0) {
-            if (years > 0) result += " and ";
-            result += `${months} month${months > 1 ? 's' : ''}`;
-        }
-        return result || (totalMonths > 0 ? "Less than a month" : "Paid off");
-    }
-
-    function resetRepaymentCalculator() {
-        document.getElementById('repaymentFormEl').reset();
-        document.getElementById('rcExtraPaymentRepay').value = '0'; // Reset optional field with default
-
-        document.getElementById('rc-calc-error-message').style.display = 'none';
-        document.getElementById('rcMinPaymentWarning').style.display = 'none';
-        document.getElementById('rcMinPaymentWarning').innerHTML = '';
-        document.getElementById('rcResultsSection').style.display = 'none';
-        document.getElementById('rcAmortizationTableContainer').style.display = 'none';
-        document.getElementById('rcSavingsInfo').style.display = 'none';
-    }
-
-    // Standard Amortizing Loan Payment Formula (for P&I)
-    function calculateMonthlyPI_RC(principal, annualInterestRate, loanTermInYears) {
-        if (principal <= 0 || loanTermInYears <= 0) return 0;
-        if (annualInterestRate === 0) return principal / (loanTermInYears * 12);
-
-        const monthlyInterestRate = (annualInterestRate / 100) / 12;
-        const numberOfPayments = loanTermInYears * 12;
-
-        if (monthlyInterestRate === 0) return principal / numberOfPayments;
-
-        const numerator = monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments);
-        const denominator = Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1;
-
-        if (denominator === 0) return Infinity;
-        return principal * (numerator / denominator);
-    }
-
-    function runRepaymentScenario(loanAmount, annualRate, termYears, extraPmt) {
-        const scheduledMonthlyPI = calculateMonthlyPI_RC(loanAmount, annualRate, termYears);
-        if (!isFinite(scheduledMonthlyPI)) {
-             return { error: "Could not calculate scheduled monthly payment. Check inputs." };
-        }
-
-        const totalMonthlyPaymentWithExtra = scheduledMonthlyPI + extraPmt;
-        const monthlyRate = (annualRate / 100) / 12;
-        let currentBalance = loanAmount;
-        let months = 0;
-        let totalInterestPaid = 0;
-        let schedule = [];
-        const MAX_MONTHS_REPAY = termYears * 12 * 2; // Safety break (e.g., twice original term)
-
-        // Check if total payment covers first month's interest
-        if (annualRate > 0) {
-            const firstMonthInterest = currentBalance * monthlyRate;
-            if (totalMonthlyPaymentWithExtra <= firstMonthInterest) {
-                return { error: `The total monthly payment of ${rcFormatCurrency(totalMonthlyPaymentWithExtra)} is not enough to cover the first month's interest of ${rcFormatCurrency(firstMonthInterest)}. The loan balance will not decrease.` };
+        @media (max-width: 480px) {
+            .btn-group button, .btn-group a.button {
+                flex: 1 1 100%; /* Stack buttons on very small screens */
             }
-        } else if (totalMonthlyPaymentWithExtra <=0 && loanAmount > 0) { // No interest but also no payment
-             return { error: "Monthly payment must be greater than zero to pay off the loan."};
+        }
+        .btn-group button:hover, .btn-group a.button:hover {
+            background-color: #218838;
+            transform: translateY(-1px);
+        }
+        .btn-group button:active, .btn-group a.button:active {
+            transform: translateY(0);
+        }
+
+        #resetButton {
+            background-color: #6c757d;
+        }
+        #resetButton:hover {
+            background-color: #5a6268;
+        }
+        
+        #printButton {
+            background-color: #17a2b8; /* Info blue */
+        }
+        #printButton:hover {
+            background-color: #138496;
+        }
+        #saveCsvButton {
+            background-color: #007bff; /* Blue */
+        }
+        #saveCsvButton:hover {
+            background-color: #0069d9;
+        }
+        #saveXlsxButton {
+            background-color: #28a745; /* Green (Excel color hint) */
+        }
+        #saveXlsxButton:hover {
+            background-color: #218838;
+        }
+        #shareEmailButton {
+            background-color: #6f42c1; /* Purple */
+        }
+        #shareEmailButton:hover {
+            background-color: #563d7c;
+        }
+
+        .calculator-output-section {
+            background-color: #ffffff;
+            padding: 1.2rem;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .result-item {
+            margin-bottom: 0.8rem;
+            padding: 0.7rem;
+            background-color: #e9f5ff;
+            border-left: 5px solid var(--secondary-color);
+            border-radius: 4px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        .result-item span {
+            word-break: break-word;
+        }
+
+        .result-item span:first-child {
+            color: var(--text-color);
+            font-weight: 600;
+            flex-basis: 60%;
+            padding-right: 0.5rem;
+        }
+        .result-item span:last-child {
+            color: var(--primary-color);
+            font-weight: 700;
+            flex-basis: 35%;
+            text-align: right;
+        }
+        @media (max-width: 480px) {
+            .result-item span:first-child, .result-item span:last-child {
+                flex-basis: 100%;
+                text-align: left;
+                padding-right: 0;
+            }
+            .result-item span:last-child {
+                margin-top: 0.2rem;
+            }
+        }
+
+        #projectedBalanceResult {
+            background-color: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            font-size: 1.3rem;
+        }
+
+        #inflationAdjustedBalanceResult {
+             background-color: #ffe8d6;
+             border-left: 5px solid #fd7e14;
+             font-size: 1.2rem;
+        }
+        #afterTaxBalanceResult {
+             background-color: #fff3cd;
+             border-left: 5px solid #ffc107;
+             font-size: 1.25rem;
+             font-weight: 700;
         }
 
 
-        while (currentBalance > 0.005 && months < MAX_MONTHS_REPAY) {
-            months++;
-            const interestForThisMonth = currentBalance * monthlyRate;
-            let principalPaidThisMonth = totalMonthlyPaymentWithExtra - interestForThisMonth;
+        .chart-section {
+            margin-top: 1.5rem;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+            margin-top: 1rem;
+            background-color: #fdfdfd;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        /* Detailed Results Table */
+        .detailed-table-container {
+            margin-top: 2rem;
+            overflow-x: auto;
+            background-color: #fcfcfc;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+        .detailed-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+        .detailed-table th, .detailed-table td {
+            padding: 0.6rem 0.8rem;
+            border-bottom: 1px solid #eee;
+        }
+        .detailed-table th {
+            background-color: #e9ecef;
+            font-weight: 600;
+            color: var(--text-color);
+            white-space: nowrap;
+        }
+        .detailed-table tbody tr:hover {
+            background-color: #f1f7fc;
+        }
+        .detailed-table tbody tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        .toggle-table-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.7rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
+            width: auto;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        .toggle-table-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Professional Additions Styles */
+        .professional-box {
+            background-color: #f0f4f7;
+            border: 1px solid #d9e2e7;
+            border-left: 5px solid var(--secondary-color);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        .professional-box h3 {
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 1.15rem;
+        }
+        .professional-box p, .professional-box ul, .professional-box small {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+        .professional-box ul {
+            padding-left: 1.5rem;
+            list-style: disc;
+        }
+        .print-instruction-text, .share-instruction-text {
+            display: block;
+            text-align: center; 
+            margin-top: 0.5rem; 
+            color: #555;
+            font-size: 0.85rem;
+        }
+
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 1.5rem 1rem;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        footer a {
+            color: #add8e6;
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Basic validation feedback */
+        input:invalid {
+            border-color: red;
+        }
+        input:focus:invalid {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.2);
+        }
+
+        /* Hide output section until calculated */
+        #calculatorOutput, #chartContainer, #professionalInsights, #detailedResultsSection {
+            display: none;
+        }
+        #detailedResultsTableContainer { /* Default hidden */
+            display: none;
+        }
+
+        .alert-message {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1rem;
+            border-radius: 0.25rem;
+            text-align: center;
+            display: none;
+            font-weight: 500;
+        }
+
+        /*
+        * Print-Specific Styles
+        */
+        @media print {
+            body {
+                background-color: white !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                font-size: 10pt;
+                margin: 0.5in;
+            }
+
+            header, footer, .calculator-input-section, .btn-group,
+            .ad-slot, .header-ad-slot, .footer-ad-slot, .yllix-ad-spot,
+            .alert-message, .print-instruction-text, .share-instruction-text,
+            .home-nav-button, .toggle-table-btn {
+                display: none !important;
+            }
+
+            .container {
+                max-width: 100%;
+                margin: 0 auto;
+                padding: 0;
+                box-shadow: none;
+                grid-template-columns: 1fr;
+                display: block;
+                border: none !important;
+            }
+
+            .calculator-output-section, .chart-section, #professionalInsights, #detailedResultsSection {
+                display: block !important;
+                width: 100%;
+                margin: 0 !important;
+                padding: 0.5rem 0.5rem;
+                background-color: white !important;
+                box-shadow: none !important;
+                border: none !important;
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+            .chart-section {
+                 page-break-before: always;
+            }
+            #detailedResultsSection {
+                page-break-before: always;
+                page-break-inside: auto; /* Allow the table to break */
+            }
+            /* Explicitly show detailed table content in print mode */
+            #detailedResultsTableContainer {
+                display: block !important; /* Force the detailed table to show */
+            }
+
+
+            .result-item {
+                background-color: #f5f5f5 !important;
+                border-left-color: #b0b0b0 !important;
+                box-shadow: none;
+                margin-bottom: 0.4rem;
+                font-size: 10pt;
+                padding: 0.4rem;
+            }
+            .result-item span:last-child {
+                color: #333 !important;
+            }
+            #projectedBalanceResult, #inflationAdjustedBalanceResult, #afterTaxBalanceResult {
+                background-color: #e8e8e8 !important;
+                border-left-color: #888 !important;
+            }
             
-            // Adjust for final payment
-            if (currentBalance + interestForThisMonth <= totalMonthlyPaymentWithExtra) {
-                principalPaidThisMonth = currentBalance; // Pay off remaining balance
+            h1, h2, h3 {
+                color: #333 !important;
             }
-            // Ensure principal paid is not negative if payment doesn't cover interest (should be caught by initial check)
-            if (principalPaidThisMonth < 0) principalPaidThisMonth = 0;
+
+            .chart-container {
+                height: 400px;
+                width: 100%;
+                border: 1px solid #ccc;
+                padding: 5px;
+                box-sizing: border-box;
+            }
+
+            .professional-box {
+                background-color: #f7f7f7 !important;
+                border: 1px solid #e0e0e0 !important;
+                border-left-color: #999 !important;
+                margin-top: 1rem !important;
+                border-radius: 0;
+                padding: 0.8rem;
+                font-size: 9pt;
+            }
+            .professional-box h3 {
+                font-size: 10.5pt;
+            }
+            .professional-box ul, .professional-box p, .professional-box small {
+                font-size: 9pt;
+            }
+            .professional-box .professional-box {
+                background-color: #ededed !important;
+                border-left-color: #bbb !important;
+            }
+
+            .detailed-table-container {
+                margin-top: 1rem;
+                border: 1px solid #ccc;
+            }
+            .detailed-table {
+                font-size: 8pt;
+            }
+            .detailed-table th, .detailed-table td {
+                padding: 0.4rem 0.5rem;
+                border-bottom: 1px solid #eee;
+            }
+            .detailed-table th {
+                background-color: #e9ecef !important;
+                color: #555 !important;
+            }
+            .detailed-table tbody tr:nth-child(even) {
+                background-color: #fbfbfb !important;
+            }
+
+            @page {
+                size: A4 portrait;
+                margin: 0.75in;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Home Page Button/Link: IMPORTANT - Update href="/" to your actual homepage URL if it's not the root. -->
+        <a href="/" target="_top" class="home-nav-button" aria-label="Go to Home Page">← Home</a>
+
+        <!-- Adsterra Ad Slot (Header) - Insert your code here -->
+        <div class="header-ad-slot ad-slot">
+            <p>ADSTERRA AD ZONE: LEAD BOARD (e.g., 728x90) or Native</p>
+            <!-- Adsterra ad code for header will be pasted here by the client -->
+            <!-- Example (replace with your actual code, use 'async' or 'defer' for scripts):
+            <script type="text/javascript" async>
+                atOptions = {
+                    'key' : 'YOUR_ADSTERRA_CODE_HEADER_KEY',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+                document.write('<script type="text/javascript" src="//www.profitablegate.com/YOUR_ADSTERRA_CODE_HEADER_JS.js"></script>');
+            </script>
+            -->
+        </div>
+        <h1>Advanced 401K Projection Calculator</h1>
+        <p>Plan your retirement confidently with accurate financial insights.</p>
+    </header>
+
+    <main class="container">
+        <section class="calculator-input-section">
+            <h2>Your 401K Details</h2>
+            <div id="alertMessage" class="alert-message"></div>
+
+            <div class="form-group">
+                <label for="currentBalance">Current 401K Balance ($)</label>
+                <input type="number" id="currentBalance" value="50000" min="0" step="1000" required aria-label="Current 401K Balance">
+            </div>
+
+            <div class="form-group">
+                <label for="annualContribution">Your Annual Contribution ($)</label>
+                <input type="number" id="annualContribution" value="6000" min="0" step="100" required aria-label="Annual Contribution">
+            </div>
+
+            <div class="form-group">
+                <label for="employerMatch">Employer Match (%)</label>
+                <input type="number" id="employerMatch" value="50" min="0" max="100" step="1" required aria-label="Employer Match Percentage">
+                <small>e.g., 50 for 50% match (assumed on your contributions, up to plan limits).</small>
+            </div>
+
+            <div class="form-group">
+                <label for="expectedReturn">Expected Annual Return (%)</label>
+                <input type="number" id="expectedReturn" value="7" min="0.1" max="20" step="0.1" required aria-label="Expected Annual Return">
+            </div>
+
+            <div class="form-group">
+                <label for="yearsUntilRetirement">Years Until Retirement</label>
+                <input type="number" id="yearsUntilRetirement" value="25" min="1" max="60" step="1" required aria-label="Years Until Retirement">
+            </div>
+
+            <div class="form-group">
+                <label for="inflationRate">Expected Inflation Rate (%)</label>
+                <input type="number" id="inflationRate" value="3" min="0" max="10" step="0.1" required aria-label="Expected Inflation Rate">
+            </div>
+            
+            <div class="form-group">
+                <label>401K Type:</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="accountType" value="traditional" checked aria-label="Traditional 401K Account Type"> Traditional
+                    </label>
+                    <label>
+                        <input type="radio" name="accountType" value="roth" aria-label="Roth 401K Account Type"> Roth
+                    </label>
+                </div>
+                <small>Traditional is pre-tax contributions, taxed at withdrawal. Roth is after-tax contributions, tax-free at withdrawal.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="retirementTaxRate">Expected Retirement Tax Rate (%)</label>
+                <input type="number" id="retirementTaxRate" value="15" min="0" max="50" step="1" required aria-label="Expected Retirement Tax Rate">
+                <small>For Traditional 401K only; rate at which withdrawals will be taxed.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Contribution Frequency:</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="contributionFrequency" value="monthly" checked aria-label="Monthly Contribution Frequency"> Monthly
+                    </label>
+                    <label>
+                        <input type="radio" name="contributionFrequency" value="quarterly" aria-label="Quarterly Contribution Frequency"> Quarterly
+                    </label>
+                    <label>
+                        <input type="radio" name="contributionFrequency" value="annual" aria-label="Annual Contribution Frequency"> Annual
+                    </label>
+                </div>
+            </div>
+
+            <button id="calculateButton" aria-label="Calculate 401K Projection">Calculate My 401K Future</button>
+            <button id="resetButton" aria-label="Reset Calculator Inputs">Reset</button>
+
+        </section>
+
+        <section class="calculator-output-section">
+            <h2>Your Projection</h2>
+            <div id="calculatorOutput">
+                <div class="result-item" id="projectedBalanceResult">
+                    <span>Projected Balance at Retirement (Nominal):</span>
+                    <span id="finalBalance"></span>
+                </div>
+                <div class="result-item">
+                    <span>Your Total Contributions:</span>
+                    <span id="yourContributions"></span>
+                </div>
+                <div class="result-item">
+                    <span>Total Employer Match:</span>
+                    <span id="employerMatchAmount"></span>
+                </div>
+                <div class="result-item">
+                    <span>Total Investment Growth:</span>
+                    <span id="totalGrowth"></span>
+                </div>
+                <div class="result-item" id="inflationAdjustedBalanceResult">
+                    <span>Inflation-Adjusted Balance (Today's Value):</span>
+                    <span id="inflationAdjustedBalance"></span>
+                </div>
+                <div class="result-item" id="afterTaxBalanceResult">
+                    <span>Estimated After-Tax Balance:</span>
+                    <span id="afterTaxBalance"></span>
+                </div>
+                
+                <div class="btn-group">
+                    <button id="printButton" aria-label="Print or Save Report as PDF">Print or Save as PDF</button>
+                    <button id="saveCsvButton" aria-label="Download Data as CSV">Download CSV</button>
+                    <button id="saveXlsxButton" aria-label="Download Data as Excel (XLSX)">Download Excel</button>
+                    <button id="shareEmailButton" aria-label="Share Results via Email">Share by Email</button>
+                </div>
+                <small class="print-instruction-text">
+                    **To Save as PDF:** Click 'Print', then select 'Save as PDF' from your printer options.
+                </small>
+                <small class="share-instruction-text" style="margin-top: 0.1rem;">
+                    **Share Security:** Email will open in your mail client. Direct links are not supported for specific results due to client-side privacy.
+                </small>
+            </div>
+
+            <div class="chart-section" id="chartContainer">
+                <h3>Growth Projection Over Time</h3>
+                <div class="chart-container">
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+
+            <div id="detailedResultsSection">
+                <h2>Detailed Annual Breakdown</h2>
+                <button class="toggle-table-btn" id="toggleTableButton">Show Detailed Table</button>
+                <div class="detailed-table-container" id="detailedResultsTableContainer">
+                    <table class="detailed-table">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Balance (Nominal)</th>
+                                <th>Your Contribution</th>
+                                <th>Employer Match</th>
+                                <th>Investment Growth</th>
+                                <th>Inflation Adjusted Balance</th>
+                                <th>Estimated After-Tax Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="detailedResultsTableBody">
+                            <!-- Rows will be inserted here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
 
-            currentBalance -= principalPaidThisMonth;
-            totalInterestPaid += interestForThisMonth;
+            <!-- Professional Addition: Insights & Tips -->
+            <div id="professionalInsights" class="professional-box">
+                <h3>Key Considerations for Your Retirement Planning</h3>
+                <ul>
+                    <li>The power of **compounding** is evident in the 'Investment Growth' portion of your projected balance. The earlier you start, the more significant its impact.</li>
+                    <li>**Inflation** significantly reduces future purchasing power. Regularly review and adjust your contribution goals to outpace inflation.</li>
+                    <li>Your **expected annual return** is a critical variable. While 7% is a common average for diversified investments, market performance can vary. Consider building models with lower returns for conservative planning.</li>
+                    <li>Even small **increases in annual contributions** can lead to substantially higher balances over many years. Experiment with increasing your 'Annual Contribution' to see the difference.</li>
+                    <li>Always max out your **employer match** if possible – it's free money for your retirement and an immediate, guaranteed return on your contributions.</li>
+                    <li>This calculation assumes consistent contributions and returns. Actual market performance fluctuates, and life events can alter plans. Regularly **review and adjust** your strategy with a financial advisor.</li>
+                </ul>
+                <div class="professional-box" style="border-left-color: #6c757d; background-color: #e2e6ea;">
+                    <h3>Important Assumptions:</h3>
+                    <ul>
+                        <li>**Data Privacy:** This calculator operates entirely client-side. **No user inputs or calculated results are ever sent to or stored on our servers.** All data processing occurs locally within your web browser.</li>
+                        <li>Contributions and employer match are assumed to occur consistently at the **beginning of each compounding period**.</li>
+                        <li>The 'Expected Annual Return' is a **pre-tax average** and does not account for specific investment fees not represented by the net return.</li>
+                        <li>'Inflation Rate' is applied uniformly over the retirement period to adjust purchasing power.</li>
+                        <li>This tool **does not account for income taxes on capital gains or during investment (except for explicit withdrawal taxation)**, specific 401K plan administration fees (beyond what's reflected in net return), or potential required minimum distributions (RMDs) during retirement.</li>
+                        <li>The 'Estimated After-Tax Balance' for **Traditional 401K** is a simplification applying your 'Expected Retirement Tax Rate' directly to the nominal balance. For **Roth 401K**, it's assumed tax-free.</li>
+                    </ul>
+                </div>
+            </div>
 
-            if (currentBalance < 0.005) currentBalance = 0;
+            <!-- Yllix Ad Spot - Insert your code here -->
+            <div class="yllix-ad-spot ad-slot">
+                <p>YLLIX AD ZONE (e.g., Medium Rectangle 300x250 or Native Ad block)</p>
+                <!-- Yllix ad code will be pasted here by the client -->
+                <!-- Example (replace with your actual code):
+                <div data-zone="YOUR_YLLIX_AD_ZONE_ID" class="zone"></div>
+                <script data-cfasync="false" type="text/javascript" src="//pl18797960.highrevenuegate.com/YOUR_YLLIX_AD_SCRIPT.js" async></script>
+                -->
+            </div>
 
-            schedule.push({
-                month: months,
-                payment: (months === schedule.length + 1 && currentBalance === 0 && schedule.length > 0) ? (schedule[schedule.length-1].principal + interestForThisMonth) : totalMonthlyPaymentWithExtra,
-                extraPayment: extraPmt, // Store the extra payment component for this payment
-                principal: principalPaidThisMonth,
-                interest: interestForThisMonth,
-                balance: currentBalance
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-ad-slot ad-slot">
+            <p>ADSTERRA AD ZONE: BANNER / NATIVE AD (e.g., 728x90) or Native</p>
+            <!-- Adsterra ad code for footer will be pasted here by the client -->
+            <!-- Example (replace with your actual code):
+            <script type="text/javascript" async>
+                atOptions = {
+                    'key' : 'YOUR_ADSTERRA_CODE_FOOTER_KEY',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+                document.write('<script type="text/javascript" src="//www.profitablegate.com/YOUR_ADSTERRA_CODE_FOOTER_JS.js"></script>');
+            </script>
+            -->
+        </div>
+        <p>© <span id="currentYear"></span> Fintech Solutions. All rights reserved.</p>
+        <p>
+            <a href="/privacy-policy.html">Privacy Policy</a> |
+            <a href="/disclaimer.html">Disclaimer</a> |
+            <a href="/terms-of-service.html">Terms of Service</a>
+        </p>
+        <p>This calculator is for illustrative purposes only and does not constitute financial advice. Consult a professional financial advisor for personalized guidance.</p>
+    </footer>
+
+    <script>
+        // Set current year dynamically for copyright
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        /*
+        * JAVASCRIPT LOGIC
+        * Client-side calculations, chart rendering, and DOM manipulation.
+        */
+
+        // Chart.js global config and plugin registration
+        Chart.register(ChartDataLabels);
+        Chart.defaults.plugins.datalabels.display = false; // Disable by default
+        Chart.defaults.font.family = "'Segoe UI', sans-serif";
+        Chart.defaults.font.size = 12;
+
+        // --- DOM Elements ---
+        const currentBalanceInput = document.getElementById('currentBalance');
+        const annualContributionInput = document.getElementById('annualContribution');
+        const employerMatchInput = document.getElementById('employerMatch');
+        const expectedReturnInput = document.getElementById('expectedReturn');
+        const yearsUntilRetirementInput = document.getElementById('yearsUntilRetirement');
+        const inflationRateInput = document.getElementById('inflationRate');
+        const accountTypeRadios = document.querySelectorAll('input[name="accountType"]');
+        const retirementTaxRateInput = document.getElementById('retirementTaxRate');
+        const contributionFrequencyRadios = document.querySelectorAll('input[name="contributionFrequency"]');
+
+        const calculateButton = document.getElementById('calculateButton');
+        const resetButton = document.getElementById('resetButton');
+        const printButton = document.getElementById('printButton');
+        const saveCsvButton = document.getElementById('saveCsvButton');
+        const saveXlsxButton = document.getElementById('saveXlsxButton');
+        const shareEmailButton = document.getElementById('shareEmailButton');
+        const toggleTableButton = document.getElementById('toggleTableButton');
+
+        const calculatorOutput = document.getElementById('calculatorOutput');
+        const finalBalanceSpan = document.getElementById('finalBalance');
+        const yourContributionsSpan = document.getElementById('yourContributions');
+        const employerMatchAmountSpan = document.getElementById('employerMatchAmount');
+        const totalGrowthSpan = document.getElementById('totalGrowth');
+        const inflationAdjustedBalanceSpan = document.getElementById('inflationAdjustedBalance');
+        const afterTaxBalanceSpan = document.getElementById('afterTaxBalance');
+        const chartContainer = document.getElementById('chartContainer');
+        const alertMessageDiv = document.getElementById('alertMessage');
+        const professionalInsightsDiv = document.getElementById('professionalInsights');
+        const detailedResultsSection = document.getElementById('detailedResultsSection');
+        const detailedResultsTableContainer = document.getElementById('detailedResultsTableContainer');
+        const detailedResultsTableBody = document.getElementById('detailedResultsTableBody');
+
+        let growthChartInstance;
+        let detailedChartData = []; // Store detailed data for table/exports
+
+        // --- Input Validation ---
+        function validateInputs() {
+            let isValid = true;
+            const inputs = [
+                currentBalanceInput, annualContributionInput, employerMatchInput,
+                expectedReturnInput, yearsUntilRetirementInput, inflationRateInput,
+                retirementTaxRateInput
+            ];
+
+            inputs.forEach(input => {
+                if (!input.checkValidity() || input.value === '') {
+                    isValid = false;
+                }
+                if (parseFloat(input.value) < 0 && 
+                    !['inflationRate', 'employerMatch', 'retirementTaxRate'].includes(input.id)) {
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                alertMessageDiv.textContent = 'Please fill in all required fields and ensure valid, non-negative values for contributions, balances, returns, and years. Percentages should be realistic.';
+                alertMessageDiv.style.display = 'block';
+                const firstInvalid = Array.from(inputs).find(input => !input.checkValidity() || parseFloat(input.value) < 0);
+                if (firstInvalid) {
+                    firstInvalid.focus();
+                }
+            } else {
+                alertMessageDiv.style.display = 'none';
+            }
+            return isValid;
+        }
+
+        // --- Core Calculation Logic ---
+        function calculate401K() {
+            if (!validateInputs()) {
+                return null;
+            }
+
+            // Get values from inputs (converted to numbers)
+            const currentBalance = parseFloat(currentBalanceInput.value);
+            const annualContribution = parseFloat(annualContributionInput.value);
+            const employerMatchPercentage = parseFloat(employerMatchInput.value) / 100;
+            const expectedAnnualReturn = parseFloat(expectedReturnInput.value) / 100;
+            const yearsUntilRetirement = parseInt(yearsUntilRetirementInput.value);
+            const inflationRate = parseFloat(inflationRateInput.value) / 100;
+            
+            let accountType = 'traditional';
+            for (const radio of accountTypeRadios) {
+                if (radio.checked) {
+                    accountType = radio.value;
+                    break;
+                }
+            }
+            const retirementTaxRate = parseFloat(retirementTaxRateInput.value) / 100;
+
+            let contributionFrequencyMultiplier = 1;
+            for (const radio of contributionFrequencyRadios) {
+                if (radio.checked) {
+                    if (radio.value === 'monthly') contributionFrequencyMultiplier = 12;
+                    else if (radio.value === 'quarterly') contributionFrequencyMultiplier = 4;
+                    else if (radio.value === 'annual') contributionFrequencyMultiplier = 1;
+                    break;
+                }
+            }
+
+            const actualAnnualContribution = annualContribution;
+            const actualAnnualEmployerMatch = annualContribution * employerMatchPercentage;
+            const totalAnnualContributionWithMatch = actualAnnualContribution + actualAnnualEmployerMatch;
+
+            const periodicContributionWithMatch = totalAnnualContributionWithMatch / contributionFrequencyMultiplier;
+            
+            const periodicReturnRate = (contributionFrequencyMultiplier === 0 || expectedAnnualReturn === 0) ? 0 :
+                                       Math.pow(1 + expectedAnnualReturn, 1 / contributionFrequencyMultiplier) - 1;
+            
+            const totalPeriods = yearsUntilRetirement * contributionFrequencyMultiplier;
+
+            // 1. Future Value of Initial Balance (Lump Sum Growth)
+            const futureValueCurrentBalance = currentBalance * Math.pow(1 + periodicReturnRate, totalPeriods);
+            
+            // 2. Future Value of Annuity (Regular Contributions and Match)
+            let futureValueContributions = 0;
+            if (periodicContributionWithMatch > 0) {
+                if (periodicReturnRate === 0) {
+                    futureValueContributions = periodicContributionWithMatch * totalPeriods;
+                } else {
+                    futureValueContributions = periodicContributionWithMatch * ( (Math.pow(1 + periodicReturnRate, totalPeriods) - 1) / periodicReturnRate ) * (1 + periodicReturnRate);
+                }
+            }
+            
+            const projectedBalance = futureValueCurrentBalance + futureValueContributions;
+
+            const totalUserContributions = actualAnnualContribution * yearsUntilRetirement;
+            const totalEmployerMatch = actualAnnualEmployerMatch * yearsUntilRetirement;
+
+            const totalInvestmentGrowth = projectedBalance - currentBalance - totalUserContributions - totalEmployerMatch;
+
+            const inflationAdjustedBalance = projectedBalance / Math.pow(1 + inflationRate, yearsUntilRetirement);
+
+            let afterTaxBalance;
+            if (accountType === 'traditional') {
+                afterTaxBalance = projectedBalance * (1 - retirementTaxRate);
+            } else { // Roth
+                afterTaxBalance = projectedBalance;
+            }
+
+
+            // --- Data for Chart and Detailed Table (Annual Granularity) ---
+            const chartLabels = [];
+            const chartDataTotalBalance = [];
+            const chartDataCumulativeContributions = [];
+            const chartDataCumulativeGrowth = [];
+            detailedChartData = []; // Reset for new calculation
+
+            let currentChartBalance = currentBalance;
+            let currentChartContributions = 0; 
+            let currentChartGrowth = 0;
+
+            // Add initial state for Year 0
+            chartLabels.push(`Year 0`);
+            chartDataTotalBalance.push(currentBalance);
+            chartDataCumulativeContributions.push(0);
+            chartDataCumulativeGrowth.push(0);
+            
+            const initialAfterTax = (accountType === 'traditional' ? currentBalance * (1 - retirementTaxRate) : currentBalance);
+            detailedChartData.push({
+                year: 0,
+                balance: currentBalance,
+                yourContribution: 0,
+                employerMatch: 0,
+                growth: 0,
+                inflationAdjusted: currentBalance,
+                afterTax: initialAfterTax
+            });
+
+
+            for (let year = 1; year <= yearsUntilRetirement; year++) {
+                chartLabels.push(`Year ${year}`);
+
+                currentChartBalance += totalAnnualContributionWithMatch;
+                currentChartContributions += totalAnnualContributionWithMatch; 
+
+                currentChartBalance *= (1 + expectedAnnualReturn);
+                
+                chartDataTotalBalance.push(currentChartBalance);
+                chartDataCumulativeContributions.push(currentChartContributions);
+
+                currentChartGrowth = currentChartBalance - currentBalance - currentChartContributions;
+                chartDataCumulativeGrowth.push(Math.max(0, currentChartGrowth));
+
+                const yearEndBalance = currentChartBalance;
+                const yearInflationAdjusted = yearEndBalance / Math.pow(1 + inflationRate, year);
+                const yearAfterTax = (accountType === 'traditional' ? yearEndBalance * (1 - retirementTaxRate) : yearEndBalance);
+
+                detailedChartData.push({
+                    year: year,
+                    balance: yearEndBalance,
+                    yourContribution: annualContribution, // Annual contribution for the year
+                    employerMatch: actualAnnualEmployerMatch, // Annual employer match for the year
+                    growth: Math.max(0, yearEndBalance - (currentBalance + chartDataCumulativeContributions[year])), // Accurate growth for that point in time
+                    inflationAdjusted: yearInflationAdjusted,
+                    afterTax: yearAfterTax
+                });
+            }
+
+            return {
+                projectedBalance: projectedBalance,
+                totalUserContributions: totalUserContributions,
+                totalEmployerMatch: totalEmployerMatch,
+                totalGrowth: totalInvestmentGrowth,
+                inflationAdjustedBalance: inflationAdjustedBalance,
+                afterTaxBalance: afterTaxBalance,
+                chartLabels: chartLabels,
+                chartDataTotalBalance: chartDataTotalBalance,
+                chartDataCumulativeContributions: chartDataCumulativeContributions,
+                chartDataCumulativeGrowth: chartDataCumulativeGrowth,
+                detailedTableData: detailedChartData
+            };
+        }
+
+        // --- Formatting Helpers ---
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(Math.round(value));
+        }
+        
+        function formatNumber(value) {
+            return new Intl.NumberFormat('en-US', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(Math.round(value));
+        }
+
+        // --- Chart Rendering ---
+        function renderChart(chartData) {
+            const ctx = document.getElementById('growthChart').getContext('2d');
+
+            if (growthChartInstance) {
+                growthChartInstance.destroy();
+            }
+
+            growthChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartData.chartLabels,
+                    datasets: [
+                        {
+                            label: 'Projected Total Balance (Nominal)',
+                            data: chartData.chartDataTotalBalance,
+                            borderColor: 'var(--primary-color)',
+                            backgroundColor: 'rgba(0, 86, 179, 0.2)',
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 3,
+                            pointHoverRadius: 6,
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Cumulative Contributions (You + Match)',
+                            data: chartData.chartDataCumulativeContributions,
+                            borderColor: 'var(--accent-color)',
+                            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                            fill: false,
+                            tension: 0.3,
+                            pointRadius: 2,
+                            pointHoverRadius: 5,
+                            borderDash: [5, 5],
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Cumulative Investment Growth',
+                            data: chartData.chartDataCumulativeGrowth,
+                            borderColor: '#ffc107',
+                            backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                            fill: false,
+                            tension: 0.3,
+                            pointRadius: 2,
+                            pointHoverRadius: 5,
+                            borderDash: [5, 5],
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                usePointStyle: true,
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + formatCurrency(Math.round(context.parsed.y));
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Years', font: { size: 14, weight: 'bold' } },
+                            grid: { display: false }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Value ($)', font: { size: 14, weight: 'bold' } },
+                            ticks: {
+                                callback: function(value) { return formatCurrency(value); }
+                            }
+                        }
+                    }
+                }
             });
         }
 
-        if (months >= MAX_MONTHS_REPAY && currentBalance > 0) {
-            return { error: "Loan payoff takes too long with current payments or encountered an issue." , months: Infinity, totalInterest: Infinity, totalPaid: Infinity, schedule: schedule.slice(0,12)};
+        // --- Detailed Table Rendering ---
+        function renderDetailedTable(data) {
+            detailedResultsTableBody.innerHTML = '';
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.year}</td>
+                    <td>${formatCurrency(row.balance)}</td>
+                    <td>${formatCurrency(row.yourContribution)}</td>
+                    <td>${formatCurrency(row.employerMatch)}</td>
+                    <td>${formatCurrency(row.growth)}</td>
+                    <td>${formatCurrency(row.inflationAdjusted)}</td>
+                    <td>${formatCurrency(row.afterTax)}</td>
+                `;
+                detailedResultsTableBody.appendChild(tr);
+            });
         }
 
-        return {
-            months: months,
-            totalInterest: totalInterestPaid,
-            totalPaid: loanAmount + totalInterestPaid,
-            scheduledMonthlyPI: scheduledMonthlyPI, // Store this for reference
-            schedule: schedule
-        };
-    }
+        // --- Save Functionality ---
+        function saveDataAsCsv(data) {
+            const headers = ["Year", "Balance (Nominal)", "Your Contribution", "Employer Match", "Investment Growth", "Inflation Adjusted Balance", "Estimated After-Tax Balance"];
+            const rows = data.map(row => [
+                row.year,
+                Math.round(row.balance),
+                Math.round(row.yourContribution),
+                Math.round(row.employerMatch),
+                Math.round(row.growth),
+                Math.round(row.inflationAdjusted),
+                Math.round(row.afterTax)
+            ]);
 
+            let csvContent = "data:text/csv;charset=utf-8," 
+                + headers.join(",") + "\n"
+                + rows.map(e => e.join(",")).join("\n");
 
-    function calculateRepayment() {
-        const loanAmount = parseFloat(document.getElementById('rcLoanAmount').value);
-        const annualRate = parseFloat(document.getElementById('rcAnnualRateRepay').value);
-        const loanTermYears = parseInt(document.getElementById('rcLoanTermRepay').value);
-        const extraPayment = parseFloat(document.getElementById('rcExtraPaymentRepay').value) || 0;
-
-        const errorDiv = document.getElementById('rc-calc-error-message');
-        const warningDiv = document.getElementById('rcMinPaymentWarning');
-        const resultsSection = document.getElementById('rcResultsSection');
-        const amortizationTableContainer = document.getElementById('rcAmortizationTableContainer');
-        const amortizationTableBody = document.getElementById('rcAmortizationTable').getElementsByTagName('tbody')[0];
-        const savingsInfoDiv = document.getElementById('rcSavingsInfo');
-
-
-        // Reset
-        errorDiv.style.display = 'none'; errorDiv.innerHTML = '';
-        warningDiv.style.display = 'none'; warningDiv.innerHTML = '';
-        resultsSection.style.display = 'none';
-        amortizationTableContainer.style.display = 'none';
-        amortizationTableBody.innerHTML = '';
-        savingsInfoDiv.style.display = 'none';
-
-        // --- Input Validation ---
-        let errors = [];
-        if (isNaN(loanAmount) || loanAmount <= 0) errors.push("Loan amount must be a positive number.");
-        if (isNaN(annualRate) || annualRate < 0) errors.push("Annual interest rate must be non-negative.");
-        else if (annualRate > 40) errors.push("Annual interest rate seems unusually high (>40%).");
-        if (isNaN(loanTermYears) || loanTermYears <= 0) errors.push("Loan term must be a positive number of years.");
-        if (isNaN(extraPayment) || extraPayment < 0) errors.push("Additional monthly payment must be non-negative.");
-
-        if (errors.length > 0) {
-            errorDiv.innerHTML = errors.join("<br>");
-            errorDiv.style.display = 'block';
-            return;
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "401k_projection.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
-        // Scenario with Extra Payments
-        const payoffWithExtra = runRepaymentScenario(loanAmount, annualRate, loanTermYears, extraPayment);
+        function saveDataAsXlsx(data) {
+            const headerKeys = ["year", "balance", "yourContribution", "employerMatch", "growth", "inflationAdjusted", "afterTax"];
+            const headers = ["Year", "Balance (Nominal)", "Your Contribution", "Employer Match", "Investment Growth", "Inflation Adjusted Balance", "Estimated After-Tax Balance"];
+            
+            const wsData = [];
+            wsData.push(headers);
 
-        if (payoffWithExtra.error) {
-            // The error (payment too low) is already displayed by runRepaymentScenario via warningDiv
-            // If it's a different kind of error, show it in errorDiv
-            if (!warningDiv.innerHTML) { // If warningDiv wasn't populated, it's a different error
-                errorDiv.textContent = payoffWithExtra.error;
-                errorDiv.style.display = 'block';
-            }
-            return; // Stop further processing if there's a fundamental calculation error
+            data.forEach(row => {
+                const newRow = headerKeys.map(key => Math.round(row[key]));
+                wsData.push(newRow);
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "401K_Projection");
+
+            XLSX.writeFile(wb, "401k_projection.xlsx");
         }
 
-
-        document.getElementById('resScheduledMonthlyPayment').textContent = rcFormatCurrency(payoffWithExtra.scheduledMonthlyPI);
-        document.getElementById('resActualTotalMonthlyPayment').textContent = rcFormatCurrency(payoffWithExtra.scheduledMonthlyPI + extraPayment);
-        document.getElementById('resRepayPayoffTimeline').textContent = rcFormatYearsMonths(payoffWithExtra.months);
-        document.getElementById('resRepayTotalInterestPaid').textContent = rcFormatCurrency(payoffWithExtra.totalInterest);
-        document.getElementById('resRepayTotalAmountPaid').textContent = rcFormatCurrency(payoffWithExtra.totalPaid);
-        resultsSection.style.display = 'block';
-
-
-        // Populate Amortization Table (first year and last year)
-        if (payoffWithExtra.schedule.length > 0) {
-            const schedule = payoffWithExtra.schedule;
-            const numPayments = schedule.length;
-            const displayFirstN = 12; // Show first 12 months
-            const displayLastN = 12;  // Show last 12 months
-
-            for (let i = 0; i < numPayments; i++) {
-                if (i < displayFirstN || i >= numPayments - displayLastN) {
-                    const pmt = schedule[i];
-                    const row = amortizationTableBody.insertRow();
-                    row.insertCell().textContent = pmt.month;
-                    // Display the actual total payment made for this period
-                    const actualPaymentThisPeriod = (i === numPayments - 1 && pmt.balance === 0) ? (pmt.principal + pmt.interest) : (payoffWithExtra.scheduledMonthlyPI + extraPayment);
-                    row.insertCell().textContent = rcFormatCurrency(actualPaymentThisPeriod);
-                    row.insertCell().textContent = rcFormatCurrency(pmt.extraPayment);
-                    row.insertCell().textContent = rcFormatCurrency(pmt.principal);
-                    row.insertCell().textContent = rcFormatCurrency(pmt.interest);
-                    row.insertCell().textContent = rcFormatCurrency(pmt.balance);
-                }
-                if (i === displayFirstN -1 && numPayments > displayFirstN + displayLastN) {
-                    const row = amortizationTableBody.insertRow();
-                    const cell = row.insertCell();
-                    cell.colSpan = 6; // Adjusted for new 'Extra Pmt' column
-                    cell.style.textAlign = "center";
-                    cell.style.fontStyle = "italic";
-                    cell.textContent = `... ${numPayments - displayFirstN - displayLastN} more payments ...`;
-                }
-            }
-            amortizationTableContainer.style.display = 'block';
+        // --- Share Functionality ---
+        function shareByEmail(results) {
+            const subject = "My 401K Projection Results";
+            const body = `Hello,\n\nHere are the summarized results from my 401K projection using Fintech Solutions' Calculator:\n\n` +
+                         `Projected Balance at Retirement (Nominal): ${formatCurrency(results.projectedBalance)}\n` +
+                         `Your Total Contributions: ${formatCurrency(results.totalUserContributions)}\n` +
+                         `Total Employer Match: ${formatCurrency(results.totalEmployerMatch)}\n` +
+                         `Total Investment Growth: ${formatCurrency(results.totalGrowth)}\n` +
+                         `Inflation-Adjusted Balance (Today's Value): ${formatCurrency(results.inflationAdjustedBalance)}\n` +
+                         `Estimated After-Tax Balance: ${formatCurrency(results.afterTaxBalance)}\n\n` +
+                         `You can try the calculator here: ${window.location.href}\n\n` +
+                         `Please note: This is for illustrative purposes only and not financial advice. Consult a professional advisor for personalized guidance.`;
+            
+            const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
         }
 
-        // Comparison if extra payment was made
-        if (extraPayment > 0) {
-            const originalPayoff = runRepaymentScenario(loanAmount, annualRate, loanTermYears, 0); // Scenario without extra
-            if (originalPayoff.months !== Infinity && !originalPayoff.error) {
-                const timeSavedVal = originalPayoff.months - payoffWithExtra.months;
-                const interestSavedVal = originalPayoff.totalInterest - payoffWithExtra.totalInterest;
+        // --- Event Listeners ---
+        calculateButton.addEventListener('click', () => {
+            const result = calculate401K();
+            if (result) {
+                finalBalanceSpan.textContent = formatCurrency(result.projectedBalance);
+                yourContributionsSpan.textContent = formatCurrency(result.totalUserContributions);
+                employerMatchAmountSpan.textContent = formatCurrency(result.totalEmployerMatch);
+                totalGrowthSpan.textContent = formatCurrency(result.totalGrowth);
+                inflationAdjustedBalanceSpan.textContent = formatCurrency(result.inflationAdjustedBalance);
+                afterTaxBalanceSpan.textContent = formatCurrency(result.afterTaxBalance);
 
-                if (timeSavedVal > 0 || interestSavedVal > 0) {
-                    document.getElementById('resRepayTimeSaved').textContent = rcFormatYearsMonths(timeSavedVal > 0 ? timeSavedVal : 0);
-                    document.getElementById('resRepayInterestSaved').textContent = rcFormatCurrency(interestSavedVal > 0 ? interestSavedVal : 0);
-                    savingsInfoDiv.style.display = 'block';
+                calculatorOutput.style.display = 'block';
+                chartContainer.style.display = 'block';
+                professionalInsightsDiv.style.display = 'block';
+                detailedResultsSection.style.display = 'block';
 
-                    // Display example use case message
-                    const exampleDiv = document.getElementById('rcMinPaymentWarning'); // Re-use for positive message
-                    exampleDiv.innerHTML = `<strong>Example Impact:</strong> By adding ${rcFormatCurrency(extraPayment)}/month extra, you could pay off your loan <span class="savings-highlight">${rcFormatYearsMonths(timeSavedVal)}</span> sooner and save <span class="savings-highlight">${rcFormatCurrency(interestSavedVal)}</span> in interest!`;
-                    exampleDiv.className = 'rc-calc-warning'; // General info styling
-                    exampleDiv.style.backgroundColor = '#d4edda'; // Greenish for positive
-                    exampleDiv.style.borderColor = '#c3e6cb';
-                    exampleDiv.style.color = '#155724';
-                    exampleDiv.style.display = 'block';
+                renderChart(result);
+                renderDetailedTable(result.detailedTableData);
+            } else {
+                calculatorOutput.style.display = 'none';
+                chartContainer.style.display = 'none';
+                professionalInsightsDiv.style.display = 'none';
+                detailedResultsSection.style.display = 'none';
+                detailedResultsTableContainer.style.display = 'none';
+                if (growthChartInstance) {
+                    growthChartInstance.destroy();
+                    growthChartInstance = null;
                 }
             }
-        } else { // No extra payment, show encouraging message
-            const exampleDiv = document.getElementById('rcMinPaymentWarning');
-            exampleDiv.innerHTML = `You’re on track to be debt-free by <strong>${rcFormatYearsMonths(payoffWithExtra.months)}</strong>! Want to pay it off even faster and save on interest? Try adding an amount to the "Additional Monthly Payment" field.`;
-            exampleDiv.className = 'rc-calc-warning';
-            exampleDiv.style.backgroundColor = '#d1ecf1'; // Light blue for info
-            exampleDiv.style.borderColor = '#bee5eb';
-            exampleDiv.style.color = '#0c5460';
-            exampleDiv.style.display = 'block';
-        }
-    }
-</script>
-<br>
-<br>
-<script type="text/javascript" src="https://udbaa.com/slider.php?section=General&pub=772531&ga=g&side=random"></script>
-<script type="text/javascript" src="https://udbaa.com/bnr.php?section=General&pub=772531&format=300x250&ga=g"></script>
-<noscript><a href="https://yllix.com/publishers/772531" target="_blank"><img src="//ylx-aff.advertica-cdn.com/pub/300x250.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" /></a></noscript>
+        });
+
+        resetButton.addEventListener('click', () => {
+            currentBalanceInput.value = 50000;
+            annualContributionInput.value = 6000;
+            employerMatchInput.value = 50;
+            expectedReturnInput.value = 7;
+            yearsUntilRetirementInput.value = 25;
+            inflationRateInput.value = 3;
+            document.querySelector('input[name="accountType"][value="traditional"]').checked = true;
+            retirementTaxRateInput.value = 15;
+            document.querySelector('input[name="contributionFrequency"][value="monthly"]').checked = true;
+
+            calculatorOutput.style.display = 'none';
+            chartContainer.style.display = 'none';
+            professionalInsightsDiv.style.display = 'none';
+            detailedResultsSection.style.display = 'none';
+            detailedResultsTableContainer.style.display = 'none';
+            alertMessageDiv.style.display = 'none';
+            
+            if (growthChartInstance) {
+                growthChartInstance.destroy();
+                growthChartInstance = null;
+            }
+            detailedChartData = [];
+            detailedResultsTableBody.innerHTML = '';
+            toggleTableButton.textContent = 'Show Detailed Table';
+        });
+
+        printButton.addEventListener('click', () => {
+            window.print();
+        });
+
+        saveCsvButton.addEventListener('click', () => {
+            if (detailedChartData.length > 0) {
+                saveDataAsCsv(detailedChartData);
+            } else {
+                alertMessageDiv.textContent = 'Please calculate your 401K projection first to enable download.';
+                alertMessageDiv.style.display = 'block';
+            }
+        });
+
+        saveXlsxButton.addEventListener('click', () => {
+            if (detailedChartData.length > 0) {
+                saveDataAsXlsx(detailedChartData);
+            } else {
+                alertMessageDiv.textContent = 'Please calculate your 401K projection first to enable download.';
+                alertMessageDiv.style.display = 'block';
+            }
+        });
+
+        shareEmailButton.addEventListener('click', () => {
+            const currentResult = calculate401K();
+            if (currentResult) {
+                shareByEmail(currentResult);
+            } else {
+                alertMessageDiv.textContent = 'Please calculate your 401K projection first to share results.';
+                alertMessageDiv.style.display = 'block';
+            }
+        });
+        
+        toggleTableButton.addEventListener('click', () => {
+            if (detailedResultsTableContainer.style.display === 'none') {
+                detailedResultsTableContainer.style.display = 'block';
+                toggleTableButton.textContent = 'Hide Detailed Table';
+            } else {
+                detailedResultsTableContainer.style.display = 'none';
+                toggleTableButton.textContent = 'Show Detailed Table';
+            }
+        });
+
+        // Initial state on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Uncomment the line below if you want to run calculation on page load with default values
+            // calculateButton.click();
+        });
+    </script>
+</body>
+</html>
