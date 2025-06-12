@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced 401K Calculator | FinTech Solutions</title>
-    <meta name="description" content="Secure, advanced 401K retirement planning calculator with ad integration. Project your future 401K balance.">
+    <title>Advanced 401K Calculator | Fintech Solutions</title>
+    <meta name="description" content="Secure and advanced 401K retirement planning calculator with tax implications, detailed reports, and save/print options.">
 
     <!-- Chart.js for visualizations (using latest recommended CDN for UMD bundle) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <!-- Chart.js Plugin for Datalabels (optional, for showing values on bars/lines) -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <!-- SheetJS (xlsx.mini.min.js) for Excel (XLSX) file generation -->
+    <script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.mini.min.js"></script>
 
     <style>
         /*
@@ -45,7 +47,53 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            position: relative; /* Essential for positioning the absolute home button */
+            min-height: 120px; /* Ensure enough height for button and ad slot */
         }
+        
+        /* Styles for the "Go to Home Page" button */
+        .home-nav-button {
+            position: absolute;
+            top: 15px; /* Adjust as needed */
+            left: 15px; /* Adjust as needed */
+            background-color: #f0f0f0; /* Light grey, stands out on dark blue */
+            color: var(--primary-color); /* Dark blue text */
+            padding: 0.6rem 1.2rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000; /* Ensure it's above other elements */
+            display: inline-flex; /* Use flex for potential icon if added */
+            align-items: center;
+            gap: 0.3em;
+        }
+        .home-nav-button:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-1px);
+        }
+        .home-nav-button:active {
+            transform: translateY(0);
+        }
+        /* Media query for smaller screens: move button to top center */
+        @media (max-width: 767px) {
+            .home-nav-button {
+                position: static; /* Remove absolute positioning */
+                margin-top: 0.5rem;
+                margin-left: auto;
+                margin-right: auto;
+                order: -2; /* Place it logically before h1 */
+            }
+            header {
+                 min-height: 100px; /* Smaller min-height without absolute positioning */
+            }
+            header h1 {
+                margin-top: 1rem; /* Adjust margin if button moves */
+            }
+        }
+
 
         header h1 {
             margin-bottom: 0.5rem;
@@ -54,9 +102,9 @@
 
         .header-ad-slot, .footer-ad-slot, .yllix-ad-spot {
             width: 100%;
-            max-width: 728px; /* Common leaderboard size */
+            max-width: 728px;
             margin: 0.5rem auto;
-            min-height: 90px; /* To reserve space, prevents layout jump if ad loads slowly */
+            min-height: 90px;
             background-color: #e9ecef;
             display: flex;
             align-items: center;
@@ -65,11 +113,20 @@
             color: #6c757d;
             font-size: 0.9rem;
             text-align: center;
-            box-sizing: border-box; /* Ensures padding/border are included in max-width */
-            overflow: hidden; /* Prevent ad content overflowing */
+            box-sizing: border-box;
+            overflow: hidden;
+            border: 1px solid #dcdcdc; /* Added for clearer visual boundary */
+            order: -1; /* Place before h1 in flex container */
         }
+        @media (max-width: 767px) { /* Adjust ad slot on small screens */
+            .header-ad-slot, .footer-ad-slot {
+                max-width: 320px; /* Common mobile banner size */
+                min-height: 50px;
+            }
+        }
+
         .yllix-ad-spot {
-            min-height: 250px; /* Adjust for medium rectangle size */
+            min-height: 250px;
             margin-top: 2rem;
             border: 1px dashed var(--border-color);
         }
@@ -88,7 +145,7 @@
 
         @media (min-width: 768px) {
             .container {
-                grid-template-columns: 1fr 2fr; /* Inputs on left, results/chart on right */
+                grid-template-columns: 1fr 2fr;
                 gap: 2rem;
             }
         }
@@ -118,13 +175,13 @@
             font-size: 0.95rem;
         }
 
-        .form-group input[type="number"] {
+        .form-group input[type="number"], .form-group select {
             width: calc(100% - 20px);
             padding: 0.6rem 10px;
             border: 1px solid var(--border-color);
             border-radius: 4px;
             font-size: 1rem;
-            box-sizing: border-box; /* Include padding in width */
+            box-sizing: border-box;
         }
 
         .radio-group {
@@ -145,7 +202,15 @@
         }
 
 
-        button {
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem; /* Space between buttons */
+            margin-top: 1rem;
+        }
+        .btn-group button, .btn-group a.button {
+            flex: 1 1 48%; /* Allows two buttons per row on larger screens */
+            min-width: 140px; /* Ensures minimum size */
             background-color: var(--accent-color);
             color: white;
             padding: 0.8rem 1.5rem;
@@ -154,24 +219,30 @@
             cursor: pointer;
             font-size: 1.05rem;
             font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
             transition: background-color 0.2s ease, transform 0.1s ease;
-            width: 100%;
             box-sizing: border-box;
             -webkit-appearance: none;
         }
-
-        button:hover {
+        @media (max-width: 480px) {
+            .btn-group button, .btn-group a.button {
+                flex: 1 1 100%; /* Stack buttons on very small screens */
+            }
+        }
+        .btn-group button:hover, .btn-group a.button:hover {
             background-color: #218838;
             transform: translateY(-1px);
         }
-
-        button:active {
+        .btn-group button:active, .btn-group a.button:active {
             transform: translateY(0);
         }
 
         #resetButton {
             background-color: #6c757d;
-            margin-top: 0.5rem;
         }
         #resetButton:hover {
             background-color: #5a6268;
@@ -179,12 +250,28 @@
         
         #printButton {
             background-color: #17a2b8; /* Info blue */
-            margin-top: 0.5rem;
         }
         #printButton:hover {
             background-color: #138496;
         }
-
+        #saveCsvButton {
+            background-color: #007bff; /* Blue */
+        }
+        #saveCsvButton:hover {
+            background-color: #0069d9;
+        }
+        #saveXlsxButton {
+            background-color: #28a745; /* Green (Excel color hint) */
+        }
+        #saveXlsxButton:hover {
+            background-color: #218838;
+        }
+        #shareEmailButton {
+            background-color: #6f42c1; /* Purple */
+        }
+        #shareEmailButton:hover {
+            background-color: #563d7c;
+        }
 
         .calculator-output-section {
             background-color: #ffffff;
@@ -244,6 +331,13 @@
              border-left: 5px solid #fd7e14;
              font-size: 1.2rem;
         }
+        #afterTaxBalanceResult {
+             background-color: #fff3cd;
+             border-left: 5px solid #ffc107;
+             font-size: 1.25rem;
+             font-weight: 700;
+        }
+
 
         .chart-section {
             margin-top: 1.5rem;
@@ -258,6 +352,54 @@
             border-radius: 6px;
             padding: 10px;
             box-sizing: border-box;
+        }
+
+        /* Detailed Results Table */
+        .detailed-table-container {
+            margin-top: 2rem;
+            overflow-x: auto;
+            background-color: #fcfcfc;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+        .detailed-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+        .detailed-table th, .detailed-table td {
+            padding: 0.6rem 0.8rem;
+            border-bottom: 1px solid #eee;
+        }
+        .detailed-table th {
+            background-color: #e9ecef;
+            font-weight: 600;
+            color: var(--text-color);
+            white-space: nowrap;
+        }
+        .detailed-table tbody tr:hover {
+            background-color: #f1f7fc;
+        }
+        .detailed-table tbody tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        .toggle-table-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.7rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
+            width: auto;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        .toggle-table-btn:hover {
+            background-color: #45a049;
         }
 
         /* Professional Additions Styles */
@@ -275,7 +417,7 @@
             margin-bottom: 0.5rem;
             font-size: 1.15rem;
         }
-        .professional-box p, .professional-box ul {
+        .professional-box p, .professional-box ul, .professional-box small {
             font-size: 0.95rem;
             color: #555;
             margin-bottom: 0.5rem;
@@ -284,10 +426,11 @@
             padding-left: 1.5rem;
             list-style: disc;
         }
-        .professional-box small {
+        .print-instruction-text, .share-instruction-text {
             display: block;
-            margin-top: 0.5rem;
-            color: #777;
+            text-align: center; 
+            margin-top: 0.5rem; 
+            color: #555;
             font-size: 0.85rem;
         }
 
@@ -325,7 +468,10 @@
         }
 
         /* Hide output section until calculated */
-        #calculatorOutput, #chartContainer, #professionalInsights {
+        #calculatorOutput, #chartContainer, #professionalInsights, #detailedResultsSection {
+            display: none;
+        }
+        #detailedResultsTableContainer { /* Default hidden */
             display: none;
         }
 
@@ -341,79 +487,81 @@
             font-weight: 500;
         }
 
-
         /*
         * Print-Specific Styles
-        * When the user triggers print (Ctrl/Cmd+P or print button)
-        * these styles will override the screen styles.
         */
         @media print {
             body {
                 background-color: white !important;
-                -webkit-print-color-adjust: exact !important; /* For Chrome to print colors/backgrounds */
-                print-color-adjust: exact !important;         /* Standard for color printing */
-                font-size: 10pt; /* Adjust base font size for printing */
-                margin: 0;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                font-size: 10pt;
+                margin: 0.5in;
             }
 
-            /* Hide everything that isn't essential for the report */
-            header, footer, .calculator-input-section, #calculateButton, #resetButton,
+            header, footer, .calculator-input-section, .btn-group,
             .ad-slot, .header-ad-slot, .footer-ad-slot, .yllix-ad-spot,
-            .alert-message, #printButton, .print-instruction-text { /* Hide print button and instruction too */
+            .alert-message, .print-instruction-text, .share-instruction-text,
+            .home-nav-button, .toggle-table-btn {
                 display: none !important;
             }
 
             .container {
                 max-width: 100%;
-                margin: 0 auto; /* Center on page, sometimes useful if margin is removed above */
+                margin: 0 auto;
                 padding: 0;
                 box-shadow: none;
-                grid-template-columns: 1fr; /* Stack elements vertically */
-                display: block; /* Ensures block layout flow */
+                grid-template-columns: 1fr;
+                display: block;
                 border: none !important;
             }
 
-            .calculator-output-section, .chart-section, #professionalInsights {
-                display: block !important; /* Force these to be visible */
+            .calculator-output-section, .chart-section, #professionalInsights, #detailedResultsSection {
+                display: block !important;
                 width: 100%;
                 margin: 0 !important;
-                padding: 1rem;
-                background-color: white !important; /* Ensure white background for print */
+                padding: 0.5rem 0.5rem;
+                background-color: white !important;
                 box-shadow: none !important;
                 border: none !important;
-                page-break-inside: avoid; /* Prevent breaking sections */
-                page-break-after: auto; /* Allow pages to break normally, or use 'always' for distinct sections on new pages */
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+            .chart-section {
+                 page-break-before: always;
+            }
+            #detailedResultsSection {
+                page-break-before: always;
+                page-break-inside: auto; /* Allow the table to break */
+            }
+            /* Explicitly show detailed table content in print mode */
+            #detailedResultsTableContainer {
+                display: block !important; /* Force the detailed table to show */
             }
 
-            /* Improve spacing and aesthetics for print */
-            .calculator-output-section {
-                padding-bottom: 0.5rem;
-            }
+
             .result-item {
-                background-color: #f0f0f0 !important; /* Lighter background for print */
-                border-left-color: #b0b0b0 !important; /* Grey border for consistency */
+                background-color: #f5f5f5 !important;
+                border-left-color: #b0b0b0 !important;
                 box-shadow: none;
                 margin-bottom: 0.4rem;
                 font-size: 10pt;
+                padding: 0.4rem;
             }
             .result-item span:last-child {
-                color: #333 !important; /* Black value text for print */
+                color: #333 !important;
             }
-            #projectedBalanceResult, #inflationAdjustedBalanceResult {
-                background-color: #e5e5e5 !important;
+            #projectedBalanceResult, #inflationAdjustedBalanceResult, #afterTaxBalanceResult {
+                background-color: #e8e8e8 !important;
                 border-left-color: #888 !important;
             }
             
             h1, h2, h3 {
-                color: #333 !important; /* Dark text for headers */
+                color: #333 !important;
             }
 
-            .chart-section {
-                /* Add a page break before the chart if it makes sense for presentation */
-                /* page-break-before: always; */ 
-            }
             .chart-container {
-                height: 450px; /* Slightly adjust height for clearer print */
+                height: 400px;
                 width: 100%;
                 border: 1px solid #ccc;
                 padding: 5px;
@@ -421,59 +569,58 @@
             }
 
             .professional-box {
-                background-color: #f7f7f7 !important; /* Light background */
+                background-color: #f7f7f7 !important;
                 border: 1px solid #e0e0e0 !important;
-                border-left-color: #999 !important; /* Less intense border */
+                border-left-color: #999 !important;
                 margin-top: 1rem !important;
-                border-radius: 0; /* No rounded corners for print */
+                border-radius: 0;
                 padding: 0.8rem;
                 font-size: 9pt;
             }
-
-            /* Custom print header/footer - remove if not desired */
-            @page {
-                size: A4 portrait; /* Or 'letter' or 'landscape' */
-                margin: 0.75in; /* Consistent margins */
+            .professional-box h3 {
+                font-size: 10.5pt;
             }
-
-            body::before {
-                content: "401K Retirement Projection Report | Fintech Solutions";
-                display: block;
-                position: running(header); /* Positions the element for print header */
-                font-size: 10pt;
-                text-align: center;
-                color: #555;
-                margin-bottom: 15px; /* Adjust spacing */
-                padding-bottom: 5px;
-                border-bottom: 1px solid #ddd;
-            }
-            body::after {
-                content: "Page " counter(page);
-                display: block;
-                position: running(footer); /* Positions the element for print footer */
+            .professional-box ul, .professional-box p, .professional-box small {
                 font-size: 9pt;
-                text-align: right;
-                color: #777;
-                margin-top: 15px; /* Adjust spacing */
-                padding-top: 5px;
-                border-top: 1px solid #ddd;
             }
-            /* Need to declare 'header' and 'footer' box areas for running elements */
-            @page {
-              @top-center { content: element(header); }
-              @bottom-right { content: element(footer); }
+            .professional-box .professional-box {
+                background-color: #ededed !important;
+                border-left-color: #bbb !important;
             }
-            /* Fallback for browsers that don't support @page rules with running elements */
-            /* In modern browsers, often you don't need body::before/::after with position:running directly. */
-            /* The default print options often let you customize headers/footers. */
 
-        } /* End @media print */
+            .detailed-table-container {
+                margin-top: 1rem;
+                border: 1px solid #ccc;
+            }
+            .detailed-table {
+                font-size: 8pt;
+            }
+            .detailed-table th, .detailed-table td {
+                padding: 0.4rem 0.5rem;
+                border-bottom: 1px solid #eee;
+            }
+            .detailed-table th {
+                background-color: #e9ecef !important;
+                color: #555 !important;
+            }
+            .detailed-table tbody tr:nth-child(even) {
+                background-color: #fbfbfb !important;
+            }
+
+            @page {
+                size: A4 portrait;
+                margin: 0.75in;
+            }
+        }
 
     </style>
 </head>
 <body>
 
     <header>
+        <!-- Home Page Button/Link: IMPORTANT - Update href="/" to your actual homepage URL if it's not the root. -->
+        <a href="/" target="_top" class="home-nav-button" aria-label="Go to Home Page">← Home</a>
+
         <!-- Adsterra Ad Slot (Header) - Insert your code here -->
         <div class="header-ad-slot ad-slot">
             <p>ADSTERRA AD ZONE: LEAD BOARD (e.g., 728x90) or Native</p>
@@ -513,7 +660,7 @@
             <div class="form-group">
                 <label for="employerMatch">Employer Match (%)</label>
                 <input type="number" id="employerMatch" value="50" min="0" max="100" step="1" required aria-label="Employer Match Percentage">
-                <small>e.g., 50 for 50% match (assumed on your contributions, up to plan limits)</small>
+                <small>e.g., 50 for 50% match (assumed on your contributions, up to plan limits).</small>
             </div>
 
             <div class="form-group">
@@ -529,6 +676,25 @@
             <div class="form-group">
                 <label for="inflationRate">Expected Inflation Rate (%)</label>
                 <input type="number" id="inflationRate" value="3" min="0" max="10" step="0.1" required aria-label="Expected Inflation Rate">
+            </div>
+            
+            <div class="form-group">
+                <label>401K Type:</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="accountType" value="traditional" checked aria-label="Traditional 401K Account Type"> Traditional
+                    </label>
+                    <label>
+                        <input type="radio" name="accountType" value="roth" aria-label="Roth 401K Account Type"> Roth
+                    </label>
+                </div>
+                <small>Traditional is pre-tax contributions, taxed at withdrawal. Roth is after-tax contributions, tax-free at withdrawal.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="retirementTaxRate">Expected Retirement Tax Rate (%)</label>
+                <input type="number" id="retirementTaxRate" value="15" min="0" max="50" step="1" required aria-label="Expected Retirement Tax Rate">
+                <small>For Traditional 401K only; rate at which withdrawals will be taxed.</small>
             </div>
 
             <div class="form-group">
@@ -574,10 +740,22 @@
                     <span>Inflation-Adjusted Balance (Today's Value):</span>
                     <span id="inflationAdjustedBalance"></span>
                 </div>
+                <div class="result-item" id="afterTaxBalanceResult">
+                    <span>Estimated After-Tax Balance:</span>
+                    <span id="afterTaxBalance"></span>
+                </div>
                 
-                <button id="printButton" aria-label="Print or Save Retirement Report as PDF">Print or Save as PDF</button>
-                <small class="print-instruction-text" style="text-align: center; display: block; margin-top: 0.5rem; color: #555;">
-                    After clicking 'Print', select 'Save as PDF' from your printer options.
+                <div class="btn-group">
+                    <button id="printButton" aria-label="Print or Save Report as PDF">Print or Save as PDF</button>
+                    <button id="saveCsvButton" aria-label="Download Data as CSV">Download CSV</button>
+                    <button id="saveXlsxButton" aria-label="Download Data as Excel (XLSX)">Download Excel</button>
+                    <button id="shareEmailButton" aria-label="Share Results via Email">Share by Email</button>
+                </div>
+                <small class="print-instruction-text">
+                    **To Save as PDF:** Click 'Print', then select 'Save as PDF' from your printer options.
+                </small>
+                <small class="share-instruction-text" style="margin-top: 0.1rem;">
+                    **Share Security:** Email will open in your mail client. Direct links are not supported for specific results due to client-side privacy.
                 </small>
             </div>
 
@@ -587,6 +765,30 @@
                     <canvas id="growthChart"></canvas>
                 </div>
             </div>
+
+            <div id="detailedResultsSection">
+                <h2>Detailed Annual Breakdown</h2>
+                <button class="toggle-table-btn" id="toggleTableButton">Show Detailed Table</button>
+                <div class="detailed-table-container" id="detailedResultsTableContainer">
+                    <table class="detailed-table">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Balance (Nominal)</th>
+                                <th>Your Contribution</th>
+                                <th>Employer Match</th>
+                                <th>Investment Growth</th>
+                                <th>Inflation Adjusted Balance</th>
+                                <th>Estimated After-Tax Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="detailedResultsTableBody">
+                            <!-- Rows will be inserted here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
 
             <!-- Professional Addition: Insights & Tips -->
             <div id="professionalInsights" class="professional-box">
@@ -602,10 +804,12 @@
                 <div class="professional-box" style="border-left-color: #6c757d; background-color: #e2e6ea;">
                     <h3>Important Assumptions:</h3>
                     <ul>
+                        <li>**Data Privacy:** This calculator operates entirely client-side. **No user inputs or calculated results are ever sent to or stored on our servers.** All data processing occurs locally within your web browser.</li>
                         <li>Contributions and employer match are assumed to occur consistently at the **beginning of each compounding period**.</li>
-                        <li>The 'Expected Annual Return' is a **pre-tax average** and does not account for capital gains taxes or other investment fees.</li>
+                        <li>The 'Expected Annual Return' is a **pre-tax average** and does not account for specific investment fees not represented by the net return.</li>
                         <li>'Inflation Rate' is applied uniformly over the retirement period to adjust purchasing power.</li>
-                        <li>This tool **does not account for income taxes** on 401K withdrawals, required minimum distributions (RMDs), or specific 401K plan fees.</li>
+                        <li>This tool **does not account for income taxes on capital gains or during investment (except for explicit withdrawal taxation)**, specific 401K plan administration fees (beyond what's reflected in net return), or potential required minimum distributions (RMDs) during retirement.</li>
+                        <li>The 'Estimated After-Tax Balance' for **Traditional 401K** is a simplification applying your 'Expected Retirement Tax Rate' directly to the nominal balance. For **Roth 401K**, it's assumed tax-free.</li>
                     </ul>
                 </div>
             </div>
@@ -640,7 +844,7 @@
             </script>
             -->
         </div>
-        <p>© <span id="currentYear"></span> FinTech Solutions. All rights reserved.</p>
+        <p>© <span id="currentYear"></span> Fintech Solutions. All rights reserved.</p>
         <p>
             <a href="/privacy-policy.html">Privacy Policy</a> |
             <a href="/disclaimer.html">Disclaimer</a> |
@@ -659,21 +863,29 @@
         */
 
         // Chart.js global config and plugin registration
-        Chart.register(ChartDataLabels); 
-        Chart.defaults.plugins.datalabels.display = false; // Disable by default, enable in options if needed
+        Chart.register(ChartDataLabels);
+        Chart.defaults.plugins.datalabels.display = false; // Disable by default
         Chart.defaults.font.family = "'Segoe UI', sans-serif";
         Chart.defaults.font.size = 12;
 
+        // --- DOM Elements ---
         const currentBalanceInput = document.getElementById('currentBalance');
         const annualContributionInput = document.getElementById('annualContribution');
         const employerMatchInput = document.getElementById('employerMatch');
         const expectedReturnInput = document.getElementById('expectedReturn');
         const yearsUntilRetirementInput = document.getElementById('yearsUntilRetirement');
         const inflationRateInput = document.getElementById('inflationRate');
+        const accountTypeRadios = document.querySelectorAll('input[name="accountType"]');
+        const retirementTaxRateInput = document.getElementById('retirementTaxRate');
         const contributionFrequencyRadios = document.querySelectorAll('input[name="contributionFrequency"]');
+
         const calculateButton = document.getElementById('calculateButton');
         const resetButton = document.getElementById('resetButton');
-        const printButton = document.getElementById('printButton'); // New print button
+        const printButton = document.getElementById('printButton');
+        const saveCsvButton = document.getElementById('saveCsvButton');
+        const saveXlsxButton = document.getElementById('saveXlsxButton');
+        const shareEmailButton = document.getElementById('shareEmailButton');
+        const toggleTableButton = document.getElementById('toggleTableButton');
 
         const calculatorOutput = document.getElementById('calculatorOutput');
         const finalBalanceSpan = document.getElementById('finalBalance');
@@ -681,40 +893,38 @@
         const employerMatchAmountSpan = document.getElementById('employerMatchAmount');
         const totalGrowthSpan = document.getElementById('totalGrowth');
         const inflationAdjustedBalanceSpan = document.getElementById('inflationAdjustedBalance');
+        const afterTaxBalanceSpan = document.getElementById('afterTaxBalance');
         const chartContainer = document.getElementById('chartContainer');
         const alertMessageDiv = document.getElementById('alertMessage');
         const professionalInsightsDiv = document.getElementById('professionalInsights');
+        const detailedResultsSection = document.getElementById('detailedResultsSection');
+        const detailedResultsTableContainer = document.getElementById('detailedResultsTableContainer');
+        const detailedResultsTableBody = document.getElementById('detailedResultsTableBody');
 
-        let growthChartInstance; // To store the Chart.js instance
+        let growthChartInstance;
+        let detailedChartData = []; // Store detailed data for table/exports
 
-        /**
-         * Validates all input fields.
-         * @returns {boolean} True if all inputs are valid, false otherwise.
-         */
+        // --- Input Validation ---
         function validateInputs() {
             let isValid = true;
             const inputs = [
-                currentBalanceInput,
-                annualContributionInput,
-                employerMatchInput,
-                expectedReturnInput,
-                yearsUntilRetirementInput,
-                inflationRateInput
+                currentBalanceInput, annualContributionInput, employerMatchInput,
+                expectedReturnInput, yearsUntilRetirementInput, inflationRateInput,
+                retirementTaxRateInput
             ];
 
             inputs.forEach(input => {
                 if (!input.checkValidity() || input.value === '') {
                     isValid = false;
                 }
-                // Check if value is truly a positive number if type=number's min/max are not enough (e.g. user types '-')
-                // Employer match % can be 0, inflation can be 0, others must be >= 0 (or >0 for returns)
-                if (parseFloat(input.value) < 0 && input.id !== 'inflationRate' && input.id !== 'employerMatch') { 
+                if (parseFloat(input.value) < 0 && 
+                    !['inflationRate', 'employerMatch', 'retirementTaxRate'].includes(input.id)) {
                     isValid = false;
                 }
             });
 
             if (!isValid) {
-                alertMessageDiv.textContent = 'Please fill in all required fields and ensure values are valid (e.g., non-negative for contributions/balances, appropriate percentages).';
+                alertMessageDiv.textContent = 'Please fill in all required fields and ensure valid, non-negative values for contributions, balances, returns, and years. Percentages should be realistic.';
                 alertMessageDiv.style.display = 'block';
                 const firstInvalid = Array.from(inputs).find(input => !input.checkValidity() || parseFloat(input.value) < 0);
                 if (firstInvalid) {
@@ -726,11 +936,7 @@
             return isValid;
         }
 
-        /**
-         * Calculates the 401K projection based on user inputs.
-         * Accounts for initial balance compounding and regular contributions (annuity).
-         * @returns {object|null} An object containing financial projections and chart data, or null if validation fails.
-         */
+        // --- Core Calculation Logic ---
         function calculate401K() {
             if (!validateInputs()) {
                 return null;
@@ -743,6 +949,15 @@
             const expectedAnnualReturn = parseFloat(expectedReturnInput.value) / 100;
             const yearsUntilRetirement = parseInt(yearsUntilRetirementInput.value);
             const inflationRate = parseFloat(inflationRateInput.value) / 100;
+            
+            let accountType = 'traditional';
+            for (const radio of accountTypeRadios) {
+                if (radio.checked) {
+                    accountType = radio.value;
+                    break;
+                }
+            }
+            const retirementTaxRate = parseFloat(retirementTaxRateInput.value) / 100;
 
             let contributionFrequencyMultiplier = 1;
             for (const radio of contributionFrequencyRadios) {
@@ -769,7 +984,6 @@
             const futureValueCurrentBalance = currentBalance * Math.pow(1 + periodicReturnRate, totalPeriods);
             
             // 2. Future Value of Annuity (Regular Contributions and Match)
-            // Assumes contributions happen at the beginning of each period for 401k
             let futureValueContributions = 0;
             if (periodicContributionWithMatch > 0) {
                 if (periodicReturnRate === 0) {
@@ -779,53 +993,79 @@
                 }
             }
             
-            // Total Projected Nominal Balance at retirement
             const projectedBalance = futureValueCurrentBalance + futureValueContributions;
 
-            // Individual cash contributions breakdown
             const totalUserContributions = actualAnnualContribution * yearsUntilRetirement;
             const totalEmployerMatch = actualAnnualEmployerMatch * yearsUntilRetirement;
 
-            // Total Investment Growth
             const totalInvestmentGrowth = projectedBalance - currentBalance - totalUserContributions - totalEmployerMatch;
 
-
-            // Inflation-Adjusted Balance
             const inflationAdjustedBalance = projectedBalance / Math.pow(1 + inflationRate, yearsUntilRetirement);
 
+            let afterTaxBalance;
+            if (accountType === 'traditional') {
+                afterTaxBalance = projectedBalance * (1 - retirementTaxRate);
+            } else { // Roth
+                afterTaxBalance = projectedBalance;
+            }
 
-            // --- Data for Chart Visualization (Annual Granularity) ---
-            const chartDataYears = [];
+
+            // --- Data for Chart and Detailed Table (Annual Granularity) ---
+            const chartLabels = [];
             const chartDataTotalBalance = [];
             const chartDataCumulativeContributions = [];
             const chartDataCumulativeGrowth = [];
+            detailedChartData = []; // Reset for new calculation
 
             let currentChartBalance = currentBalance;
             let currentChartContributions = 0; 
             let currentChartGrowth = 0;
 
-            // Initial state for Year 0
-            chartDataYears.push(`Year 0`);
+            // Add initial state for Year 0
+            chartLabels.push(`Year 0`);
             chartDataTotalBalance.push(currentBalance);
             chartDataCumulativeContributions.push(0);
             chartDataCumulativeGrowth.push(0);
+            
+            const initialAfterTax = (accountType === 'traditional' ? currentBalance * (1 - retirementTaxRate) : currentBalance);
+            detailedChartData.push({
+                year: 0,
+                balance: currentBalance,
+                yourContribution: 0,
+                employerMatch: 0,
+                growth: 0,
+                inflationAdjusted: currentBalance,
+                afterTax: initialAfterTax
+            });
+
 
             for (let year = 1; year <= yearsUntilRetirement; year++) {
-                chartDataYears.push(`Year ${year}`);
+                chartLabels.push(`Year ${year}`);
 
-                // Add this year's total contributions (your part + employer match)
                 currentChartBalance += totalAnnualContributionWithMatch;
                 currentChartContributions += totalAnnualContributionWithMatch; 
 
-                // Apply the annual expected return on the entire accumulated balance
                 currentChartBalance *= (1 + expectedAnnualReturn);
                 
                 chartDataTotalBalance.push(currentChartBalance);
                 chartDataCumulativeContributions.push(currentChartContributions);
 
-                // Calculate current investment growth at this year mark
                 currentChartGrowth = currentChartBalance - currentBalance - currentChartContributions;
-                chartDataCumulativeGrowth.push(Math.max(0, currentChartGrowth)); // Growth shouldn't be negative for display
+                chartDataCumulativeGrowth.push(Math.max(0, currentChartGrowth));
+
+                const yearEndBalance = currentChartBalance;
+                const yearInflationAdjusted = yearEndBalance / Math.pow(1 + inflationRate, year);
+                const yearAfterTax = (accountType === 'traditional' ? yearEndBalance * (1 - retirementTaxRate) : yearEndBalance);
+
+                detailedChartData.push({
+                    year: year,
+                    balance: yearEndBalance,
+                    yourContribution: annualContribution, // Annual contribution for the year
+                    employerMatch: actualAnnualEmployerMatch, // Annual employer match for the year
+                    growth: Math.max(0, yearEndBalance - (currentBalance + chartDataCumulativeContributions[year])), // Accurate growth for that point in time
+                    inflationAdjusted: yearInflationAdjusted,
+                    afterTax: yearAfterTax
+                });
             }
 
             return {
@@ -834,18 +1074,16 @@
                 totalEmployerMatch: totalEmployerMatch,
                 totalGrowth: totalInvestmentGrowth,
                 inflationAdjustedBalance: inflationAdjustedBalance,
-                chartLabels: chartDataYears,
+                afterTaxBalance: afterTaxBalance,
+                chartLabels: chartLabels,
                 chartDataTotalBalance: chartDataTotalBalance,
                 chartDataCumulativeContributions: chartDataCumulativeContributions,
-                chartDataCumulativeGrowth: chartDataCumulativeGrowth
+                chartDataCumulativeGrowth: chartDataCumulativeGrowth,
+                detailedTableData: detailedChartData
             };
         }
 
-        /**
-         * Formats a number to currency.
-         * @param {number} value The number to format.
-         * @returns {string} The formatted currency string.
-         */
+        // --- Formatting Helpers ---
         function formatCurrency(value) {
             return new Intl.NumberFormat('en-US', {
                 style: 'currency',
@@ -854,11 +1092,15 @@
                 maximumFractionDigits: 0
             }).format(Math.round(value));
         }
+        
+        function formatNumber(value) {
+            return new Intl.NumberFormat('en-US', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(Math.round(value));
+        }
 
-        /**
-         * Renders/updates the Chart.js graph.
-         * @param {object} chartData The data object from calculate401K().
-         */
+        // --- Chart Rendering ---
         function renderChart(chartData) {
             const ctx = document.getElementById('growthChart').getContext('2d');
 
@@ -872,7 +1114,7 @@
                     labels: chartData.chartLabels,
                     datasets: [
                         {
-                            label: 'Projected Total Balance',
+                            label: 'Projected Total Balance (Nominal)',
                             data: chartData.chartDataTotalBalance,
                             borderColor: 'var(--primary-color)',
                             backgroundColor: 'rgba(0, 86, 179, 0.2)',
@@ -932,32 +1174,14 @@
                     },
                     scales: {
                         x: {
-                            title: {
-                                display: true,
-                                text: 'Years',
-                                font: {
-                                    size: 14,
-                                    weight: 'bold'
-                                }
-                            },
-                            grid: {
-                                display: false
-                            }
+                            title: { display: true, text: 'Years', font: { size: 14, weight: 'bold' } },
+                            grid: { display: false }
                         },
                         y: {
                             beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Value ($)',
-                                font: {
-                                    size: 14,
-                                    weight: 'bold'
-                                }
-                            },
+                            title: { display: true, text: 'Value ($)', font: { size: 14, weight: 'bold' } },
                             ticks: {
-                                callback: function(value) {
-                                    return formatCurrency(value);
-                                }
+                                callback: function(value) { return formatCurrency(value); }
                             }
                         }
                     }
@@ -965,9 +1189,87 @@
             });
         }
 
-        /**
-         * Event listener for the Calculate button.
-         */
+        // --- Detailed Table Rendering ---
+        function renderDetailedTable(data) {
+            detailedResultsTableBody.innerHTML = '';
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.year}</td>
+                    <td>${formatCurrency(row.balance)}</td>
+                    <td>${formatCurrency(row.yourContribution)}</td>
+                    <td>${formatCurrency(row.employerMatch)}</td>
+                    <td>${formatCurrency(row.growth)}</td>
+                    <td>${formatCurrency(row.inflationAdjusted)}</td>
+                    <td>${formatCurrency(row.afterTax)}</td>
+                `;
+                detailedResultsTableBody.appendChild(tr);
+            });
+        }
+
+        // --- Save Functionality ---
+        function saveDataAsCsv(data) {
+            const headers = ["Year", "Balance (Nominal)", "Your Contribution", "Employer Match", "Investment Growth", "Inflation Adjusted Balance", "Estimated After-Tax Balance"];
+            const rows = data.map(row => [
+                row.year,
+                Math.round(row.balance),
+                Math.round(row.yourContribution),
+                Math.round(row.employerMatch),
+                Math.round(row.growth),
+                Math.round(row.inflationAdjusted),
+                Math.round(row.afterTax)
+            ]);
+
+            let csvContent = "data:text/csv;charset=utf-8," 
+                + headers.join(",") + "\n"
+                + rows.map(e => e.join(",")).join("\n");
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "401k_projection.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function saveDataAsXlsx(data) {
+            const headerKeys = ["year", "balance", "yourContribution", "employerMatch", "growth", "inflationAdjusted", "afterTax"];
+            const headers = ["Year", "Balance (Nominal)", "Your Contribution", "Employer Match", "Investment Growth", "Inflation Adjusted Balance", "Estimated After-Tax Balance"];
+            
+            const wsData = [];
+            wsData.push(headers);
+
+            data.forEach(row => {
+                const newRow = headerKeys.map(key => Math.round(row[key]));
+                wsData.push(newRow);
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "401K_Projection");
+
+            XLSX.writeFile(wb, "401k_projection.xlsx");
+        }
+
+        // --- Share Functionality ---
+        function shareByEmail(results) {
+            const subject = "My 401K Projection Results";
+            const body = `Hello,\n\nHere are the summarized results from my 401K projection using Fintech Solutions' Calculator:\n\n` +
+                         `Projected Balance at Retirement (Nominal): ${formatCurrency(results.projectedBalance)}\n` +
+                         `Your Total Contributions: ${formatCurrency(results.totalUserContributions)}\n` +
+                         `Total Employer Match: ${formatCurrency(results.totalEmployerMatch)}\n` +
+                         `Total Investment Growth: ${formatCurrency(results.totalGrowth)}\n` +
+                         `Inflation-Adjusted Balance (Today's Value): ${formatCurrency(results.inflationAdjustedBalance)}\n` +
+                         `Estimated After-Tax Balance: ${formatCurrency(results.afterTaxBalance)}\n\n` +
+                         `You can try the calculator here: ${window.location.href}\n\n` +
+                         `Please note: This is for illustrative purposes only and not financial advice. Consult a professional advisor for personalized guidance.`;
+            
+            const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        }
+
+        // --- Event Listeners ---
         calculateButton.addEventListener('click', () => {
             const result = calculate401K();
             if (result) {
@@ -976,55 +1278,98 @@
                 employerMatchAmountSpan.textContent = formatCurrency(result.totalEmployerMatch);
                 totalGrowthSpan.textContent = formatCurrency(result.totalGrowth);
                 inflationAdjustedBalanceSpan.textContent = formatCurrency(result.inflationAdjustedBalance);
+                afterTaxBalanceSpan.textContent = formatCurrency(result.afterTaxBalance);
 
                 calculatorOutput.style.display = 'block';
                 chartContainer.style.display = 'block';
                 professionalInsightsDiv.style.display = 'block';
+                detailedResultsSection.style.display = 'block';
+
                 renderChart(result);
+                renderDetailedTable(result.detailedTableData);
             } else {
-                // Hide outputs if validation fails
                 calculatorOutput.style.display = 'none';
                 chartContainer.style.display = 'none';
                 professionalInsightsDiv.style.display = 'none';
+                detailedResultsSection.style.display = 'none';
+                detailedResultsTableContainer.style.display = 'none';
                 if (growthChartInstance) {
                     growthChartInstance.destroy();
+                    growthChartInstance = null;
                 }
             }
         });
 
-        /**
-         * Event listener for the Reset button.
-         */
         resetButton.addEventListener('click', () => {
-            // Reset input values to defaults
             currentBalanceInput.value = 50000;
             annualContributionInput.value = 6000;
             employerMatchInput.value = 50;
             expectedReturnInput.value = 7;
             yearsUntilRetirementInput.value = 25;
             inflationRateInput.value = 3;
+            document.querySelector('input[name="accountType"][value="traditional"]').checked = true;
+            retirementTaxRateInput.value = 15;
             document.querySelector('input[name="contributionFrequency"][value="monthly"]').checked = true;
 
-            // Hide output sections and clear any validation messages
             calculatorOutput.style.display = 'none';
             chartContainer.style.display = 'none';
             professionalInsightsDiv.style.display = 'none';
+            detailedResultsSection.style.display = 'none';
+            detailedResultsTableContainer.style.display = 'none';
             alertMessageDiv.style.display = 'none';
             
             if (growthChartInstance) {
                 growthChartInstance.destroy();
                 growthChartInstance = null;
             }
+            detailedChartData = [];
+            detailedResultsTableBody.innerHTML = '';
+            toggleTableButton.textContent = 'Show Detailed Table';
         });
 
-        /**
-         * Event listener for the Print button.
-         */
         printButton.addEventListener('click', () => {
             window.print();
         });
 
-        // Optional: Perform initial calculation on page load with default values
+        saveCsvButton.addEventListener('click', () => {
+            if (detailedChartData.length > 0) {
+                saveDataAsCsv(detailedChartData);
+            } else {
+                alertMessageDiv.textContent = 'Please calculate your 401K projection first to enable download.';
+                alertMessageDiv.style.display = 'block';
+            }
+        });
+
+        saveXlsxButton.addEventListener('click', () => {
+            if (detailedChartData.length > 0) {
+                saveDataAsXlsx(detailedChartData);
+            } else {
+                alertMessageDiv.textContent = 'Please calculate your 401K projection first to enable download.';
+                alertMessageDiv.style.display = 'block';
+            }
+        });
+
+        shareEmailButton.addEventListener('click', () => {
+            const currentResult = calculate401K();
+            if (currentResult) {
+                shareByEmail(currentResult);
+            } else {
+                alertMessageDiv.textContent = 'Please calculate your 401K projection first to share results.';
+                alertMessageDiv.style.display = 'block';
+            }
+        });
+        
+        toggleTableButton.addEventListener('click', () => {
+            if (detailedResultsTableContainer.style.display === 'none') {
+                detailedResultsTableContainer.style.display = 'block';
+                toggleTableButton.textContent = 'Hide Detailed Table';
+            } else {
+                detailedResultsTableContainer.style.display = 'none';
+                toggleTableButton.textContent = 'Show Detailed Table';
+            }
+        });
+
+        // Initial state on page load
         document.addEventListener('DOMContentLoaded', () => {
             // Uncomment the line below if you want to run calculation on page load with default values
             // calculateButton.click();
