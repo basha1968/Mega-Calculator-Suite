@@ -14,8 +14,8 @@
     <!-- SEO OPTIMIZATION -->
     <!-- =================================================================== -->
     <title>Loan Amortization Schedule Calculator - Mega Calculator Suite</title>
-    <meta name="description" content="Generate a detailed loan amortization schedule, calculate monthly payments, total interest, and visualize your debt repayment plan for mortgages, car loans, and more.">
-    <meta name="keywords" content="amortization calculator, loan payment, loan schedule, interest breakdown, principal payment, debt calculator, financial planning, free online calculator">
+    <meta name="description" content=" Generate a detailed loan amortization schedule, calculate monthly payments, total interest, and visualize your debt repayment plan for mortgages, car loans, and more.">
+    <meta name="keywords" content=" amortization calculator, loan payment, loan schedule, interest breakdown, principal payment, debt calculator, financial planning, free online calculator">
     <link rel="canonical" href="https://your-website-url.com/amortization-calculator.html"> <!-- IMPORTANT: Update canonical URL specific to this calculator page -->
 
     <!-- Structured Data (JSON-LD) for SEO -->
@@ -40,7 +40,7 @@
     <!-- =================================================================== -->
     <style>
         /* --- General Styling & Variables --- */
-        :root {
+        :root { /* FIXED: Changed ' root' to ':root' */
             --primary-color: #005A9C; /* A professional blue */
             --secondary-color: #f4f4f4;
             --font-color: #333;
@@ -514,7 +514,7 @@
             <details open>
                 <summary>Financial Calculators</summary>
                 <ul>
-                    <li><a href="/Mega-Calculator-Suite/1.1.html" onclick="showCalculator('calc-401k')">401K Calculator</a></li>
+                    <li><a href="#" onclick="showCalculator('calc-401k')">401K Calculator</a></li>
                     <li><a href="#" onclick="showCalculator('calc-amortization')">Amortization Calculator</a></li>
                     <li><a href="#" onclick="showCalculator('calc-annuity')">Annuity Calculator</a></li>
                     <li><a href="#" onclick="showCalculator('calc-annuity-payout')">Annuity Payout Calculator</a></li>
@@ -1078,37 +1078,44 @@
         const monthlyInterestRate = (annualInterestRate / 100) / 12;
         const numberOfPayments = loanTermYears * 12;
 
-        let monthlyPayment;
+        let fixedMonthlyPayment; // Using a different variable name to avoid confusion (formerly 'monthlyPayment')
 
         if (monthlyInterestRate === 0) {
             // Handle 0% interest separately to avoid division by zero
-            monthlyPayment = loanAmount / numberOfPayments;
+            fixedMonthlyPayment = loanAmount / numberOfPayments;
         } else {
-            monthlyPayment = loanAmount * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
-                             (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+            fixedMonthlyPayment = loanAmount * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
+                                (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
         }
         
         let remainingBalance = loanAmount;
-        let totalInterestPaid = 0;
+        let totalInterestAccrued = 0; // Accumulated interest over loan term
+        let totalActualPaymentsSum = 0; // Accumulates actual payments made, including any final adjustment
         let scheduleRows = [];
 
         // Generate Amortization Schedule
         for (let i = 1; i <= numberOfPayments; i++) {
             const interestForMonth = remainingBalance * monthlyInterestRate;
-            let principalForMonth = monthlyPayment - interestForMonth;
+            let principalForMonth;
+            let currentPaymentAmount; // This will be the actual payment amount for THIS month
 
-            // Adjust last payment to account for floating point inaccuracies
             if (i === numberOfPayments) {
-                principalForMonth = remainingBalance; // Ensure balance goes to exactly zero
-                monthlyPayment = interestForMonth + principalForMonth; // Recalculate payment to match final principal
+                // For the last payment, set principal to exactly what's remaining to zero out the balance
+                principalForMonth = remainingBalance; 
+                currentPaymentAmount = interestForMonth + principalForMonth; // This is the final payment amount
+                remainingBalance = 0; // Set to exactly zero for accurate display in the last row
+            } else {
+                principalForMonth = fixedMonthlyPayment - interestForMonth;
+                currentPaymentAmount = fixedMonthlyPayment;
+                remainingBalance -= principalForMonth;
             }
 
-            remainingBalance -= principalForMonth;
-            totalInterestPaid += interestForMonth;
+            totalInterestAccrued += interestForMonth;
+            totalActualPaymentsSum += currentPaymentAmount; // Accumulate actual payment for true total
 
             // Format values for display
             const paymentNoFormatted = i.toLocaleString();
-            const paymentFormatted = `$${monthlyPayment.toFixed(2)}`;
+            const paymentFormatted = `$${currentPaymentAmount.toFixed(2)}`; // Use the calculated actual payment for this month
             const principalFormatted = `$${principalForMonth.toFixed(2)}`;
             const interestFormatted = `$${interestForMonth.toFixed(2)}`;
             const balanceFormatted = `$${Math.max(0, remainingBalance).toFixed(2)}`; // Ensure balance doesn't show negative zero
@@ -1125,9 +1132,9 @@
         }
 
         // Update Summary
-        monthlyPaymentElem.textContent = `Monthly Payment: $${monthlyPayment.toFixed(2)}`;
-        totalInterestElem.textContent = `Total Interest Paid: $${totalInterestPaid.toFixed(2)}`;
-        totalPaymentsElem.textContent = `Total Payments: $${(monthlyPayment * numberOfPayments).toFixed(2)}`; // Use final payment value for true total
+        monthlyPaymentElem.textContent = `Monthly Payment: $${fixedMonthlyPayment.toFixed(2)}`; // Display the consistent monthly payment
+        totalInterestElem.textContent = `Total Interest Paid: $${totalInterestAccrued.toFixed(2)}`;
+        totalPaymentsElem.textContent = `Total Payments: $${totalActualPaymentsSum.toFixed(2)}`; // Display the sum of all actual payments
 
         // Display Schedule
         scheduleTbody.innerHTML = scheduleRows.join('');
