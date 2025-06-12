@@ -402,8 +402,13 @@
                 align-items: center;
                 padding: 20px 30px;
             }
+            .site-header .header-content { /* Adjust spacing for content within header */
+                text-align: left;
+                flex-grow: 1; /* Allow content to take up space */
+                margin-right: 20px; /* Space between text and button */
+            }
             .site-header h1, .site-header p {
-                text-align: left; /* Align text left within content block */
+                margin: 0; /* Remove default margins if not needed */
             }
             .header-controls {
                 width: auto; /* Allow home link to take minimal space */
@@ -447,12 +452,23 @@
 
             body {
                 /*
-                We'll wrap the main content and sidebar in a wrapper for horizontal alignment
-                This reverts the overall body display back to block so ads can take full width
+                We'll let the main calculator-container control its width within body,
+                and ad banners will be separate blocks taking up available width.
+                This allows ads to sit outside the central flex flow if desired.
                 */
-                display: block; 
+                display: block; /* Revert body to block flow */
             }
-            
+            .site-header, .site-footer {
+                width: 100%; /* Take full width */
+            }
+
+            .site-header {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+
+            /* Container for main content to center with ads on the sides */
             .main-content-wrapper {
                 display: flex;
                 max-width: 1400px; /* Wider container to accommodate sidebar ad */
@@ -503,6 +519,11 @@
             }
             .ad-label {
                 position: static; /* Let it flow normally within div on mobile */
+            }
+            .site-header .header-content {
+                width: 100%;
+                text-align: center; /* Center content in mobile header */
+                margin-right: 0;
             }
         }
 
@@ -600,9 +621,8 @@
             <p>Project your retirement savings with precision and clarity.</p>
         </div>
         <div class="header-controls">
-            <!-- IMPORTANT: Replace 'YOUR_MAIN_HOMEPAGE_URL_HERE' with your actual website's main homepage URL -->
-            <!-- If this tool is standalone and there is no other "main homepage" to return to, you can remove this link. -->
-            <a href="YOUR_MAIN_HOMEPAGE_URL_HERE" class="header-home-link" aria-label="Back to Main Homepage" title="Return to our website's main page.">
+            <!-- Back to Main Homepage Link -->
+            <a href="https://basha1968.github.io/Mega-Calculator-Suite/" class="header-home-link" aria-label="Back to Main Homepage" title="Return to our website's main page.">
                 <i class="fas fa-home"></i> Back to Main Homepage
             </a>
         </div>
@@ -778,9 +798,8 @@
     <footer class="site-footer">
         <p>Disclaimer: This 401K calculator provides estimates for informational purposes only and is not financial advice. Your actual returns may vary. Consult a qualified financial professional for personalized guidance.</p>
         <p>© <span id="current-year"></span> Your Fintech Company. All rights reserved.</p>
-        <!-- IMPORTANT: Replace 'YOUR_MAIN_HOMEPAGE_URL_HERE' with your actual website's main homepage URL -->
-        <!-- If this tool is standalone and there is no other "main homepage" to return to, you can remove this link. -->
-        <p><a href="YOUR_MAIN_HOMEPAGE_URL_HERE" class="footer-home-link" title="Return to our website's main page.">Back to Main Homepage</a></p>
+        <!-- Back to Main Homepage Link in Footer -->
+        <p><a href="https://basha1968.github.io/Mega-Calculator-Suite/" class="footer-home-link" title="Return to our website's main page.">Back to Main Homepage</a></p>
     </footer>
 
     <script>
