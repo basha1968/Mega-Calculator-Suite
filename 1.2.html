@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Amortization Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .calculator-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .summary-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .summary-card h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #7f8c8d;
+        }
+        .summary-card p {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #2c3e50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .chart-container {
+            height: 300px;
+            margin: 20px 0;
+        }
+        .export-options, .social-sharing {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 12px;
+            border-radius: 4px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .email { background-color: #777; }
+        .whatsapp { background-color: #25D366; }
+        .linkedin { background-color: #0077B5; }
+        .twitter { background-color: #1DA1F2; }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: none;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <h1>Amortization Calculator</h1>
+        
+        <div class="input-group">
+            <label for="loanAmount">Loan Amount ($)</label>
+            <input type="number" id="loanAmount" value="250000" min="1000">
+        </div>
+        
+        <div class="input-group">
+            <label for="interestRate">Interest Rate (%)</label>
+            <input type="number" id="interestRate" value="4.5" min="0.1" step="0.01">
+        </div>
+        
+        <div class="input-group">
+            <label for="loanTerm">Loan Term (Years)</label>
+            <input type="number" id="loanTerm" value="30" min="1">
+        </div>
+        
+        <div class="input-group">
+            <label for="paymentFrequency">Payment Frequency</label>
+            <select id="paymentFrequency">
+                <option value="12">Monthly</option>
+                <option value="24">Bi-Weekly</option>
+                <option value="52">Weekly</option>
+            </select>
+        </div>
+        
+        <button id="calculateBtn">Calculate</button>
+        
+        <div id="results">
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <h3>Payment Amount</h3>
+                    <p id="monthlyPayment">$0.00</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Total Interest</h3>
+                    <p id="totalInterest">$0.00</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Total Cost</h3>
+                    <p id="totalCost">$0.00</p>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="paymentChart"></canvas>
+            </div>
+            
+            <table id="amortizationTable">
+                <thead>
+                    <tr>
+                        <th>Payment #</th>
+                        <th>Payment</th>
+                        <th>Principal</th>
+                        <th>Interest</th>
+                        <th>Balance</th>
+                    </tr>
+                </thead>
+                <tbody id="amortizationBody"></tbody>
+            </table>
+            
+            <div class="export-options no-print">
+                <button id="printBtn">Print Schedule</button>
+                <button id="pdfBtn">Save as PDF</button>
+                <button id="excelBtn">Save as Excel</button>
+                <button id="csvBtn">Save as CSV</button>
+            </div>
+            
+            <div class="social-sharing no-print">
+                <a href="#" class="social-btn email" id="emailShare">Email</a>
+                <a href="#" class="social-btn whatsapp" id="whatsappShare">WhatsApp</a>
+                <a href="#" class="social-btn linkedin" id="linkedinShare">LinkedIn</a>
+                <a href="#" class="social-btn twitter" id="twitterShare">Twitter</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up event listeners
+            document.getElementById('calculateBtn').addEventListener('click', calculateAmortization);
+            document.getElementById('printBtn').addEventListener('click', printSchedule);
+            document.getElementById('pdfBtn').addEventListener('click', exportToPDF);
+            document.getElementById('excelBtn').addEventListener('click', exportToExcel);
+            document.getElementById('csvBtn').addEventListener('click', exportToCSV);
+            
+            // Set up social sharing
+            setupSocialSharing();
+            
+            // Calculate on initial load
+            calculateAmortization();
+        });
+
+        function calculateAmortization() {
+            // Get input values
+            const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+            const annualRate = parseFloat(document.getElementById('interestRate').value) / 100;
+            const loanTermYears = parseInt(document.getElementById('loanTerm').value);
+            const frequency = parseInt(document.getElementById('paymentFrequency').value);
+            
+            // Validate inputs
+            if (isNaN(loanAmount) || isNaN(annualRate) || isNaN(loanTermYears) || isNaN(frequency)) {
+                alert('Please enter valid values for all fields.');
+                return;
+            }
+            
+            // Calculate payment details
+            const paymentsPerYear = frequency;
+            const periodicRate = annualRate / paymentsPerYear;
+            const totalPayments = loanTermYears * paymentsPerYear;
+            
+            const payment = periodicRate === 0 
+                ? loanAmount / totalPayments 
+                : loanAmount * periodicRate / (1 - Math.pow(1 + periodicRate, -totalPayments));
+            
+            // Generate amortization schedule
+            let balance = loanAmount;
+            let totalInterest = 0;
+            const schedule = [];
+            
+            for (let i = 1; i <= totalPayments; i++) {
+                const interest = balance * periodicRate;
+                const principal = payment - interest;
+                totalInterest += interest;
+                balance = Math.max(0, balance - principal);
+                
+                // Add to schedule
+                schedule.push({
+                    paymentNumber: i,
+                    payment: payment,
+                    principal: principal,
+                    interest: interest,
+                    balance: balance
+                });
+            }
+            
+            // Update UI
+            updateSummaryCards(payment, totalInterest, loanAmount);
+            displayAmortizationTable(schedule);
+            updateChart(loanAmount, totalInterest);
+        }
+
+        function updateSummaryCards(payment, totalInterest, loanAmount) {
+            document.getElementById('monthlyPayment').textContent = formatCurrency(payment);
+            document.getElementById('totalInterest').textContent = formatCurrency(totalInterest);
+            document.getElementById('totalCost').textContent = formatCurrency(loanAmount + totalInterest);
+        }
+
+        function displayAmortizationTable(schedule) {
+            const tableBody = document.getElementById('amortizationBody');
+            tableBody.innerHTML = '';
+            
+            // Only show every 12th payment if there are many
+            const showAll = schedule.length <= 120;
+            
+            schedule.forEach((payment, i) => {
+                if (showAll || (i + 1) % 12 === 0 || i === 0 || i === schedule.length - 1) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${payment.paymentNumber}</td>
+                        <td>${formatCurrency(payment.payment)}</td>
+                        <td>${formatCurrency(payment.principal)}</td>
+                        <td>${formatCurrency(payment.interest)}</td>
+                        <td>${formatCurrency(payment.balance)}</td>
+                    `;
+                    tableBody.appendChild(row);
+                }
+            });
+        }
+
+        function updateChart(principal, totalInterest) {
+            const ctx = document.getElementById('paymentChart').getContext('2d');
+            
+            // Destroy previous chart if exists
+            if (window.paymentChart) {
+                window.paymentChart.destroy();
+            }
+            
+            window.paymentChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Principal', 'Interest'],
+                    datasets: [{
+                        data: [principal, totalInterest],
+                        backgroundColor: ['#3498db', '#e74c3c']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${formatCurrency(context.raw)} (${Math.round(context.raw / (principal + totalInterest) * 100)}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+        }
+
+        function printSchedule() {
+            window.print();
+        }
+
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Add title
+            doc.setFontSize(18);
+            doc.text('Amortization Schedule', 14, 15);
+            
+            // Add loan details
+            doc.setFontSize(12);
+            doc.text(`Loan Amount: ${document.getElementById('loanAmount').value}`, 14, 25);
+            doc.text(`Interest Rate: ${document.getElementById('interestRate').value}%`, 14, 30);
+            doc.text(`Loan Term: ${document.getElementById('loanTerm').value} years`, 14, 35);
+            
+            // Add summary
+            doc.text(`Payment Amount: ${document.getElementById('monthlyPayment').textContent}`, 14, 45);
+            doc.text(`Total Interest: ${document.getElementById('totalInterest').textContent}`, 14, 50);
+            doc.text(`Total Cost: ${document.getElementById('totalCost').textContent}`, 14, 55);
+            
+            // Add table
+            doc.autoTable({
+                startY: 65,
+                head: [['Payment #', 'Payment', 'Principal', 'Interest', 'Balance']],
+                body: getAmortizationDataForExport(),
+                styles: { fontSize: 8 },
+                headStyles: { fillColor: [44, 62, 80] }
+            });
+            
+            doc.save('amortization_schedule.pdf');
+        }
+
+        function exportToExcel() {
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(getAmortizationDataForExport());
+            XLSX.utils.book_append_sheet(wb, ws, "Amortization Schedule");
+            XLSX.writeFile(wb, 'amortization_schedule.xlsx');
+        }
+
+        function exportToCSV() {
+            const data = getAmortizationDataForExport();
+            const headers = Object.keys(data[0]).join(',');
+            const rows = data.map(obj => Object.values(obj).join(','));
+            const csvContent = [headers, ...rows].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'amortization_schedule.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function getAmortizationDataForExport() {
+            const table = document.getElementById('amortizationTable');
+            const rows = table.querySelectorAll('tbody tr');
+            const data = [];
+            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                data.push({
+                    'Payment #': cells[0].textContent,
+                    'Payment': cells[1].textContent,
+                    'Principal': cells[2].textContent,
+                    'Interest': cells[3].textContent,
+                    'Balance': cells[4].textContent
+                });
+            });
+            
+            return data;
+        }
+
+        function setupSocialSharing() {
+            const loanAmount = document.getElementById('loanAmount').value;
+            const interestRate = document.getElementById('interestRate').value;
+            const loanTerm = document.getElementById('loanTerm').value;
+            const monthlyPayment = document.getElementById('monthlyPayment').textContent;
+            
+            const shareText = `Check out my amortization schedule: $${loanAmount} loan at ${interestRate}% for ${loanTerm} years. Monthly payment: ${monthlyPayment}.`;
+            const shareUrl = window.location.href;
+            
+            document.getElementById('emailShare').href = `mailto:?subject=Amortization Schedule&body=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
+            document.getElementById('whatsappShare').href = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
+            document.getElementById('linkedinShare').href = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(shareUrl)}&title=Amortization Schedule&summary=${encodeURIComponent(shareText)}`;
+            document.getElementById('twitterShare').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+        }
+    </script>
+</body>
+</html>
