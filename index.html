@@ -40,7 +40,7 @@
     <!-- =================================================================== -->
     <style>
         /* --- General Styling & Variables --- */
-        :root { /* FIXED: Changed ' root' to ':root' */
+        :root {
             --primary-color: #005A9C; /* A professional blue */
             --secondary-color: #f4f4f4;
             --font-color: #333;
@@ -448,44 +448,129 @@
             }
         }
 
-        /* Styles for Welcome Message sections */
-        #welcome-message p {
+        /*
+        ====================================================================
+        HOME PAGE ENHANCEMENTS (UI/UX Designer Modifications)
+        ====================================================================
+        */
+        
+        /* Subtle background pattern for a unique texture */
+        #welcome-message {
+            position: relative;
+            overflow: hidden; /* Ensures pseudo-elements don't overflow */
+            background-color: #ffffff;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23005a9c' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            padding: 40px; /* More generous padding */
+        }
+        
+        /* Gradient text effect for the main title */
+        #welcome-message h2 {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--header-bg), var(--primary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
             margin-bottom: 15px;
+            text-align: center;
         }
 
+        /* Improved styling for the description */
+        #welcome-message > .calc-description {
+            font-size: 1.1em;
+            color: #444;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 25px auto;
+        }
+        
+        /* Custom styled horizontal rule */
+        .fancy-divider {
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 90, 156, 0.5), rgba(0, 0, 0, 0));
+            margin: 40px auto;
+            width: 80%;
+        }
+
+        /* Bolder, shorter underline for section titles */
         #welcome-message .section-title {
-            color: var(--primary-color);
-            margin-top: 30px;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 5px;
+            color: var(--header-bg);
+            margin-top: 40px;
+            margin-bottom: 25px;
+            font-size: 1.6em;
+            text-align: center;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 8px;
+            display: inline-block; /* To make border only as wide as text */
+            width: auto;
+        }
+        
+        /* Center the section title container */
+        .section-title-container {
+            text-align: center;
         }
 
+        /* Custom list styling with icons */
         #welcome-message ul {
-            list-style: disc inside;
-            padding-left: 20px;
+            list-style: none;
+            padding-left: 0;
+            max-width: 700px;
+            margin: 0 auto;
         }
 
+        #welcome-message li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+
+        #welcome-message li .icon {
+            flex-shrink: 0;
+            margin-right: 15px;
+            color: var(--primary-color);
+            width: 24px;
+            height: 24px;
+            margin-top: 2px;
+        }
+        
+        /* Enhanced category links with micro-interactions */
         #welcome-message .category-links {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
-            margin-top: 25px;
+            gap: 20px;
+            margin-top: 30px;
         }
+        
         #welcome-message .category-links a {
-            display: block;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
             background-color: var(--primary-color);
             color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 12px 24px;
+            border-radius: 8px;
             text-decoration: none;
-            transition: background-color 0.2s;
             font-weight: bold;
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+        
         #welcome-message .category-links a:hover {
-            background-color: #004071;
+            background-color: var(--header-bg);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 64, 113, 0.3);
+        }
+        
+        /* Animated arrow icon inside the buttons */
+        #welcome-message .category-links a .arrow-icon {
+            transition: transform 0.2s ease-out;
+        }
+        #welcome-message .category-links a:hover .arrow-icon {
+            transform: translateX(4px);
         }
     </style>
 </head>
@@ -702,31 +787,61 @@
             <!-- ============================================ -->
 
             <div id="calculator-container">
-                <!-- Welcome Message - Enhanced Landing Page (remains the default) -->
+                <!-- ================================================================================= -->
+                <!-- UPDATED & ENHANCED WELCOME MESSAGE / HOME PAGE -->
+                <!-- ================================================================================= -->
                 <div id="welcome-message" class="calculator-wrapper active">
                     <h2>Welcome to the Mega Calculator Suite!</h2>
                     <p class="calc-description">
-                        Your ultimate destination for a vast array of free, online calculators designed for every aspect of your life. 
-                        Whether you're managing finances, solving complex math problems, optimizing your health, or exploring general utilities, 
-                        our comprehensive suite of 161 calculators provides accurate and instant results with an easy-to-use interface.
+                        Your ultimate hub for a vast array of free online calculators. Whether you're managing finances, solving complex math problems, or optimizing your health, our comprehensive suite provides accurate and instant results.
                     </p>
-                    <p>To get started, simply select a calculator from the categorized menu on the left.</p>
 
-                    <h3 class="section-title">Why Choose Our Calculators?</h3>
+                    <hr class="fancy-divider">
+
+                    <div class="section-title-container">
+                        <h3 class="section-title">Why Choose Our Calculators?</h3>
+                    </div>
                     <ul>
-                        <li><strong>Comprehensive:</strong> Access to 161 specialized calculators spanning Financial, Math, and General categories.</li>
-                        <li><strong>User-Friendly:</strong> Enjoy a clean, intuitive design engineered for effortless navigation and input.</li>
-                        <li><strong>Fully Responsive:</strong> Seamlessly switch between any device – desktop, tablet, or mobile – without compromise.</li>
-                        <li><strong>Accurate & Reliable:</strong> Benefit from tools developed with precision and trusted algorithms for dependable results.</li>
+                        <li>
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
+                            <span><strong>Comprehensive:</strong> Access 161 specialized calculators spanning Financial, Math, and General categories.</span>
+                        </li>
+                        <li>
+                           <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 1-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 1 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 1 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 1-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" /></svg>
+                            <span><strong>User-Friendly:</strong> Enjoy a clean, intuitive design engineered for effortless navigation and input.</span>
+                        </li>
+                        <li>
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg>
+                            <span><strong>Fully Responsive:</strong> Seamlessly switch between any device – desktop, tablet, or mobile – without compromise.</span>
+                        </li>
+                        <li>
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                            <span><strong>Accurate & Reliable:</strong> Benefit from tools developed with precision and trusted algorithms for dependable results.</span>
+                        </li>
                     </ul>
 
-                    <h3 class="section-title">Explore by Category:</h3>
+                    <div class="section-title-container">
+                        <h3 class="section-title">Explore by Category</h3>
+                    </div>
                     <div class="category-links">
-                        <a href="#" onclick="document.querySelector('.sidebar details:nth-of-type(1)').open = true; return false;">Financial Calculators</a>
-                        <a href="#" onclick="document.querySelector('.sidebar details:nth-of-type(2)').open = true; return false;">Math Calculators</a>
-                        <a href="#" onclick="document.querySelector('.sidebar details:nth-of-type(3)').open = true; return false;">Other Calculators</a>
+                        <!-- CORRECTED onlick HANDLERS -->
+                        <a href="#" onclick="return expandAndFocusCategory(1);">
+                            Financial Calculators 
+                            <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/></svg>
+                        </a>
+                        <a href="#" onclick="return expandAndFocusCategory(2);">
+                            Math Calculators
+                            <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/></svg>
+                        </a>
+                        <a href="#" onclick="return expandAndFocusCategory(3);">
+                            Other Calculators
+                            <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/></svg>
+                        </a>
                     </div>
                 </div>
+                <!-- ================================================================================= -->
+                <!-- END OF HOME PAGE ENHANCEMENTS -->
+                <!-- ================================================================================= -->
 
                 <!-- 
                 ====================================================================
@@ -959,14 +1074,7 @@
                     </div>
                 </div>
 
-                <!-- ... Add divs for all 158 other calculators here using the same format ... (Placeholder Structure shown below) -->
-                <!-- All existing placeholders are intentionally omitted here for brevity to keep the focus on the new 401K calculator, but assume they exist as per your last request. -->
-
-                <!-- Placeholder structure for other calculators -->
-                <!-- This placeholder will now be replaced by the implemented Amortization calculator above
-                <div id="calc-amortization" class="calculator-wrapper"><h2>Amortization Calculator <a href="#" class="home-button" onclick="return goHome()">Home</a></h2><p class="calc-description">Visualize your loan repayment journey with an amortization schedule showing principal and interest breakdowns.</p><p>The form and logic for this calculator need to be implemented.</p></div>
-                -->
-                <!-- ... many more placeholders ... -->
+                <!-- ... Add divs for all 158 other calculators here using the same format ... -->
                 <div id="calc-vat" class="calculator-wrapper"><h2>VAT Calculator <a href="#" class="home-button" onclick="return goHome()">Home</a></h2><p class="calc-description">Quickly calculate Value Added Tax (VAT) to determine prices with or without tax included.</p><p>The form and logic for this calculator need to be implemented.</p></div>
                 
             </div>
@@ -1035,53 +1143,56 @@
         return false;
     }
 
+    // --- NEW: Function to handle "Explore by Category" links ---
+    function expandAndFocusCategory(categoryIndex) {
+        // The ':nth-of-type' selector is 1-based, perfect for this.
+        const targetDetails = document.querySelector(`.sidebar details:nth-of-type(${categoryIndex})`);
+        
+        if (targetDetails) {
+            // Open the details dropdown
+            targetDetails.open = true;
+            
+            // Scroll the sidebar into view so the user can see the expanded list
+            targetDetails.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start' 
+            });
+        }
+        
+        // Prevent the link's default behavior
+        return false;
+    }
+
     // ===================================================================
     //  CALCULATOR LOGIC IMPLEMENTATIONS
     // ===================================================================
 
     // --- NEW: Amortization Calculator ---
     function calculateAmortization() {
-        // Get Inputs
         const loanAmount = parseFloat(document.getElementById('amort-amount').value);
         const annualInterestRate = parseFloat(document.getElementById('amort-interest').value);
         const loanTermYears = parseFloat(document.getElementById('amort-term').value);
-
-        // Get Output Elements
         const monthlyPaymentElem = document.getElementById('amort-monthly-payment');
         const totalInterestElem = document.getElementById('amort-total-interest');
         const totalPaymentsElem = document.getElementById('amort-total-payments');
         const scheduleTbody = document.getElementById('amort-schedule-tbody');
         const noResultsMsg = document.getElementById('amort-no-results-msg');
 
-        // Clear previous results
         scheduleTbody.innerHTML = '';
         monthlyPaymentElem.textContent = 'Monthly Payment: $0.00';
         totalInterestElem.textContent = 'Total Interest Paid: $0.00';
         totalPaymentsElem.textContent = 'Total Payments: $0.00';
-        noResultsMsg.style.display = 'block';
 
-        // Input Validation
-        if (isNaN(loanAmount) || loanAmount <= 0) {
-            alert('Please enter a valid Loan Amount greater than 0.');
-            return;
-        }
-        if (isNaN(annualInterestRate) || annualInterestRate < 0) { // Interest rate can be 0
-            alert('Please enter a valid Interest Rate (0% or more).');
-            return;
-        }
-        if (isNaN(loanTermYears) || loanTermYears <= 0) {
-            alert('Please enter a valid Loan Term in Years (1 or more).');
+        if (isNaN(loanAmount) || loanAmount <= 0 || isNaN(annualInterestRate) || annualInterestRate < 0 || isNaN(loanTermYears) || loanTermYears <= 0) {
+            noResultsMsg.style.display = 'block';
             return;
         }
 
-        // Calculations
         const monthlyInterestRate = (annualInterestRate / 100) / 12;
         const numberOfPayments = loanTermYears * 12;
-
-        let fixedMonthlyPayment; // Using a different variable name to avoid confusion (formerly 'monthlyPayment')
+        let fixedMonthlyPayment; 
 
         if (monthlyInterestRate === 0) {
-            // Handle 0% interest separately to avoid division by zero
             fixedMonthlyPayment = loanAmount / numberOfPayments;
         } else {
             fixedMonthlyPayment = loanAmount * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
@@ -1089,21 +1200,19 @@
         }
         
         let remainingBalance = loanAmount;
-        let totalInterestAccrued = 0; // Accumulated interest over loan term
-        let totalActualPaymentsSum = 0; // Accumulates actual payments made, including any final adjustment
+        let totalInterestAccrued = 0; 
+        let totalActualPaymentsSum = 0; 
         let scheduleRows = [];
 
-        // Generate Amortization Schedule
         for (let i = 1; i <= numberOfPayments; i++) {
             const interestForMonth = remainingBalance * monthlyInterestRate;
             let principalForMonth;
-            let currentPaymentAmount; // This will be the actual payment amount for THIS month
+            let currentPaymentAmount;
 
             if (i === numberOfPayments) {
-                // For the last payment, set principal to exactly what's remaining to zero out the balance
                 principalForMonth = remainingBalance; 
-                currentPaymentAmount = interestForMonth + principalForMonth; // This is the final payment amount
-                remainingBalance = 0; // Set to exactly zero for accurate display in the last row
+                currentPaymentAmount = interestForMonth + principalForMonth;
+                remainingBalance = 0;
             } else {
                 principalForMonth = fixedMonthlyPayment - interestForMonth;
                 currentPaymentAmount = fixedMonthlyPayment;
@@ -1111,32 +1220,14 @@
             }
 
             totalInterestAccrued += interestForMonth;
-            totalActualPaymentsSum += currentPaymentAmount; // Accumulate actual payment for true total
+            totalActualPaymentsSum += currentPaymentAmount;
 
-            // Format values for display
-            const paymentNoFormatted = i.toLocaleString();
-            const paymentFormatted = `$${currentPaymentAmount.toFixed(2)}`; // Use the calculated actual payment for this month
-            const principalFormatted = `$${principalForMonth.toFixed(2)}`;
-            const interestFormatted = `$${interestForMonth.toFixed(2)}`;
-            const balanceFormatted = `$${Math.max(0, remainingBalance).toFixed(2)}`; // Ensure balance doesn't show negative zero
-
-            scheduleRows.push(`
-                <tr>
-                    <td>${paymentNoFormatted}</td>
-                    <td>${paymentFormatted}</td>
-                    <td>${principalFormatted}</td>
-                    <td>${interestFormatted}</td>
-                    <td>${balanceFormatted}</td>
-                </tr>
-            `);
+            scheduleRows.push(`<tr><td>${i.toLocaleString()}</td><td>$${currentPaymentAmount.toFixed(2)}</td><td>$${principalForMonth.toFixed(2)}</td><td>$${interestForMonth.toFixed(2)}</td><td>$${Math.max(0, remainingBalance).toFixed(2)}</td></tr>`);
         }
 
-        // Update Summary
-        monthlyPaymentElem.textContent = `Monthly Payment: $${fixedMonthlyPayment.toFixed(2)}`; // Display the consistent monthly payment
+        monthlyPaymentElem.textContent = `Monthly Payment: $${fixedMonthlyPayment.toFixed(2)}`;
         totalInterestElem.textContent = `Total Interest Paid: $${totalInterestAccrued.toFixed(2)}`;
-        totalPaymentsElem.textContent = `Total Payments: $${totalActualPaymentsSum.toFixed(2)}`; // Display the sum of all actual payments
-
-        // Display Schedule
+        totalPaymentsElem.textContent = `Total Payments: $${totalActualPaymentsSum.toFixed(2)}`;
         scheduleTbody.innerHTML = scheduleRows.join('');
         noResultsMsg.style.display = 'none';
     }
@@ -1146,17 +1237,14 @@
         const annualInterestRate = parseFloat(document.getElementById('amort-interest').value);
         const loanTermYears = parseFloat(document.getElementById('amort-term').value);
 
-        let resultsText = "Loan Amortization Calculator Results:\n";
-        resultsText += "--------------------------------------\n";
+        let resultsText = "Loan Amortization Calculator Results:\n--------------------------------------\n";
         resultsText += `Loan Amount: $${loanAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n`;
         resultsText += `Annual Interest Rate: ${annualInterestRate.toFixed(2)}%\n`;
         resultsText += `Loan Term: ${loanTermYears} Years\n\n`;
         resultsText += `${document.getElementById('amort-monthly-payment').textContent}\n`;
         resultsText += `${document.getElementById('amort-total-interest').textContent}\n`;
         resultsText += `${document.getElementById('amort-total-payments').textContent}\n\n`;
-
-        resultsText += "Amortization Schedule:\n";
-        resultsText += "Payment No.\tPayment\tPrincipal\tInterest\tBalance\n";
+        resultsText += "Amortization Schedule:\nPayment No.\tPayment\tPrincipal\tInterest\tBalance\n";
 
         const rows = document.getElementById('amort-schedule-tbody').querySelectorAll('tr');
         rows.forEach(row => {
@@ -1168,27 +1256,24 @@
             alert('Amortization schedule copied to clipboard!');
         }).catch(err => {
             console.error('Failed to copy results: ', err);
-            alert('Failed to copy results. Please try again or manually select/copy.');
+            alert('Failed to copy results.');
         });
     }
 
-
     // --- NEW: 401(k) Retirement Calculator ---
     function calculate401k() {
-        // 1. Get Inputs and Sanitize
         const currentAge = parseInt(document.getElementById('k401-current-age').value);
         const retirementAge = parseInt(document.getElementById('k401-retirement-age').value);
         const initialBalance = parseFloat(document.getElementById('k401-current-balance').value);
         const annualSalary = parseFloat(document.getElementById('k401-annual-salary').value);
         const employeeContributionPerc = parseFloat(document.getElementById('k401-contribution-perc').value) / 100;
         const employerMatchPerc = parseFloat(document.getElementById('k401-employer-match-perc').value) / 100;
-        const expectedReturn = parseFloat(document.getElementById('k401-expected-return').value) / 100; // Nominal annual return
+        const expectedReturn = parseFloat(document.getElementById('k401-expected-return').value) / 100;
         const inflationRate = parseFloat(document.getElementById('k401-inflation-rate').value) / 100;
 
-        // Reset/Handle Invalid Inputs (Robust Check)
         if (isNaN(currentAge) || isNaN(retirementAge) || isNaN(initialBalance) || isNaN(annualSalary) ||
             isNaN(employeeContributionPerc) || isNaN(employerMatchPerc) || isNaN(expectedReturn) || isNaN(inflationRate) ||
-            currentAge <= 0 || retirementAge <= 0 || annualSalary < 0 || initialBalance < 0 || // Ages > 0, others >= 0
+            currentAge <= 0 || retirementAge <= 0 || annualSalary < 0 || initialBalance < 0 ||
             employeeContributionPerc < 0 || employerMatchPerc < 0
         ) {
             document.getElementById('k401-projected-balance').textContent = '$0.00';
@@ -1196,7 +1281,7 @@
             document.getElementById('k401-total-contributions').textContent = '$0.00';
             document.getElementById('k401-total-earnings').textContent = '$0.00';
             document.getElementById('k401-years-to-retirement').textContent = '0 Years';
-            update401kChart([], [], []); // Clear chart
+            update401kChart([], [], []);
             return;
         }
 
@@ -1207,171 +1292,71 @@
             document.getElementById('k401-total-contributions').textContent = '$0.00';
             document.getElementById('k401-total-earnings').textContent = '$0.00';
             document.getElementById('k401-years-to-retirement').textContent = 'Invalid';
-            update401kChart([], [], []); // Clear chart
+            update401kChart([], [], []);
             return;
         }
 
-        // Display years until retirement
         document.getElementById('k401-years-to-retirement').textContent = `${yearsToRetirement} Years`;
-
-        // Calculate total annual contribution
         const totalAnnualContribution = (annualSalary * employeeContributionPerc) + (annualSalary * employerMatchPerc);
+        let currentBalanceNominal = initialBalance;
+        let totalContributionsDuringPeriod = 0;
+        const chartLabels = [], chartDataNominal = [], chartDataReal = [];
 
-        // --- Simulation for Projected Balance (Year by Year for Charting) ---
-        let currentBalanceNominal = initialBalance; // Balance that will compound
-        let totalContributionsDuringPeriod = 0; // Only contributions made *during* the projection
-
-        const chartLabels = [];
-        const chartDataNominal = [];
-        const chartDataReal = []; // For inflation-adjusted chart
-
-        // Initial point (Year 0 / Current Age)
         chartLabels.push(currentAge);
         chartDataNominal.push(initialBalance);
-        chartDataReal.push(initialBalance); // At currentAge, the balance is already in "today's dollars"
+        chartDataReal.push(initialBalance);
 
         for (let yearElapsed = 1; yearElapsed <= yearsToRetirement; yearElapsed++) {
-            // Add current year's contribution (assuming beginning of the year)
             currentBalanceNominal += totalAnnualContribution;
             totalContributionsDuringPeriod += totalAnnualContribution;
-
-            // Apply annual growth to the entire balance
             currentBalanceNominal *= (1 + expectedReturn);
-
-            // Store results for the end of this elapsed year
-            chartLabels.push(currentAge + yearElapsed); // Age for this year
+            chartLabels.push(currentAge + yearElapsed);
             chartDataNominal.push(currentBalanceNominal);
-            // Calculate the 'real' value: nominal value divided by cumulative inflation from Year 0
             chartDataReal.push(currentBalanceNominal / Math.pow(1 + inflationRate, yearElapsed));
         }
 
         const finalNominalBalance = currentBalanceNominal;
         const finalRealBalance = finalNominalBalance / Math.pow(1 + inflationRate, yearsToRetirement); 
 
-        // Display results
         document.getElementById('k401-projected-balance').textContent = `$${finalNominalBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         document.getElementById('k401-projected-balance-inflation-adj').textContent = `( $${finalRealBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} in today's dollars )`;
-        
         document.getElementById('k401-total-contributions').textContent = `$${totalContributionsDuringPeriod.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
         const totalInvestmentEarnings = finalNominalBalance - (initialBalance + totalContributionsDuringPeriod);
         document.getElementById('k401-total-earnings').textContent = `$${totalInvestmentEarnings.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
-        // Update the chart
         update401kChart(chartLabels, chartDataNominal, chartDataReal);
     }
 
-    // Chart.js initialization and update function for 401K
     function update401kChart(labels, nominalData, realData) {
         const ctx = document.getElementById('k401Chart').getContext('2d');
-
-        // Destroy existing chart if it exists to prevent overlap
-        if (k401ChartInstance) {
-            k401ChartInstance.destroy();
-        }
-
-        // Check if data is valid before creating chart
-        if (!labels || labels.length === 0 || !nominalData || nominalData.length === 0) {
-            return; // Don't draw if no data
-        }
-
+        if (k401ChartInstance) k401ChartInstance.destroy();
+        if (!labels || labels.length === 0 || !nominalData || nominalData.length === 0) return;
         k401ChartInstance = new Chart(ctx, {
             type: 'line',
-            data: {
-                labels: labels, // Ages on X-axis
-                datasets: [{
-                    label: 'Projected Balance (Nominal)',
-                    data: nominalData,
-                    borderColor: varToRgb('--primary-color'),
-                    backgroundColor: 'rgba(0, 90, 156, 0.2)', // Light blue fill
-                    fill: true,
-                    tension: 0.1, // Smooth lines
-                    pointRadius: 3 // Smaller points
-                },
-                {
-                    label: 'Projected Balance (Inflation-Adjusted)',
-                    data: realData,
-                    borderColor: '#4CAF50', /* Green color for real value */
-                    backgroundColor: 'rgba(76, 175, 80, 0.2)', // Light green fill
-                    fill: true,
-                    tension: 0.1, // Smooth lines
-                    pointRadius: 3 // Smaller points
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false, // Allows chart to take up available height better
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.dataset.label + ': $' + context.raw.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                            }
-                        }
-                    },
-                    title: {
-                        display: false, // Title is handled by H3 above chart
-                    },
-                    legend: {
-                        labels: {
-                            color: varToRgb('--font-color')
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Age',
-                            color: varToRgb('--font-color')
-                        },
-                        ticks: {
-                             color: varToRgb('--font-color')
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Balance ($)',
-                            color: varToRgb('--font-color')
-                        },
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value, index, values) {
-                                return '$' + value.toLocaleString(); // Format Y-axis ticks as currency
-                            },
-                            color: varToRgb('--font-color')
-                        }
-                    }
-                }
+            data: { labels, datasets: [
+                { label: 'Projected Balance (Nominal)', data: nominalData, borderColor: varToRgb('--primary-color'), backgroundColor: 'rgba(0, 90, 156, 0.2)', fill: true, tension: 0.1, pointRadius: 3 },
+                { label: 'Projected Balance (Inflation-Adjusted)', data: realData, borderColor: '#4CAF50', backgroundColor: 'rgba(76, 175, 80, 0.2)', fill: true, tension: 0.1, pointRadius: 3 }
+            ]},
+            options: { responsive: true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: $${c.raw.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`}}, title: { display: false }, legend: { labels: { color: varToRgb('--font-color') }}}, scales: { x: { title: { display: true, text: 'Age', color: varToRgb('--font-color') }, ticks: { color: varToRgb('--font-color') }}, y: { title: { display: true, text: 'Balance ($)', color: varToRgb('--font-color')}, beginAtZero: true, ticks: { callback: v => `$${v.toLocaleString()}`, color: varToRgb('--font-color') }}}
             }
         });
     }
 
-    // Helper to convert CSS variable to RGB string for Chart.js
     function varToRgb(varName) {
         const color = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
         if (color.startsWith('#')) {
-            const hex = color.slice(1);
-            const r = parseInt(hex.substring(0,2), 16);
-            const g = parseInt(hex.substring(2,4), 16);
-            const b = parseInt(hex.substring(4,6), 16);
+            const hex = color.slice(1), r = parseInt(hex.substring(0,2), 16), g = parseInt(hex.substring(2,4), 16), b = parseInt(hex.substring(4,6), 16);
             return `rgb(${r}, ${g}, ${b})`;
         }
-        return color; // Assume it's already an RGB or rgba string if not hex
+        return color;
     }
 
-
-    // --- General Export/Print Functionality (401K Specific) ---
     function copyResults() {
-        let resultsText = "401(k) Retirement Calculator Results:\n";
-        resultsText += "--------------------------------------\n";
+        let resultsText = "401(k) Retirement Calculator Results:\n--------------------------------------\n";
         resultsText += `Projected Balance at Retirement: ${document.getElementById('k401-projected-balance').textContent}\n`;
         resultsText += `Inflation-Adjusted Balance: ${document.getElementById('k401-projected-balance-inflation-adj').textContent}\n`;
         resultsText += `Total Contributions (during projection): ${document.getElementById('k401-total-contributions').textContent}\n`;
         resultsText += `Total Investment Earnings: ${document.getElementById('k401-total-earnings').textContent}\n`;
-        resultsText += `Years Until Retirement: ${document.getElementById('k401-years-to-retirement').textContent}\n\n`;
-        resultsText += "Inputs:\n";
+        resultsText += `Years Until Retirement: ${document.getElementById('k401-years-to-retirement').textContent}\n\nInputs:\n`;
         resultsText += `Current Age: ${document.getElementById('k401-current-age').value} years\n`;
         resultsText += `Retirement Age: ${document.getElementById('k401-retirement-age').value} years\n`;
         resultsText += `Current 401(k) Balance: $${parseFloat(document.getElementById('k401-current-balance').value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n`;
@@ -1380,95 +1365,42 @@
         resultsText += `Employer Match: ${document.getElementById('k401-employer-match-perc').value}%\n`;
         resultsText += `Expected Annual Return: ${document.getElementById('k401-expected-return').value}%\n`;
         resultsText += `Inflation Rate: ${document.getElementById('k401-inflation-rate').value}%\n`;
-
-
-        navigator.clipboard.writeText(resultsText).then(() => {
-            alert('Results copied to clipboard!');
-        }).catch(err => {
-            console.error('Failed to copy results: ', err);
-            alert('Failed to copy results. Please try again or manually select/copy.');
-        });
+        navigator.clipboard.writeText(resultsText).then(() => alert('Results copied to clipboard!')).catch(err => alert('Failed to copy results.'));
     }
 
-
-    // --- EXAMPLE 1: Mortgage Calculator (original code for reference) ---
+    // --- EXAMPLE 1: Mortgage Calculator ---
     function calculateMortgage() {
-        const P = parseFloat(document.getElementById('mortgage-amount').value);
-        const r = parseFloat(document.getElementById('mortgage-interest').value) / 100 / 12; // Monthly interest rate
-        const n = parseFloat(document.getElementById('mortgage-term').value) * 12; // Total number of payments
+        const P = parseFloat(document.getElementById('mortgage-amount').value), r = parseFloat(document.getElementById('mortgage-interest').value) / 100 / 12, n = parseFloat(document.getElementById('mortgage-term').value) * 12;
         const resultElement = document.getElementById('mortgage-result');
-
-        if (P > 0 && r > 0 && n > 0) {
-            const M = P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-            resultElement.textContent = `$${M.toFixed(2)}`;
-        } else if (P < 0 || r < 0 || n < 0 || isNaN(P) || isNaN(r) || isNaN(n)) {
-            resultElement.textContent = '$0.00'; 
-        } else {
-            resultElement.textContent = '$0.00';
-        }
+        if (P > 0 && r >= 0 && n > 0) resultElement.textContent = `$${(r === 0 ? P/n : P * (r * Math.pow(1+r, n)) / (Math.pow(1+r, n) - 1)).toFixed(2)}`;
+        else resultElement.textContent = '$0.00';
     }
 
-    // --- EXAMPLE 2: Percentage Calculator (original code for reference) ---
+    // --- EXAMPLE 2: Percentage Calculator ---
     function calculatePercentage() {
-        const val = parseFloat(document.getElementById('percentage-value').value);
-        const of = parseFloat(document.getElementById('percentage-of').value);
+        const val = parseFloat(document.getElementById('percentage-value').value), of = parseFloat(document.getElementById('percentage-of').value);
         const resultElement = document.getElementById('percentage-result');
-
-        if (!isNaN(val) && !isNaN(of)) { 
-            const result = (val / 100) * of;
-            resultElement.textContent = result.toLocaleString(); 
-        } else {
-            resultElement.textContent = '0';
-        }
+        if (!isNaN(val) && !isNaN(of)) resultElement.textContent = ((val / 100) * of).toLocaleString();
+        else resultElement.textContent = '0';
     }
 
-    // --- EXAMPLE 3: Age Calculator (original code for reference) ---
+    // --- EXAMPLE 3: Age Calculator ---
     function calculateAge() {
-        const birthDateInput = document.getElementById('birth-date');
-        const ageResult = document.getElementById('age-result');
-
-        if (!birthDateInput.value) {
-             ageResult.textContent = "-- years, -- months, -- days";
-             return;
-        }
-
-        const birthDate = new Date(birthDateInput.value);
-        const today = new Date();
-        
-        if (birthDate > today) {
-            ageResult.textContent = "Birth date cannot be in the future.";
-            return;
-        }
-        
-        let years = today.getFullYear() - birthDate.getFullYear();
-        let months = today.getMonth() - birthDate.getMonth();
-        let days = today.getDate() - birthDate.getDate();
-
-        if (days < 0) {
-            months--;
-            days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
-        }
-
-        if (months < 0) {
-            years--;
-            months += 12;
-        }
-
+        const birthDateInput = document.getElementById('birth-date'), ageResult = document.getElementById('age-result');
+        if (!birthDateInput.value) { ageResult.textContent = "-- years, -- months, -- days"; return; }
+        const birthDate = new Date(birthDateInput.value), today = new Date();
+        if (birthDate > today) { ageResult.textContent = "Birth date cannot be in the future."; return; }
+        let years = today.getFullYear() - birthDate.getFullYear(), months = today.getMonth() - birthDate.getMonth(), days = today.getDate() - birthDate.getDate();
+        if (days < 0) { months--; days += new Date(today.getFullYear(), today.getMonth(), 0).getDate(); }
+        if (months < 0) { years--; months += 12; }
         ageResult.textContent = `${years} years, ${months} months, ${days} days`;
     }
     
-    // Ensure 401k calculator computes when first made visible (e.g., page load if directly navigated or first click)
     document.addEventListener('DOMContentLoaded', () => {
         const currentActiveCalc = document.querySelector('.calculator-wrapper.active');
-        if (currentActiveCalc && currentActiveCalc.id === 'calc-401k') {
-            calculate401k();
-        } else if (currentActiveCalc && currentActiveCalc.id === 'calc-amortization') { // NEW: Handle direct load for amortization
-            calculateAmortization();
-        } 
-        else {
-            // Default to welcome message if no calculator is explicitly active
-            showCalculator('welcome-message'); 
-        }
+        if (currentActiveCalc && currentActiveCalc.id === 'calc-401k') calculate401k();
+        else if (currentActiveCalc && currentActiveCalc.id === 'calc-amortization') calculateAmortization();
+        else showCalculator('welcome-message');
     });
 
     </script>
