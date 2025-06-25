@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Root Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjs@11.6.0/lib/browser/math.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #fca311;
+            --gray: #6c757d;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        header h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 25px;
+        }
+
+        @media (max-width: 992px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .calculator-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .ad-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .ad-space {
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            border: 2px dashed #adb5bd;
+        }
+
+        .ad-space h3 {
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+
+        .ad-space i {
+            font-size: 3rem;
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        .calculator-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-dark);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .input-field {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .input-field label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .input-field input, .input-field select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .input-field input:focus, .input-field select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5e0a99;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: var(--dark);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: var(--dark);
+        }
+
+        .result-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: #e9ecef;
+            border-radius: var(--border-radius);
+            min-height: 120px;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .result-header h3 {
+            color: var(--primary);
+        }
+
+        .result-content {
+            font-size: 1.2rem;
+        }
+
+        .complex-result {
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: var(--secondary);
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .history-container {
+            margin-top: 20px;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            border: 1px solid #dee2e6;
+        }
+
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .export-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .footer p {
+            color: var(--gray);
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e9ecef;
+        }
+
+        body.dark-mode header,
+        body.dark-mode .calculator-container,
+        body.dark-mode .footer {
+            background: rgba(33, 37, 41, 0.95);
+            color: #e9ecef;
+        }
+
+        body.dark-mode .calculator-container {
+            background: rgba(33, 37, 41, 0.95);
+        }
+
+        body.dark-mode .input-field label {
+            color: #e9ecef;
+        }
+
+        body.dark-mode .result-container {
+            background: #343a40;
+        }
+
+        body.dark-mode .history-list {
+            background: #343a40;
+            border-color: #495057;
+        }
+
+        body.dark-mode .history-item {
+            border-color: #495057;
+        }
+
+        body.dark-mode .ad-space {
+            background: linear-gradient(145deg, #343a40, #2d3339);
+            border-color: #495057;
+        }
+
+        @media print {
+            .ad-container, .theme-toggle, .export-options, .history-header button {
+                display: none !important;
+            }
+            
+            body, .calculator-container {
+                background: white !important;
+                color: black !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-square-root-alt"></i> Advanced Root Calculator</h1>
+            <p>Calculate square, cube, and nth roots with precision. Supports real and complex numbers with advanced mathematical functionality.</p>
+        </header>
+
+        <div class="app-container">
+            <div class="calculator-container">
+                <div class="calculator-header">
+                    <h2><i class="fas fa-calculator"></i> Root Calculator</h2>
+                    <button id="themeToggle" class="theme-toggle">
+                        <i class="fas fa-moon"></i> Dark Mode
+                    </button>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-row">
+                        <div class="input-field">
+                            <label for="numberInput"><i class="fas fa-hashtag"></i> Enter Number</label>
+                            <input type="text" id="numberInput" placeholder="Enter real or complex number (e.g., 25, -4, 3+2i)">
+                        </div>
+                        <div class="input-field">
+                            <label for="rootDegree"><i class="fas fa-superscript"></i> Root Degree (n)</label>
+                            <input type="number" id="rootDegree" placeholder="Enter root degree (e.g., 2 for square)" min="1" value="2">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="calculateBtn">
+                        <i class="fas fa-calculator"></i> Calculate Root
+                    </button>
+                    <button class="btn btn-secondary" id="clearBtn">
+                        <i class="fas fa-broom"></i> Clear
+                    </button>
+                </div>
+
+                <div class="result-container">
+                    <div class="result-header">
+                        <h3><i class="fas fa-square-root-alt"></i> Calculation Result</h3>
+                        <span id="resultStatus">Ready</span>
+                    </div>
+                    <div class="result-content">
+                        <p id="resultText">Enter values and click "Calculate Root"</p>
+                        <p id="complexResult" class="complex-result"></p>
+                        <p id="errorMessage" class="error-message"></p>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-success" id="saveHistoryBtn">
+                        <i class="fas fa-save"></i> Save to History
+                    </button>
+                    <button class="btn btn-warning" id="clearHistoryBtn">
+                        <i class="fas fa-trash-alt"></i> Clear History
+                    </button>
+                </div>
+
+                <div class="history-container">
+                    <div class="history-header">
+                        <h3><i class="fas fa-history"></i> Calculation History</h3>
+                        <button class="btn btn-primary" id="exportHistoryBtn">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                    <div class="history-list" id="historyList">
+                        <!-- History items will be added here -->
+                    </div>
+                </div>
+
+                <div class="export-options">
+                    <button class="btn btn-secondary" id="printBtn">
+                        <i class="fas fa-print"></i> Print Results
+                    </button>
+                    <button class="btn btn-secondary" id="pdfBtn">
+                        <i class="fas fa-file-pdf"></i> Save as PDF
+                    </button>
+                    <button class="btn btn-secondary" id="txtBtn">
+                        <i class="fas fa-file-alt"></i> Save as TXT
+                    </button>
+                    <button class="btn btn-secondary" id="csvBtn">
+                        <i class="fas fa-file-csv"></i> Save as CSV
+                    </button>
+                    <button class="btn btn-secondary" id="shareBtn">
+                        <i class="fas fa-share-alt"></i> Share Results
+                    </button>
+                </div>
+            </div>
+
+            <div class="ad-container">
+                <div class="ad-space">
+                    <i class="fab fa-adversal"></i>
+                    <h3>Adsterra Advertisement</h3>
+                    <p>300x250 Ad Space</p>
+                    <p>Premium ad placement for maximum visibility</p>
+                </div>
+                <div class="ad-space">
+                    <i class="fas fa-ad"></i>
+                    <h3>Yllix Advertising</h3>
+                    <p>300x600 Ad Space</p>
+                    <p>High-impact ad zone for your promotions</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2023 Advanced Root Calculator | Client-Side Processing | All calculations performed locally in your browser</p>
+            <p>Accessibility compliant | Supports screen readers and keyboard navigation</p>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const numberInput = document.getElementById('numberInput');
+        const rootDegree = document.getElementById('rootDegree');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const resultText = document.getElementById('resultText');
+        const complexResult = document.getElementById('complexResult');
+        const errorMessage = document.getElementById('errorMessage');
+        const saveHistoryBtn = document.getElementById('saveHistoryBtn');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        const historyList = document.getElementById('historyList');
+        const exportHistoryBtn = document.getElementById('exportHistoryBtn');
+        const printBtn = document.getElementById('printBtn');
+        const pdfBtn = document.getElementById('pdfBtn');
+        const txtBtn = document.getElementById('txtBtn');
+        const csvBtn = document.getElementById('csvBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const themeToggle = document.getElementById('themeToggle');
+        const resultStatus = document.getElementById('resultStatus');
+
+        // Initialize history
+        let calculationHistory = JSON.parse(localStorage.getItem('rootHistory')) || [];
+
+        // Initialize theme
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        document.body.classList.toggle('dark-mode', currentTheme === 'dark');
+        updateThemeButton();
+
+        // Event Listeners
+        calculateBtn.addEventListener('click', calculateRoot);
+        clearBtn.addEventListener('click', clearInputs);
+        saveHistoryBtn.addEventListener('click', saveToHistory);
+        clearHistoryBtn.addEventListener('click', clearHistory);
+        exportHistoryBtn.addEventListener('click', exportHistory);
+        printBtn.addEventListener('click', () => window.print());
+        pdfBtn.addEventListener('click', exportPDF);
+        txtBtn.addEventListener('click', exportTXT);
+        csvBtn.addEventListener('click', exportCSV);
+        shareBtn.addEventListener('click', shareResults);
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Load history on startup
+        renderHistory();
+
+        // Root Calculation Function
+        function calculateRoot() {
+            // Reset messages
+            resultText.textContent = '';
+            complexResult.textContent = '';
+            errorMessage.textContent = '';
+            resultStatus.textContent = 'Calculating...';
+            resultStatus.style.color = 'var(--warning)';
+
+            const number = numberInput.value.trim();
+            const n = parseInt(rootDegree.value);
+
+            // Validate inputs
+            if (!number) {
+                showError("Please enter a number");
+                return;
+            }
+
+            if (isNaN(n) || n < 1) {
+                showError("Root degree must be a positive integer");
+                return;
+            }
+
+            // Try to parse complex numbers
+            let numValue;
+            try {
+                // Simple complex number parsing
+                if (number.includes('i')) {
+                    const cleanNum = number.replace(/\s+/g, '');
+                    const parts = cleanNum.split(/([+-])/).filter(part => part !== '');
+                    
+                    let real = 0;
+                    let imag = 0;
+                    
+                    if (parts.length === 1) {
+                        // Only imaginary part
+                        if (parts[0].endsWith('i')) {
+                            imag = parseComplex(parts[0]);
+                        } else {
+                            real = parseFloat(parts[0]);
+                        }
+                    } else if (parts.length === 3) {
+                        real = parseFloat(parts[0]);
+                        const imagPart = parts[1] + parts[2];
+                        imag = parseComplex(imagPart);
+                    } else {
+                        throw new Error("Invalid complex number format");
+                    }
+                    
+                    numValue = { real, imag };
+                } else {
+                    // Real number
+                    numValue = parseFloat(number);
+                    if (isNaN(numValue)) throw new Error("Invalid number");
+                }
+            } catch (e) {
+                showError("Invalid number format. Use real numbers or complex format (e.g., 3+2i)");
+                return;
+            }
+
+            // Calculate root
+            setTimeout(() => {
+                try {
+                    let result;
+                    
+                    if (typeof numValue === 'number') {
+                        // Real number calculation
+                        if (numValue < 0 && n % 2 === 0) {
+                            // Negative number with even root - complex result
+                            const absRoot = Math.pow(Math.abs(numValue), 1/n);
+                            const angle = Math.PI / n;
+                            const real = absRoot * Math.cos(angle);
+                            const imag = absRoot * Math.sin(angle);
+                            
+                            result = {
+                                real: real,
+                                imag: imag
+                            };
+                        } else {
+                            // Positive number or odd root
+                            const root = Math.pow(numValue, 1/n);
+                            result = root;
+                        }
+                    } else {
+                        // Complex number calculation using polar form
+                        const magnitude = Math.sqrt(numValue.real**2 + numValue.imag**2);
+                        const angle = Math.atan2(numValue.imag, numValue.real);
+                        
+                        const rootMagnitude = Math.pow(magnitude, 1/n);
+                        const rootAngle = angle / n;
+                        
+                        // Principal root
+                        result = {
+                            real: rootMagnitude * Math.cos(rootAngle),
+                            imag: rootMagnitude * Math.sin(rootAngle)
+                        };
+                    }
+                    
+                    // Display results
+                    displayResult(result, n, numValue);
+                    resultStatus.textContent = 'Success';
+                    resultStatus.style.color = 'var(--success)';
+                } catch (error) {
+                    showError("Calculation error: " + error.message);
+                }
+            }, 500);
+        }
+
+        function parseComplex(str) {
+            let s = str.replace('i', '').trim();
+            if (s === '+' || s === '-') s += '1';
+            if (s === '') return 1;
+            if (s === '+') return 1;
+            if (s === '-') return -1;
+            return parseFloat(s);
+        }
+
+        function displayResult(result, n, original) {
+            if (typeof result === 'number') {
+                resultText.innerHTML = `${n}<sup>${n === 2 ? '' : n}</sup>√(${formatNumber(original)}) = <strong>${formatNumber(result)}</strong>`;
+            } else {
+                resultText.innerHTML = `${n}<sup>${n === 2 ? '' : n}</sup>√(${formatComplex(original)}) =`;
+                complexResult.textContent = formatComplex(result);
+            }
+        }
+
+        function formatNumber(num) {
+            // Format number to 6 decimal places if needed
+            if (Math.abs(num) < 1e-6 || Math.abs(num) > 1e6) {
+                return num.toExponential(6);
+            }
+            
+            // Check if decimal
+            if (Math.floor(num) !== num) {
+                return num.toFixed(6).replace(/\.?0+$/, '');
+            }
+            
+            return num.toString();
+        }
+
+        function formatComplex(c) {
+            if (c.imag === 0) return formatNumber(c.real);
+            if (c.real === 0) return `${formatNumber(c.imag)}i`;
+            
+            const realPart = formatNumber(c.real);
+            const imagPart = Math.abs(c.imag) === 1 ? 
+                (c.imag < 0 ? '-i' : '+i') : 
+                `${formatNumber(c.imag)}i`;
+            
+            return `${realPart} ${c.imag < 0 ? '-' : '+'} ${imagPart.replace('-', '')}`;
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            resultStatus.textContent = 'Error';
+            resultStatus.style.color = 'var(--danger)';
+        }
+
+        function clearInputs() {
+            numberInput.value = '';
+            rootDegree.value = '2';
+            resultText.textContent = 'Enter values and click "Calculate Root"';
+            complexResult.textContent = '';
+            errorMessage.textContent = '';
+            resultStatus.textContent = 'Ready';
+            resultStatus.style.color = 'inherit';
+        }
+
+        function saveToHistory() {
+            if (!resultText.textContent.includes('=')) {
+                showError("No result to save");
+                return;
+            }
+            
+            const input = numberInput.value.trim();
+            const n = rootDegree.value;
+            const result = resultText.textContent + (complexResult.textContent ? '\n' + complexResult.textContent : '');
+            
+            // Add to history
+            calculationHistory.unshift({
+                input,
+                degree: n,
+                result,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Keep only last 10 items
+            if (calculationHistory.length > 10) {
+                calculationHistory.pop();
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('rootHistory', JSON.stringify(calculationHistory));
+            
+            // Update UI
+            renderHistory();
+        }
+
+        function renderHistory() {
+            historyList.innerHTML = '';
+            
+            if (calculationHistory.length === 0) {
+                historyList.innerHTML = '<div class="history-item">No calculations yet</div>';
+                return;
+            }
+            
+            calculationHistory.forEach((item, index) => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div>
+                        <strong>${item.input}</strong> 
+                        <span>root ${item.degree}</span>
+                    </div>
+                    <div>${item.result.split('\n')[0]}</div>
+                `;
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        function clearHistory() {
+            if (calculationHistory.length === 0) return;
+            
+            if (confirm("Are you sure you want to clear all history?")) {
+                calculationHistory = [];
+                localStorage.setItem('rootHistory', JSON.stringify(calculationHistory));
+                renderHistory();
+            }
+        }
+
+        function exportHistory() {
+            if (calculationHistory.length === 0) {
+                alert("No history to export");
+                return;
+            }
+            
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            const filename = `root-calculator-history-${timestamp}`;
+            const content = calculationHistory.map(item => {
+                return `Calculation: ${item.input} root ${item.degree}\nResult: ${item.result}\nDate: ${new Date(item.timestamp).toLocaleString()}\n`;
+            }).join('\n');
+            
+            downloadFile(content, filename, 'text/plain');
+        }
+
+        function exportPDF() {
+            alert("PDF export would be implemented with jsPDF library in a production environment");
+        }
+
+        function exportTXT() {
+            const content = resultText.textContent + (complexResult.textContent ? '\n' + complexResult.textContent : '');
+            if (!content) {
+                showError("No result to export");
+                return;
+            }
+            
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            downloadFile(content, `root-result-${timestamp}.txt`, 'text/plain');
+        }
+
+        function exportCSV() {
+            if (!resultText.textContent.includes('=')) {
+                showError("No result to export");
+                return;
+            }
+            
+            const input = numberInput.value.trim();
+            const n = rootDegree.value;
+            const result = resultText.textContent.split('=')[1].trim();
+            
+            const content = `Input,Root Degree,Result\n"${input}",${n},"${result}"`;
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            downloadFile(content, `root-result-${timestamp}.csv`, 'text/csv');
+        }
+
+        function shareResults() {
+            if (!resultText.textContent.includes('=')) {
+                showError("No result to share");
+                return;
+            }
+            
+            const result = resultText.textContent + (complexResult.textContent ? '\n' + complexResult.textContent : '');
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Root Calculator Result',
+                    text: result,
+                    url: window.location.href
+                }).catch(error => {
+                    console.log('Sharing failed', error);
+                    alert(`Sharing not available: ${error.message}`);
+                });
+            } else {
+                alert("Web Share API not supported in your browser. Copy result manually:\n\n" + result);
+            }
+        }
+
+        function downloadFile(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+            updateThemeButton();
+        }
+
+        function updateThemeButton() {
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            themeToggle.innerHTML = isDarkMode ? 
+                '<i class="fas fa-sun"></i> Light Mode' : 
+                '<i class="fas fa-moon"></i> Dark Mode';
+        }
+
+        // Keyboard accessibility
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                calculateRoot();
+            }
+        });
+    </script>
+</body>
+</html>
