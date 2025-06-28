@@ -1,1175 +1,302 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced 401K Calculator - Your Retirement Future</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23007bff' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E" type="image/svg+xml">
+    <title>Advanced 401(k) Growth Calculator</title>
+    <!-- Privacy Headers -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     
-    <!-- External Libraries (CDNs) -->
-    <!-- ORDER IS IMPORTANT for jsPDF and its plugins -->
+    <!-- Dependencies for PDF Export & Charting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- SheetJS (xlsx.js) for Excel/CSV export -->
-    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-    <!-- Social Media Icon CDN (FontAwesome for professional look) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
-        /* Basic Reset & Body Styling */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f7f6;
-            color: #333;
-            line-height: 1.6;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+        :root {
+            --bg-color: #f1f5f9;
+            --text-color: #0f172a;
+            --primary-color: #0d9488; /* Teal */
+            --secondary-color: #64748b;
+            --accent-color: #fbbf24; /* Amber */
+            --border-color: #cbd5e1;
+            --card-bg: #ffffff;
+            --input-bg: #f8fafc;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+            --font-family: 'Inter', sans-serif;
+        }
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --primary-color: #5eead4; /* Lighter Teal */
+            --secondary-color: #94a3b8;
+            --accent-color: #fcd34d; /* Lighter Amber */
+            --border-color: #334155;
+            --card-bg: #1e293b;
+            --input-bg: #334155;
+            --shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
         }
 
-        .site-header {
-            background-color: #007bff;
-            color: white;
-            padding: 20px; /* Base padding */
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column; /* Stack on mobile */
-            align-items: center;
-        }
+        /* General & Layout */
+        *, *::before, *::after { box-sizing: border-box; }
+        body { margin: 0; font-family: var(--font-family); background-color: var(--bg-color); color: var(--text-color); transition: all 0.2s; }
+        .container { max-width: 1600px; margin: 2rem auto; padding: 1rem; display: grid; grid-template-columns: 400px 1fr; gap: 2rem; }
+        h1, h2, h3 { color: var(--primary-color); }
+        .card { background-color: var(--card-bg); border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow); }
 
-        .site-header h1 {
-            margin: 0;
-            font-size: 2.2em;
-        }
-
-        .site-header p {
-            margin: 5px 0 0;
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-
-        /* Header navigation/controls for the home link */
-        .header-controls {
-            width: 100%;
-            display: flex;
-            justify-content: flex-end; /* Push button to the right on mobile */
-            padding-top: 10px; /* Space from title/description */
-            box-sizing: border-box;
-            text-align: right;
-        }
-
-        .header-home-link {
-            background-color: #0056b3; /* Darker blue for contrast */
-            color: white;
-            padding: 8px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 0.9em;
-            transition: background-color 0.3s ease, transform 0.1s ease;
-            display: inline-flex; /* Align icon and text */
-            align-items: center;
-        }
-
-        .header-home-link:hover {
-            background-color: #004085;
-            transform: translateY(-1px);
-        }
-
-        .header-home-link:active {
-            transform: translateY(0);
-        }
-
-        .header-home-link i {
-            margin-right: 5px;
-        }
-
-
-        /* Ad Placement Styling */
-        .ad-placement {
-            background-color: #e0e0e0;
-            border: 1px dashed #ccc;
-            text-align: center;
-            padding: 10px;
-            margin: 15px auto;
-            max-width: 90%;
-            min-height: 90px; /* Standard banner height */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9em;
-            color: #666;
-            line-height: 1.2;
-            overflow: hidden; /* Prevent ad content from spilling */
-            position: relative; /* For ad-label positioning */
-        }
-
-        .ad-label {
-            font-style: italic;
-            color: #888;
-            margin-bottom: 5px;
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            font-size: 0.7em;
-            background: rgba(255,255,255,0.7);
-            padding: 2px 5px;
-            border-radius: 3px;
-        }
-
-        .ad-top {
-            max-width: 970px; /* Standard leaderboard max width */
-        }
-
-        .ad-bottom {
-            max-width: 970px; /* Standard leaderboard max width */
-        }
-
-        .sidebar-ad {
-            width: 300px; /* Standard medium rectangle width */
-            min-height: 250px; /* Standard medium rectangle height */
-            position: sticky;
-            top: 20px; /* Stays at the top of the viewport when scrolling */
-            margin: 0 0 0 20px; /* Adjust margin for layout */
-        }
-
-        /* Calculator Container - Main Layout */
-        .calculator-container {
-            display: flex;
-            flex-direction: column; /* Stacks sections on mobile */
-            max-width: 1200px;
-            margin: 20px auto;
-            background-color: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            flex-grow: 1; /* Allows container to grow and push footer down */
-        }
-
-        /* Input Section */
-        .calculator-inputs, .calculator-results {
-            padding: 20px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-        }
-
-        .calculator-inputs h2, .calculator-results h2, .calculator-results h3 {
-            color: #0056b3;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .input-group {
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .input-group label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #555;
-        }
-
-        .input-group input[type="number"] {
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
-            width: calc(100% - 24px); /* Account for padding */
-            box-sizing: border-box; /* Include padding in width */
-            transition: border-color 0.2s ease;
-        }
-
-        .input-group input[type="number"]:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-        }
-
-        .error-message {
-            color: #dc3545;
-            font-size: 0.85em;
-            margin-top: 5px;
-            min-height: 18px; /* To prevent layout shift when errors appear/disappear */
-        }
-
-        /* Buttons */
-        button {
-            background-color: #007bff;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.1s ease;
-            margin-top: 10px;
-            display: block; /* Make button full width by default on smaller screens */
-            width: 100%;
-            box-sizing: border-box;
-        }
+        /* Sidebar: Inputs & Ads */
+        .sidebar { display: flex; flex-direction: column; gap: 2rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .input-group { position: relative; display:flex; align-items:center; margin-bottom: 1.25rem;}
+        .input-group span.prefix { position: absolute; left: 1rem; }
+        .input-group span.suffix { position: absolute; right: 1rem; }
+        input[type="number"] { width: 100%; padding: 0.8rem; padding-left:2.5rem; border: 1px solid var(--border-color); border-radius: 6px; background-color: var(--input-bg); color: var(--text-color); font-size: 1rem; }
+        input[type="number"]~span.suffix { padding-left: 0;}
+        .tooltip { cursor: help; font-weight: bold; color: var(--secondary-color); }
         
-        button.reset-button {
-            background-color: #6c757d; /* Different color for reset */
-            margin-top: 20px; /* Space it out a bit */
-        }
-        button.reset-button:hover {
-            background-color: #5a6268;
-        }
+        /* Main Content: Results & Ads */
+        .main-content { display:flex; flex-direction:column; gap:2rem;}
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; text-align:center;}
+        .summary-card { padding: 1rem; background-color:var(--bg-color); border-radius:8px;}
+        .summary-card .label { font-size: 0.9rem; opacity: 0.8;}
+        .summary-card .value { font-size: 2rem; font-weight: 700; color: var(--primary-color);}
+        #growth-chart-container { position:relative; min-height:400px; }
+        .action-buttons { display:flex; gap: 1rem; flex-wrap: wrap;}
+        .btn { padding: 0.8rem 1.5rem; font-weight: 600; border-radius: 6px; border: 2px solid; cursor: pointer; text-decoration: none;}
+        .btn-primary { background-color:var(--primary-color); color:white; border-color:var(--primary-color);}
+        
+        /* Ad Placeholders */
+        .ad-placeholder { min-height: 250px; border: 2px dashed var(--border-color); display: flex; align-items: center; justify-content: center; text-align:center; padding: 1rem; color: var(--secondary-color); border-radius: 12px; }
 
-
-        button:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        button:active {
-            transform: translateY(0);
-            background-color: #004085;
-        }
-
-        button:focus {
-            outline: 2px solid #007bff;
-            outline-offset: 2px;
-        }
-
-        /* Loading Spinner */
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #007bff;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-            display: none; /* Hidden by default */
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Results Section */
-        .calculator-results.hidden {
-            display: none;
-        }
-
-        .summary-results p {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-            background-color: #e9f7fe;
-            padding: 15px;
-            border-left: 5px solid #007bff;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-
-        .summary-results span {
-            color: #0056b3;
-            font-size: 1.3em;
-        }
-
-        /* Table Styling */
-        .table-container {
-            max-height: 400px; /* Fixed height for scrolling */
-            overflow-y: auto;
-            margin-top: 20px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background-color: #fff;
-            box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
-        }
-
-        #yearly-breakdown-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9em;
-            min-width: 600px; /* Ensure table is scrollable if content too wide */
-        }
-
-        #yearly-breakdown-table th,
-        #yearly-breakdown-table td {
-            border: 1px solid #eee;
-            padding: 10px 15px;
-            text-align: right;
-        }
-
-        #yearly-breakdown-table th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-            text-align: center;
-            position: sticky; /* Make header sticky */
-            top: 0;
-            z-index: 10;
-        }
-
-        #yearly-breakdown-table td:first-child,
-        #yearly-breakdown-table th:first-child {
-            text-align: center; /* Align year/age left or center */
-        }
-
-        #yearly-breakdown-table tbody tr:nth-child(even) {
-            background-color: #f9f9f9; /* Zebra striping */
-        }
-
-        #yearly-breakdown-table tbody tr:hover {
-            background-color: #eaf6ff;
-        }
-
-        /* Export & Share Options */
-        .export-share-options {
-            margin-top: 30px;
-            border-top: 2px solid #eee;
-            padding-top: 20px;
-        }
-
-        .export-share-options h3 {
-            margin-top: 0;
-            color: #0056b3;
-            text-align: center;
-        }
-
-        .export-buttons, .share-buttons {
-            display: flex;
-            flex-wrap: wrap; /* Allow buttons to wrap */
-            gap: 10px; /* Space between buttons */
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-
-        .export-buttons button, .share-buttons button {
-            width: auto; /* Buttons adjust to content */
-            flex: 1 1 auto; /* Allow flexible width, but don't grow excessively */
-            max-width: 180px; /* Limit max width on large screens */
-            margin: 0; /* Override default button margin */
-            display: inline-flex; /* Align icon and text */
-            align-items: center;
-            justify-content: center;
-        }
-
-        .export-buttons button i, .share-buttons button i {
-            margin-right: 8px;
-        }
-
-        /* Tooltip (CSS only, for basic `title` attribute) */
-        .tooltip {
-            cursor: help;
-            border-bottom: 1px dotted #999;
-        }
-
-        /* Footer */
-        .site-footer {
-            background-color: #333;
-            color: #f4f7f6;
-            text-align: center;
-            padding: 20px;
-            font-size: 0.9em;
-            margin-top: auto; /* Pushes footer to the bottom */
-        }
-
-        .site-footer p {
-            margin: 5px 0;
-        }
-
-        .footer-home-link {
-            color: #f4f7f6;
-            text-decoration: underline;
-            transition: color 0.2s ease;
-        }
-
-        .footer-home-link:hover {
-            color: #a4d3f5;
-        }
-
-        /* Accessibility - Focus states */
-        *:focus {
-            outline: 2px solid #007bff;
-            outline-offset: 2px;
-        }
-
-        /* Responsive Design */
-        @media (min-width: 768px) {
-            .site-header {
-                flex-direction: row; /* Header elements in a row on desktop */
-                justify-content: space-between;
-                align-items: center;
-                padding: 20px 30px;
-            }
-            .site-header .header-content { /* Adjust spacing for content within header */
-                text-align: left;
-                flex-grow: 1; /* Allow content to take up space */
-                margin-right: 20px; /* Space between text and button */
-            }
-            .site-header h1, .site-header p {
-                margin: 0; /* Remove default margins if not needed */
-            }
-            .header-controls {
-                width: auto; /* Allow home link to take minimal space */
-                padding-top: 0; /* No top padding */
-                text-align: right; /* Align right */
-            }
-
-            .calculator-container {
-                flex-direction: row; /* Side-by-side on larger screens */
-                justify-content: space-between;
-                align-items: flex-start; /* Align content to the top */
-                padding: 30px;
-            }
-
-            .calculator-inputs {
-                flex: 1;
-                margin-right: 30px; /* Space between input and results */
-                max-width: 450px; /* Limit input section width */
-            }
-
-            .calculator-inputs button {
-                width: auto;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .calculator-results {
-                flex: 2;
-                margin-left: 30px;
-                min-width: 600px; /* Ensure results section has enough width */
-            }
-
-            .ad-placement {
-                margin: 25px auto;
-            }
-
-            .sidebar-ad {
-                display: block; /* Show sidebar ad on desktop */
-                margin-left: 20px;
-            }
-
-            body {
-                /*
-                We'll let the main calculator-container control its width within body,
-                and ad banners will be separate blocks taking up available width.
-                This allows ads to sit outside the central flex flow if desired.
-                */
-                display: block; /* Revert body to block flow */
-            }
-            .site-header, .site-footer {
-                width: 100%; /* Take full width */
-            }
-
-            .site-header {
-                position: sticky;
-                top: 0;
-                z-index: 100;
-            }
-
-            /* Container for main content to center with ads on the sides */
-            .main-content-wrapper {
-                display: flex;
-                max-width: 1400px; /* Wider container to accommodate sidebar ad */
-                margin: 20px auto;
-                justify-content: center;
-                align-items: flex-start;
-                padding: 0 20px; /* Some padding on edges */
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .calculator-container {
-                max-width: 1000px; /* Adjust max-width as needed within wrapper */
-            }
-
-            .ad-top, .ad-bottom {
-                max-width: 970px;
-            }
-        }
-
-        @media (max-width: 767px) {
-            .hidden-mobile {
-                display: none !important; /* Hide sidebar ad on mobile */
-            }
-            .ad-placement {
-                min-height: 50px; /* Smaller ad height for mobile */
-                max-width: 320px; /* Common mobile banner size */
-                font-size: 0.7em;
-            }
-            .site-header h1 {
-                font-size: 1.8em;
-            }
-            .site-header p {
-                font-size: 1em;
-            }
-            .input-group input[type="number"] {
-                width: calc(100% - 24px);
-            }
-            .export-buttons button, .share-buttons button {
-                width: 100%; /* Stack buttons on very small screens */
-                max-width: none;
-            }
-            .table-container {
-                overflow-x: auto; /* Enable horizontal scrolling for tables */
-            }
-            #yearly-breakdown-table {
-                min-width: 600px; /* Ensure table content forces scroll if needed */
-            }
-            .ad-label {
-                position: static; /* Let it flow normally within div on mobile */
-            }
-            .site-header .header-content {
-                width: 100%;
-                text-align: center; /* Center content in mobile header */
-                margin-right: 0;
-            }
-        }
-
-        /* Print Specific Styles */
+        @media (max-width: 1024px) { .container { grid-template-columns: 1fr; } }
+        
+        /* Print Styles */
         @media print {
-            body {
-                background-color: #fff;
-                color: #000;
-                margin: 0;
-                padding: 0;
-                font-size: 10pt;
-            }
-
-            /* Hide elements not relevant to printing */
-            .site-header, .ad-placement, .calculator-inputs, .export-share-options, .site-footer,
-            .loading-spinner, .error-message, .main-content-wrapper .sidebar-ad {
-                display: none !important; 
-            }
-
-            .calculator-container, .main-content-wrapper {
-                box-shadow: none;
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                max-width: none;
-                display: block; /* Override flex/grid for printing */
-            }
-
-            .calculator-results {
-                display: block !important; /* Ensure results are shown */
-                margin: 0;
-                padding: 0;
-                width: 100%;
-            }
-
-            .summary-results p {
-                font-size: 1em;
-                padding: 10px;
-                border-left: 3px solid #007bff;
-                page-break-after: avoid; /* Keep summary with initial part of table */
-            }
-
-            .summary-results span {
-                font-size: 1.1em;
-            }
-
-            h2, h3 {
-                color: #000 !important;
-                border-bottom: 1px solid #ccc !important;
-                page-break-after: avoid;
-            }
-
-            .table-container {
-                max-height: none; /* Show full table on print */
-                overflow-y: visible;
-                border: none;
-                box-shadow: none;
-            }
-
-            #yearly-breakdown-table {
-                width: 100%;
-                min-width: auto;
-            }
-
-            #yearly-breakdown-table th,
-            #yearly-breakdown-table td {
-                border: 1px solid #ccc;
-                padding: 5px;
-                font-size: 0.85em;
-            }
-
-            #yearly-breakdown-table th {
-                background-color: #eee;
-                position: static; /* No sticky header for print */
-                top: auto;
-            }
-
-            /* Add custom header/footer for print if desired */
-            @page {
-                margin: 1cm;
-                @top-center {
-                    content: "401K Projection Report - Your Company";
-                }
-                @bottom-center {
-                    content: "Page " counter(page) " of " counter(pages);
-                }
-            }
+            body { background: #fff !important; color: #000 !important; font-size: 12pt; }
+            .sidebar, .ad-placeholder, .action-buttons, h1, #theme-toggle { display: none; }
+            .container, .main-content { all: unset; display: block; }
+            #printable-results { display: block !important; }
         }
     </style>
 </head>
 <body>
-    <header class="site-header">
-        <div class="header-content">
-            <h1>Your Future 401K Calculator</h1>
-            <p>Project your retirement savings with precision and clarity.</p>
+<div class="container">
+    <aside class="sidebar">
+        <div class="card">
+            <h1>401(k) Calculator</h1>
+            <p style="margin-top:-0.5rem; opacity:0.8;">Project your retirement savings with detailed year-by-year growth.</p>
         </div>
-        <div class="header-controls">
-            <!-- Back to Main Homepage Link -->
-            <a href="https://basha1968.github.io/Mega-Calculator-Suite/" class="header-home-link" aria-label="Back to Main Homepage" title="Return to our website's main page.">
-                <i class="fas fa-home"></i> Back to Main Homepage
-            </a>
+        <div class="card">
+            <h2>Your Details</h2>
+            <form id="401k-form">
+                <div class="input-group"><label for="currentAge">Current Age</label><input type="number" id="currentAge" value="30"></div>
+                <div class="input-group"><label for="retirementAge">Retirement Age</label><input type="number" id="retirementAge" value="65"></div>
+                <div class="input-group"><label for="annualSalary">Annual Salary</label><span class="prefix">$</span><input type="number" id="annualSalary" value="75000"></div>
+                <div class="input-group"><label for="currentBalance">Current 401(k) Balance</label><span class="prefix">$</span><input type="number" id="currentBalance" value="50000"></div>
+            </form>
         </div>
-    </header>
+        <div class="card">
+             <h2>Contribution</h2>
+            <div class="input-group">
+                <label for="contributionPercent">Your Contribution</label><span class="prefix">%</span><input type="number" id="contributionPercent" value="6" step="0.5"><span class="suffix"> of Salary</span>
+            </div>
+             <div class="input-group">
+                <label for="employerMatchPercent">Employer Match</label><span class="prefix">%</span><input type="number" id="employerMatchPercent" value="3" step="0.5"><span class="suffix"> up to 6%</span>
+            </div>
+             <div class="input-group"><label for="matchLimitPercent">Employer Match Limit</label><span class="prefix">%</span><input type="number" id="matchLimitPercent" value="6"><span class="suffix">of Salary</span></div>
+        </div>
+         <div class="card">
+             <h2>Assumptions</h2>
+            <div class="input-group"><label for="annualReturn">Annual Rate of Return <span class="tooltip" title="Historical average of the S&P 500 is ~10%, but 7-8% is a common projection.">?</span></label><span class="prefix">%</span><input type="number" id="annualReturn" value="8" step="0.1"></div>
+            <div class="input-group"><label for="inflationRate">Annual Inflation Rate <span class="tooltip" title="Historical average inflation is ~3%. This is used to show your balance in today's dollars.">?</span></label><span class="prefix">%</span><input type="number" id="inflationRate" value="3" step="0.1"></div>
+            <div class="input-group"><label for="taxRate">Retirement Tax Rate <span class="tooltip" title="Your estimated marginal tax rate during retirement withdrawals.">?</span></label><span class="prefix">%</span><input type="number" id="taxRate" value="15" step="1"></div>
+             <button id="theme-toggle" style="width:100%; margin-top:1rem;">Toggle Theme</button>
+        </div>
+         <div class="ad-placeholder">
+            <!-- YLLIX AD SLOT -->
+            <p>Yllix Ad Space</p>
+        </div>
+    </aside>
 
-    <!-- Adsterra/Yllix Top Banner Ad Placement -->
-    <div class="ad-placement ad-top" id="ad-top-banner" aria-label="Top advertisement banner">
-        <p class="ad-label">Advertisement</p>
-        <!-- Place your Adsterra/Yllix top banner ad code here -->
-        <!-- Example Adsterra Code: 
-        <script type="text/javascript">
-            atOptions = {
-                'key' : 'YOUR_ADSTERRA_KEY_TOP',
-                'format' : 'iframe',
-                'height' : 90,
-                'width' : 728,
-                'params' : {}
-            };
-            document.write('<script type="text/javascript" src="//www.someadnetwork.com/ads.js"></script>');
-        </script> 
-        -->
-    </div>
-
-    <!-- Wrapper for calculator main content and sidebar ad (desktop) -->
-    <div class="main-content-wrapper">
-        <main class="calculator-container">
-            <section class="calculator-inputs">
-                <h2>Input Your Details</h2>
-                <form id="401k-form">
-                    <div class="input-group">
-                        <label for="current-age">Current Age:</label>
-                        <input type="number" id="current-age" min="18" max="99" value="30" required 
-                               title="Your current age in years.">
-                        <p class="error-message" id="error-current-age" aria-live="polite"></p>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="retirement-age">Retirement Age:</label>
-                        <input type="number" id="retirement-age" min="60" max="99" value="65" required 
-                               title="The age you plan to retire.">
-                        <p class="error-message" id="error-retirement-age" aria-live="polite"></p>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="current-balance">Current 401K Balance ($):</label>
-                        <input type="number" id="current-balance" min="0" value="50000" required 
-                               title="The total amount currently in your 401K account.">
-                        <p class="error-message" id="error-current-balance" aria-live="polite"></p>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="annual-salary">Annual Salary ($):</label>
-                        <input type="number" id="annual-salary" min="10000" value="70000" required 
-                               title="Your gross annual salary.">
-                        <p class="error-message" id="error-annual-salary" aria-live="polite"></p>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="employee-contribution">Employee Contribution (%):</label>
-                        <input type="number" id="employee-contribution" min="0" max="100" value="10" required 
-                               title="The percentage of your annual salary you contribute to your 401K each year.">
-                        <p class="error-message" id="error-employee-contribution" aria-live="polite"></p>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="employer-match">Employer Match (%):</label>
-                        <input type="number" id="employer-match" min="0" max="100" value="5" required 
-                               title="The percentage of your annual salary your employer contributes to your 401K. For simplicity, we assume this is based on your full annual salary.">
-                        <p class="error-message" id="error-employer-match" aria-live="polite"></p>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="return-rate">Expected Annual Return (%):</label>
-                        <input type="number" id="return-rate" min="-10" max="20" step="0.1" value="7" required 
-                               title="Your estimated average annual return on investments after fees, before inflation. Be realistic.">
-                        <p class="error-message" id="error-return-rate" aria-live="polite"></p>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="inflation-rate">Inflation Rate (%):</label>
-                        <input type="number" id="inflation-rate" min="0" max="10" step="0.1" value="3" required 
-                               title="The anticipated average annual rate of inflation. This affects the purchasing power of your future savings.">
-                        <p class="error-message" id="error-inflation-rate" aria-live="polite"></p>
-                    </div>
-
-                    <button type="submit" id="calculate-btn">Calculate 401K Projection</button>
-                    <button type="button" id="reset-form-btn" class="reset-button"><i class="fas fa-redo"></i> Start New Calculation</button>
-                    <div id="loading-spinner" class="loading-spinner" aria-live="polite" aria-hidden="true"></div>
-                </form>
-            </section>
-
-            <section class="calculator-results hidden" id="results-section">
-                <h2>Your Projected Retirement Savings</h2>
-                <div class="summary-results">
-                    <p>Projected 401K Balance at Retirement (Nominal): <span id="projected-balance-nominal">$0.00</span></p>
-                    <p>Projected 401K Balance at Retirement (Inflation-Adjusted): <span id="projected-balance-real">$0.00</span> 
-                       <span class="tooltip" title="This is the estimated purchasing power of your savings in today's dollars, after accounting for inflation.">(?)</span>
-                    </p>
+    <main class="main-content" id="printable-results">
+        <div class="card">
+            <h2>Projected Results at Age <span id="retireAgeDisplay">65</span></h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="label">Total 401(k) Value</div>
+                    <div class="value" id="totalValue">$0</div>
                 </div>
-
-                <h3>Yearly Growth Breakdown</h3>
-                <div class="table-container">
-                    <table id="yearly-breakdown-table">
-                        <thead>
-                            <tr>
-                                <th>Year</th>
-                                <th>Age</th>
-                                <th>Starting Balance</th>
-                                <th>Annual Contributions</th>
-                                <th>Investment Growth</th>
-                                <th>Ending Balance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Yearly projections will be inserted here by JavaScript -->
-                        </tbody>
-                    </table>
+                 <div class="summary-card">
+                    <div class="label">After-Tax Value</div>
+                    <div class="value" id="afterTaxValue">$0</div>
                 </div>
-
-                <div class="export-share-options">
-                    <h3>Export & Share</h3>
-                    <div class="export-buttons">
-                        <button id="print-btn" aria-label="Print Results"><i class="fas fa-print"></i> Print</button>
-                        <button id="pdf-btn" aria-label="Save as PDF"><i class="fas fa-file-pdf"></i> PDF</button>
-                        <button id="excel-btn" aria-label="Save as Excel"><i class="fas fa-file-excel"></i> Excel</button>
-                        <button id="csv-btn" aria-label="Save as CSV"><i class="fas fa-file-csv"></i> CSV</button>
-                    </div>
-                    <div class="share-buttons">
-                        <button id="linkedin-share-btn" aria-label="Share on LinkedIn"><i class="fab fa-linkedin"></i> LinkedIn</button>
-                        <button id="twitter-share-btn" aria-label="Share on Twitter"><i class="fab fa-twitter"></i> Twitter</button>
-                        <button id="email-share-btn" aria-label="Share via Email"><i class="fas fa-envelope"></i> Email</button>
-                    </div>
-                    <button type="button" id="reset-results-btn" class="reset-button"><i class="fas fa-redo"></i> Start New Calculation</button>
+                 <div class="summary-card">
+                    <div class="label">Value in Today's Dollars</div>
+                    <div class="value" id="inflationAdjustedValue">$0</div>
                 </div>
-            </section>
-        </main>
+            </div>
+        </div>
 
-        <!-- Adsterra/Yllix Sidebar Ad Placement (Desktop only, controlled by CSS) -->
-        <aside class="sidebar-ad ad-placement hidden-mobile" id="ad-sidebar-banner" aria-label="Sidebar advertisement banner">
-            <p class="ad-label">Advertisement</p>
-            <!-- Place your Adsterra/Yllix sidebar ad code here -->
-            <!-- Example Adsterra Code:
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : 'YOUR_ADSTERRA_KEY_SIDEBAR',
-                    'format' : 'iframe',
-                    'height' : 250,
-                    'width' : 300,
-                    'params' : {}
-                };
-                document.write('<script type="text/javascript" src="//www.someadnetwork.com/ads.js"></script>');
-            </script>
-            -->
-        </aside>
-    </div> <!-- /main-content-wrapper -->
+        <div class="card">
+             <h2>Growth Over Time</h2>
+             <div id="growth-chart-container"><canvas id="growthChart"></canvas></div>
+        </div>
 
-    <!-- Adsterra/Yllix Bottom Ad Placement -->
-    <div class="ad-placement ad-bottom" id="ad-bottom-banner" aria-label="Bottom advertisement banner">
-        <p class="ad-label">Advertisement</p>
-        <!-- Place your Adsterra/Yllix bottom ad code here -->
-        <!-- Example Yllix Code:
-        <script type="text/javascript">
-            var _avlVar = "_yllix_ad_code_bottom_";
-            var _avlWidth = "auto";
-            var _avlHeight = "auto";
-            var _avl = document.getElementById(_avlVar);
-            // ... rest of Yllix code ...
-        </script>
-        -->
-    </div>
+        <div class="card">
+             <h2>Actions</h2>
+             <div class="action-buttons">
+                <a href="#" id="printBtn" class="btn btn-primary">Print Report</a>
+                <a href="#" id="savePdfBtn" class="btn btn-primary">Save as PDF</a>
+                <a href="#" id="saveCsvBtn" class="btn btn-primary">Save as CSV (Excel)</a>
+                <a href="#" id="shareLinkBtn" class="btn btn-primary">Share My Projection</a>
+             </div>
+        </div>
+         <div class="ad-placeholder">
+            <!-- ADSTERRA AD SLOT -->
+            <p>Adsterra Ad Space</p>
+        </div>
+    </main>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Elements & State ---
+    const D = document;
+    const ctx = D.getElementById('growthChart').getContext('2d');
+    let growthChart;
+    let projectionData = [];
+
+    const els = {
+        form: D.getElementById('401k-form'),
+        allInputs: D.querySelectorAll('input[type="number"]'),
+        retireAgeDisplay: D.getElementById('retireAgeDisplay'),
+        totalValue: D.getElementById('totalValue'), afterTaxValue: D.getElementById('afterTaxValue'),
+        inflationAdjustedValue: D.getElementById('inflationAdjustedValue'),
+        themeToggle: D.getElementById('theme-toggle'),
+    };
     
+    // --- Calculation Engine ---
+    const calculateProjection = () => {
+        // Collect inputs & convert percentages
+        const inputs = {};
+        els.allInputs.forEach(input => inputs[input.id] = parseFloat(input.value) || 0);
+        
+        const r = inputs.annualReturn / 100;
+        const i = inputs.inflationRate / 100;
+        const tr = inputs.taxRate / 100;
 
-    <footer class="site-footer">
-        <p>Disclaimer: This 401K calculator provides estimates for informational purposes only and is not financial advice. Your actual returns may vary. Consult a qualified financial professional for personalized guidance.</p>
-        <p>© <span id="current-year"></span> Your Fintech Company. All rights reserved.</p>
-        <!-- Back to Main Homepage Link in Footer -->
-        <p><a href="https://basha1968.github.io/Mega-Calculator-Suite/" class="footer-home-link" title="Return to our website's main page.">Back to Main Homepage</a></p>
-    </footer>
+        let balance = inputs.currentBalance;
+        let yearsToRetire = inputs.retirementAge - inputs.currentAge;
+        projectionData = [];
 
-    <script>
-        // Constants for DOM elements
-        const form = document.getElementById('401k-form');
-        const currentAgeInput = document.getElementById('current-age');
-        const retirementAgeInput = document.getElementById('retirement-age');
-        const currentBalanceInput = document.getElementById('current-balance');
-        const annualSalaryInput = document.getElementById('annual-salary');
-        const employeeContributionInput = document.getElementById('employee-contribution');
-        const employerMatchInput = document.getElementById('employer-match');
-        const returnRateInput = document.getElementById('return-rate');
-        const inflationRateInput = document.getElementById('inflation-rate');
-        const calculateBtn = document.getElementById('calculate-btn');
-        const loadingSpinner = document.getElementById('loading-spinner');
+        for(let year = 1; year <= yearsToRetire; year++) {
+            const employeeContrib = inputs.annualSalary * (inputs.contributionPercent / 100);
+            const actualMatchPercent = Math.min(inputs.contributionPercent, inputs.matchLimitPercent);
+            const employerContrib = inputs.annualSalary * (actualMatchPercent * (inputs.employerMatchPercent / inputs.contributionPercent));
 
-        const resultsSection = document.getElementById('results-section');
-        const projectedBalanceNominalSpan = document.getElementById('projected-balance-nominal');
-        const projectedBalanceRealSpan = document.getElementById('projected-balance-real');
-        const yearlyBreakdownTableBody = document.querySelector('#yearly-breakdown-table tbody');
-
-        // Export & Share Buttons
-        const printBtn = document.getElementById('print-btn');
-        const pdfBtn = document.getElementById('pdf-btn');
-        const excelBtn = document.getElementById('excel-btn');
-        const csvBtn = document.getElementById('csv-btn');
-        const linkedinShareBtn = document.getElementById('linkedin-share-btn');
-        const twitterShareBtn = document.getElementById('twitter-share-btn');
-        const emailShareBtn = document.getElementById('email-share-btn');
-        const resetFormBtn = document.getElementById('reset-form-btn'); // For reset button near inputs
-        const resetResultsBtn = document.getElementById('reset-results-btn'); // For reset button in results section
-
-
-        // Set current year in footer
-        document.getElementById('current-year').textContent = new Date().getFullYear();
-
-        // Helper for currency formatting
-        const formatCurrency = (amount) => {
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }).format(amount);
-        };
-
-        // Helper for displaying validation errors
-        const displayError = (inputElement, message) => {
-            const errorElement = document.getElementById(`error-${inputElement.id}`);
-            if (errorElement) {
-                errorElement.textContent = message;
-                inputElement.classList.add('input-error'); // Add a class for visual error
-                inputElement.setAttribute('aria-invalid', 'true');
-            }
-        };
-
-        // Helper for clearing validation errors
-        const clearErrors = () => {
-            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-            document.querySelectorAll('.input-error').forEach(el => {
-                el.classList.remove('input-error');
-                el.removeAttribute('aria-invalid');
-            });
-        };
-
-        // Main calculation logic
-        const calculate401K = (event) => {
-            event.preventDefault(); // Prevent default form submission
-
-            clearErrors(); // Clear previous errors
-            resultsSection.classList.add('hidden'); // Hide results until calculated
-            yearlyBreakdownTableBody.innerHTML = ''; // Clear previous table data
-            loadingSpinner.style.display = 'block'; // Show spinner
-            calculateBtn.disabled = true; // Disable button during calculation
-
-            // Use a timeout to allow the spinner to render before heavy computation
-            setTimeout(() => {
-                // Retrieve and validate inputs
-                const currentAge = parseInt(currentAgeInput.value);
-                const retirementAge = parseInt(retirementAgeInput.value);
-                const currentBalance = parseFloat(currentBalanceInput.value);
-                const annualSalary = parseFloat(annualSalaryInput.value);
-                const employeeContributionPercentage = parseFloat(employeeContributionInput.value);
-                const employerMatchPercentage = parseFloat(employerMatchInput.value);
-                const expectedAnnualReturnRate = parseFloat(returnRateInput.value) / 100; // Convert to decimal
-                const inflationRate = parseFloat(inflationRateInput.value) / 100; // Convert to decimal
-
-                let isValid = true;
-
-                if (isNaN(currentAge) || currentAge < 18 || currentAge > 99) { displayError(currentAgeInput, 'Enter a valid age (18-99).'); isValid = false; }
-                if (isNaN(retirementAge) || retirementAge <= currentAge || retirementAge > 99) { displayError(retirementAgeInput, `Retirement age must be > Current Age (max 99).`); isValid = false; }
-                if (isNaN(currentBalance) || currentBalance < 0) { displayError(currentBalanceInput, 'Enter a non-negative balance.'); isValid = false; }
-                if (isNaN(annualSalary) || annualSalary < 1000) { displayError(annualSalaryInput, 'Enter a realistic salary (min $1,000).'); isValid = false; }
-                if (isNaN(employeeContributionPercentage) || employeeContributionPercentage < 0 || employeeContributionPercentage > 100) { displayError(employeeContributionInput, 'Enter 0-100%.'); isValid = false; }
-                if (isNaN(employerMatchPercentage) || employerMatchPercentage < 0 || employerMatchPercentage > 100) { displayError(employerMatchInput, 'Enter 0-100%.'); isValid = false; }
-                if (isNaN(expectedAnnualReturnRate)) { displayError(returnRateInput, 'Enter a valid return rate.'); isValid = false; }
-                if (isNaN(inflationRate)) { displayError(inflationRateInput, 'Enter a valid inflation rate.'); isValid = false; }
-
-                if (!isValid) {
-                    loadingSpinner.style.display = 'none';
-                    calculateBtn.disabled = false;
-                    return;
-                }
-
-                const yearsToRetirement = retirementAge - currentAge;
-                const totalAnnualContribution = annualSalary * (employeeContributionPercentage / 100 + employerMatchPercentage / 100);
-
-                let currentBalanceAtYearStart = currentBalance;
-                const yearlyProjections = [];
-
-                // Loop for yearly breakdown
-                for (let year = 1; year <= yearsToRetirement; year++) {
-                    const age = currentAge + year;
-                    
-                    // Contributions are typically added throughout the year or at the start
-                    // For simplicity, we add them at the start of the year for compounding
-                    const balanceBeforeGrowth = currentBalanceAtYearStart + totalAnnualContribution;
-
-                    let growthForYear;
-                    if (expectedAnnualReturnRate === 0) {
-                        growthForYear = 0;
-                    } else {
-                        growthForYear = balanceBeforeGrowth * expectedAnnualReturnRate;
-                    }
-
-                    const endOfYearBalance = balanceBeforeGrowth + growthForYear;
-
-                    yearlyProjections.push({
-                        year: new Date().getFullYear() + year -1, // Projecting years from current year
-                        age: age,
-                        startingBalance: currentBalanceAtYearStart,
-                        annualContributions: totalAnnualContribution,
-                        investmentGrowth: growthForYear,
-                        endingBalance: endOfYearBalance
-                    });
-
-                    currentBalanceAtYearStart = endOfYearBalance;
-                }
-
-                const finalNominalBalance = currentBalanceAtYearStart; // Last year's ending balance
-
-                // Calculate real (inflation-adjusted) balance
-                let finalRealBalance;
-                if (inflationRate === 0) {
-                    finalRealBalance = finalNominalBalance;
-                } else {
-                    finalRealBalance = finalNominalBalance / Math.pow(1 + inflationRate, yearsToRetirement);
-                }
-
-                // Display summary results
-                projectedBalanceNominalSpan.textContent = formatCurrency(finalNominalBalance);
-                projectedBalanceRealSpan.textContent = formatCurrency(finalRealBalance);
-
-                // Populate yearly breakdown table
-                const fragment = document.createDocumentFragment();
-                yearlyProjections.forEach(data => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${data.year}</td>
-                        <td>${data.age}</td>
-                        <td>${formatCurrency(data.startingBalance)}</td>
-                        <td>${formatCurrency(data.annualContributions)}</td>
-                        <td>${formatCurrency(data.investmentGrowth)}</td>
-                        <td>${formatCurrency(data.endingBalance)}</td>
-                    `;
-                    fragment.appendChild(row);
-                });
-                yearlyBreakdownTableBody.appendChild(fragment);
-
-                resultsSection.classList.remove('hidden'); // Show results section
-                loadingSpinner.style.display = 'none';
-                calculateBtn.disabled = false;
-
-                // Scroll to results
-                resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-            }, 50); // Small delay for spinner to show
-        };
-
-        // Event Listener for Calculation
-        form.addEventListener('submit', calculate401K);
-
-        // --- Export & Share Functionality ---
-
-        // Print functionality
-        printBtn.addEventListener('click', () => {
-            window.print();
-        });
-
-        // PDF Export
-        // This function requires jspdf.umd.min.js AND jspdf.plugin.autotable.min.js
-        pdfBtn.addEventListener('click', async () => {
-            // Basic checks if libraries are loaded
-            if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') {
-                console.error("jsPDF library (jspdf.umd.min.js) not loaded or incorrectly configured.");
-                alert("PDF export is not available. Please ensure the jsPDF library is correctly loaded in the <head>.");
-                return;
-            }
-            // `jspdf-autotable` attaches autoTable to the prototype of jsPDF.jsPDF.
-            // Check if it's there. Note: The `window.jspdf.default.autoTable` check is specifically for modules.
-            // When loaded via a simple script tag, it attaches directly to jsPDF.jsPDF.prototype.
-            if (typeof jsPDF.prototype.autoTable === 'undefined') {
-                console.error("jsPDF AutoTable plugin (jspdf.plugin.autotable.min.js) not loaded or incorrectly configured.");
-                alert("PDF export plugin not loaded. Please ensure the AutoTable plugin is correctly loaded AFTER jsPDF in the <head>.");
-                return;
-            }
-
-
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            const title = "401K Projection Report";
-            const date = new Date().toLocaleDateString();
-            doc.setFontSize(18);
-            doc.text(title, 14, 20);
-            doc.setFontSize(10);
-            doc.text(`Report Date: ${date}`, 14, 26);
-            doc.line(14, 28, 196, 28); // Horizontal line
-
-            // Inputs Summary
-            let y = 35;
-            doc.setFontSize(12);
-            doc.text("Input Details:", 14, y);
-            doc.setFontSize(10);
-            y += 7;
-            doc.text(`Current Age: ${currentAgeInput.value}`, 14, y); y += 5;
-            doc.text(`Retirement Age: ${retirementAgeInput.value}`, 14, y); y += 5;
-            doc.text(`Current 401K Balance: ${formatCurrency(parseFloat(currentBalanceInput.value))}`, 14, y); y += 5;
-            doc.text(`Annual Salary: ${formatCurrency(parseFloat(annualSalaryInput.value))}`, 14, y); y += 5;
-            doc.text(`Employee Contribution: ${employeeContributionInput.value}%`, 14, y); y += 5;
-            doc.text(`Employer Match: ${employerMatchInput.value}%`, 14, y); y += 5;
-            doc.text(`Expected Annual Return: ${returnRateInput.value}%`, 14, y); y += 5;
-            doc.text(`Inflation Rate: ${inflationRateInput.value}%`, 14, y); y += 10;
+            const totalContributions = employeeContrib + employerContrib;
+            balance += totalContributions;
+            balance *= (1 + r);
             
-            // Summary Results
-            doc.setFontSize(12);
-            doc.text("Projected Balances:", 14, y);
-            doc.setFontSize(10);
-            y += 7;
-            doc.text(`Nominal Balance: ${projectedBalanceNominalSpan.textContent}`, 14, y); y += 5;
-            doc.text(`Inflation-Adjusted Balance: ${projectedBalanceRealSpan.textContent}`, 14, y); y += 10;
-
-            // Table Data
-            const tableData = Array.from(yearlyBreakdownTableBody.rows).map(row => 
-                Array.from(row.cells).map(cell => cell.textContent)
-            );
-            const tableHeaders = Array.from(document.querySelectorAll('#yearly-breakdown-table thead th')).map(th => th.textContent);
-
-            doc.setFontSize(12);
-            doc.text("Yearly Growth Breakdown:", 14, y);
-            y += 7;
-
-            // Use autoTable method which is provided by the jspdf-autotable plugin
-            doc.autoTable({
-                head: [tableHeaders],
-                body: tableData,
-                startY: y,
-                theme: 'striped',
-                styles: { fontSize: 8, cellPadding: 2, halign: 'right' },
-                headStyles: { fillColor: [242, 242, 242], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center' },
-                columnStyles: { 0: { halign: 'center' }, 1: { halign: 'center' } }, // Center Year and Age
-                margin: { left: 14, right: 14 },
-                didDrawPage: function (data) {
-                    // Footer for page numbers
-                    doc.setFontSize(8);
-                    doc.text(`Page ${data.pageNumber}`, doc.internal.pageSize.width / 2, doc.internal.pageSize.height - 10, { align: 'center' });
-                }
+            projectionData.push({
+                year: inputs.currentAge + year,
+                balance: balance,
+                contributions: totalContributions * year + inputs.currentBalance,
             });
+        }
+        
+        const finalBalance = balance;
+        const afterTaxBalance = finalBalance * (1 - tr);
+        const inflationAdjusted = finalBalance / Math.pow(1 + i, yearsToRetire);
+        
+        updateUI(finalBalance, afterTaxBalance, inflationAdjusted);
+        updateChart();
+    };
 
-            // Disclaimer - ensure it is placed below the table or on a new page if necessary
-            doc.setFontSize(8);
-            doc.setTextColor(100);
-            const disclaimer = document.querySelector('.site-footer p:first-child').textContent;
-            const disclaimerLines = doc.splitTextToSize(disclaimer, doc.internal.pageSize.width - 28);
-            
-            // Calculate y position for disclaimer, ensure it doesn't overlap the table if table is short
-            const disclaimerY = doc.autoTable.previous ? Math.max(doc.autoTable.previous.finalY + 10, doc.internal.pageSize.height - 30) : doc.internal.pageSize.height - 30;
-            doc.text(disclaimerLines, 14, disclaimerY);
+    // --- UI Update & Charting ---
+    const updateUI = (total, afterTax, inflation) => {
+        const formatCurrency = (val) => `$${Math.round(val).toLocaleString()}`;
+        els.retireAgeDisplay.textContent = D.getElementById('retirementAge').value;
+        els.totalValue.textContent = formatCurrency(total);
+        els.afterTaxValue.textContent = formatCurrency(afterTax);
+        els.inflationAdjustedValue.textContent = formatCurrency(inflation);
+    };
 
-            doc.save('401k_projection.pdf');
+    const updateChart = () => {
+        if(growthChart) growthChart.destroy();
+        
+        growthChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: projectionData.map(d => d.year),
+                datasets: [{
+                    label: 'Total Value',
+                    data: projectionData.map(d => d.balance),
+                    borderColor: 'var(--primary-color)',
+                    backgroundColor: 'rgba(13, 148, 136, 0.1)', fill: true,
+                },{
+                    label: 'Total Contributions',
+                    data: projectionData.map(d => d.contributions),
+                    borderColor: 'var(--secondary-color)',
+                    borderDash: [5, 5],
+                }]
+            },
+            options: { maintainAspectRatio: false, responsive:true, }
         });
+    };
+    
+    // --- Actions & Export ---
+     const generateShareLink = () => {
+         const params = new URLSearchParams();
+         els.allInputs.forEach(input => params.set(input.id, input.value));
+         return `${location.origin}${location.pathname}?data=${btoa(params.toString())}`;
+     };
 
-        // Excel Export
-        excelBtn.addEventListener('click', () => {
-            if (typeof XLSX === 'undefined') {
-                console.error("SheetJS (xlsx.js) library not loaded. Please ensure xlsx.full.min.js is correctly linked.");
-                alert("Excel export is not available. Please try again or check your browser's console for errors.");
-                return;
-            }
-            const table = document.getElementById('yearly-breakdown-table');
-            const ws = XLSX.utils.table_to_sheet(table);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "401K Projection");
-            XLSX.writeFile(wb, "401k_projection.xlsx");
+     D.getElementById('printBtn').onclick = (e) => { e.preventDefault(); window.print();};
+     D.getElementById('savePdfBtn').onclick = (e) => {
+        e.preventDefault();
+        html2canvas(D.getElementById('printable-results')).then(canvas => {
+            const doc = new jspdf.jsPDF(); doc.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 10, 190, 0); doc.save('401k-projection.pdf');
         });
+     };
+    D.getElementById('saveCsvBtn').onclick = (e) => {
+         e.preventDefault();
+         let csvContent = "data:text/csv;charset=utf-8,Year,Total Balance,Total Contributions\n";
+         projectionData.forEach(d => { csvContent += `${d.year},${d.balance.toFixed(2)},${d.contributions.toFixed(2)}\n`});
+         const link = D.createElement('a'); link.href = encodeURI(csvContent); link.download = '401k-projection.csv'; link.click();
+    };
+     D.getElementById('shareLinkBtn').onclick = (e) => {
+         e.preventDefault();
+         navigator.clipboard.writeText(generateShareLink()).then(() => {
+             e.target.textContent = "Link Copied!";
+             setTimeout(()=> e.target.textContent = "Share My Projection", 2000);
+         });
+     };
 
-        // CSV Export
-        csvBtn.addEventListener('click', () => {
-            const table = document.getElementById('yearly-breakdown-table');
-            let csv = [];
-            const rows = table.querySelectorAll('tr');
+    // --- Init & Event Handlers ---
+    const init = () => {
+        const theme = localStorage.getItem('401kTheme') || 'light';
+        D.documentElement.setAttribute('data-theme', theme);
+        
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('data')) {
+            try {
+                 const decoded = new URLSearchParams(atob(params.get('data')));
+                 decoded.forEach((value, key) => D.getElementById(key) && (D.getElementById(key).value = value));
+            } catch(e) { console.error("Failed to parse share data.");}
+        }
+        
+        calculateProjection();
+    };
 
-            for (let i = 0; i < rows.length; i++) {
-                let row = [], cols = rows[i].querySelectorAll('td, th');
-                for (let j = 0; j < cols.length; j++) {
-                    // Enclose values with commas in quotes, and escape double quotes
-                    let data = cols[j].innerText.replace(/"/g, '""'); 
-                    row.push(`"${data}"`);
-                }
-                csv.push(row.join(','));
-            }
+    D.querySelectorAll('input').forEach(input => input.addEventListener('change', calculateProjection));
+    els.themeToggle.onclick = () => {
+        const theme = D.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        D.documentElement.setAttribute('data-theme', theme); localStorage.setItem('401kTheme', theme);
+        calculateProjection(); // Recalculate to redraw chart with new theme colors
+    };
 
-            const csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
-            const downloadLink = document.createElement('a');
-            downloadLink.download = '401k_projection.csv';
-            downloadLink.href = window.URL.createObjectURL(csvFile);
-            downloadLink.style.display = 'none';
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-        });
-
-        // Social Media Sharing
-        const appUrl = encodeURIComponent(window.location.href);
-        const appTitle = encodeURIComponent(document.title);
-        const appDescription = encodeURIComponent("Project your retirement savings with this advanced 401K calculator. Secure, user-friendly, and free!");
-
-        linkedinShareBtn.addEventListener('click', () => {
-            const linkedinUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${appUrl}&title=${appTitle}&summary=${appDescription}`;
-            console.log("Attempting LinkedIn Share URL:", decodeURIComponent(linkedinUrl));
-            window.open(linkedinUrl, '_blank', 'noopener,noreferrer');
-        });
-
-        twitterShareBtn.addEventListener('click', () => {
-            const twitterUrl = `https://twitter.com/intent/tweet?url=${appUrl}&text=${appTitle} - ${appDescription} #401K #RetirementPlanning #Fintech`;
-            console.log("Attempting Twitter Share URL:", decodeURIComponent(twitterUrl));
-            window.open(twitterUrl, '_blank', 'noopener,noreferrer');
-        });
-
-        emailShareBtn.addEventListener('click', () => {
-            const emailSubject = appTitle;
-            const emailBody = `I found this advanced 401K calculator useful. You can try it too: ${decodeURIComponent(appUrl)}\n\n${decodeURIComponent(appDescription)}`;
-            const mailtoUrl = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-            console.log("Attempting Mailto URL:", decodeURIComponent(mailtoUrl));
-            // Using a hidden link and programmatic click is more robust for mailto, avoiding potential popup blockers
-            const mailtoLink = document.createElement('a');
-            mailtoLink.href = mailtoUrl;
-            mailtoLink.style.display = 'none'; // Keep it hidden
-            document.body.appendChild(mailtoLink);
-            mailtoLink.click(); // Programmatically click the link
-            document.body.removeChild(mailtoLink); // Remove after click
-        });
-
-        // "Start New Calculation" / Reset functionality
-        const resetCalculator = () => {
-            // Using window.location.reload() effectively clears all inputs and states
-            // If you wanted to reset inputs without a full page reload, you'd loop
-            // through form fields and set values, then hide results section.
-            // For a single-file tool, reload is simple and effective.
-            window.location.reload(); 
-        };
-
-        resetFormBtn.addEventListener('click', resetCalculator);
-        resetResultsBtn.addEventListener('click', resetCalculator);
-
-
-        // Initial state setup (e.g., hide results section on page load)
-        document.addEventListener('DOMContentLoaded', () => {
-            resultsSection.classList.add('hidden');
-        });
-    </script>
+    init();
+});
+</script>
 </body>
 </html>
