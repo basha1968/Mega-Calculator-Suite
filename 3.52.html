@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Wind Chill Calculator</title>
+    <!-- Privacy Headers -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+    <!-- Dependencies for PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #eef2ff; /* Indigo-100 */
+            --text-color: #3730a3; /* Indigo-800 */
+            --primary-color: #4338ca; /* Indigo-700 */
+            --secondary-color: #64748b; /* Slate-500 */
+            --accent-color: #f97316; /* Orange-500 for warnings */
+            --border-color: #c7d2fe; /* Indigo-200 */
+            --card-bg: #ffffff;
+            --input-bg: #f8fafc; /* Slate-50 */
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+            --font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        [data-theme="dark"] {
+            --bg-color: #1e1b4b; /* Indigo-950 */
+            --text-color: #c7d2fe; /* Indigo-200 */
+            --primary-color: #818cf8; /* Indigo-400 */
+            --secondary-color: #94a3b8; /* Slate-400 */
+            --accent-color: #fb923c; /* Orange-400 */
+            --border-color: #4f46e5; /* Indigo-600 */
+            --card-bg: #312e81; /* Indigo-900 */
+            --input-bg: #4338ca; /* Indigo-700 */
+            --shadow: 0 10px 15px -3px rgba(0,0,0,0.2), 0 4px 6px -4px rgba(0,0,0,0.2);
+        }
+
+        /* General & Layout */
+        *, *::before, *::after { box-sizing: border-box; }
+        body { margin: 0; font-family: var(--font-family); background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; transition: all 0.2s ease-in-out; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 1rem; }
+        .main-layout { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; }
+        .card { background-color: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow); }
+        h1, h2 { color: var(--primary-color); }
+        
+        /* Main Content */
+        .calculator-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; align-items: end; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        input[type="number"], select { width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 6px; background-color: var(--input-bg); color: var(--text-color); font-size: 1.2rem; }
+        
+        /* Result Display */
+        .result-display { margin-top: 2rem; text-align: center; }
+        .result-display .label { font-size: 1.5rem; font-weight: 600; opacity: 0.9; }
+        .result-display .value { font-size: 5rem; font-weight: 800; line-height: 1.1; color: var(--primary-color); }
+        
+        /* Warnings & Chart */
+        #frostbite-warning { margin-top: 1rem; padding: 1rem; border-radius: 8px; font-weight: 600; text-align:center; }
+        .chart-container { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed var(--border-color); }
+        .chart-table { width:100%; text-align:center; border-collapse:collapse; font-size: 0.9rem;}
+        .chart-table th, .chart-table td { padding: 0.5rem; border: 1px solid var(--border-color); }
+        
+        /* Sidebar, Actions, Ads */
+        .sidebar { display: flex; flex-direction: column; gap: 2rem; }
+        .action-buttons button, .action-buttons a { display:block; width:100%; text-align:center; padding: 0.8rem; margin-bottom: 0.8rem; font-weight:600; border-radius:6px; cursor:pointer; text-decoration:none; }
+        .btn-primary { background-color: var(--primary-color); color: white; border:2px solid var(--primary-color);}
+        .btn-secondary { background:transparent; color: var(--primary-color); border:2px solid var(--primary-color);}
+        .ad-placeholder { min-height: 250px; border: 2px dashed var(--border-color); display: flex; align-items: center; justify-content: center; text-align:center; padding: 1rem; color: var(--secondary-color); border-radius: 12px; }
+
+        @media (max-width: 900px) { .main-layout { grid-template-columns: 1fr; } }
+
+        /* Print Styles */
+        @media print {
+            body { background: #fff !important; color: #000 !important; font-size: 12pt; }
+            .sidebar, header, .ad-placeholder, .action-buttons, h1, #theme-toggle { display: none; }
+            .main-layout, .card { all: unset; display: block; box-shadow:none; border: 1px solid #ccc; padding: 1rem;}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header style="display:flex; justify-content:space-between; align-items:center;">
+        <h1>Wind Chill Calculator</h1>
+        <button id="theme-toggle" title="Toggle Dark/Light Mode" style="font-size:1.5rem; background:none; border:none; cursor:pointer; color:var(--text-color);">🌓</button>
+    </header>
+    
+    <div class="card ad-placeholder" style="margin:2rem 0;">
+        <!-- ========================== -->
+        <!-- ADSTERRA HEADER AD SLOT -->
+        <!-- ========================== -->
+        <p>Adsterra Ad Space (e.g., 728x90 Banner)</p>
+    </div>
+
+    <main class="main-layout">
+        <section class="card" id="calculator-content">
+            <h2>Enter Conditions</h2>
+            <form id="windchill-form" class="calculator-grid">
+                <div><label for="temperature">Air Temperature</label><input type="number" id="temperature" value="20" required></div>
+                <div><label for="temp-unit">Unit</label><select id="temp-unit"><option value="F">Fahrenheit (°F)</option><option value="C">Celsius (°C)</option></select></div>
+                <div><label for="wind-speed">Wind Speed</label><input type="number" id="wind-speed" value="15" required></div>
+                <div><label for="speed-unit">Unit</label><select id="speed-unit"><option value="mph">mph</option><option value="kmh">km/h</option></select></div>
+            </form>
+
+            <div class="result-display">
+                <div class="label">Wind Chill Feels Like</div>
+                <div class="value" id="result-value">6 °F</div>
+            </div>
+            <div id="frostbite-warning"></div>
+        </section>
+
+        <aside class="sidebar">
+            <div class="card action-buttons">
+                <h2>Actions</h2>
+                <a href="#" id="printBtn" class="btn-secondary">Print Report</a>
+                <a href="#" id="savePdfBtn" class="btn-secondary">Save as PDF</a>
+                <a href="#" id="saveTxtBtn" class="btn-secondary">Save as TXT</a>
+                <button id="shareBtn" class="btn-primary">Share</button>
+            </div>
+             <div class="ad-placeholder">
+                <!-- ========================== -->
+                <!-- YLLIX SIDEBAR AD SLOT    -->
+                <!-- ========================== -->
+                <p>Yllix Ad Space (e.g., 300x250)</p>
+            </div>
+        </aside>
+    </main>
+
+     <div class="card" style="margin-top:2rem;">
+        <h2>Frostbite Times at Wind Chill Temperatures</h2>
+        <div class="chart-container">
+            <table class="chart-table">
+                <thead><tr><th>Wind Chill (°F)</th><th>Exposure Time</th><th>Wind Chill (°C)</th><th>Exposure Time</th></tr></thead>
+                <tbody>
+                    <tr><td>0 to -19</td><td>30 minutes</td><td>-18 to -28</td><td>30 minutes</td></tr>
+                    <tr><td>-20 to -39</td><td>10 minutes</td><td>-29 to -40</td><td>10 minutes</td></tr>
+                    <tr><td>-40 to -59</td><td>5 minutes</td><td>-41 to -51</td><td>5 minutes</td></tr>
+                    <tr><td>-60 or colder</td><td>< 2 minutes</td><td>-52 or colder</td><td>< 2 minutes</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const D = document;
+    let lastResult = {};
+    const els = {
+        form: D.getElementById('windchill-form'),
+        resultValue: D.getElementById('result-value'),
+        warning: D.getElementById('frostbite-warning'),
+        themeToggle: D.getElementById('theme-toggle'),
+    };
+
+    // --- Calculation Engine (NWS Formula) ---
+    const calculateWindChill = () => {
+        try {
+            let temp = parseFloat(D.getElementById('temperature').value);
+            let wind = parseFloat(D.getElementById('wind-speed').value);
+            const tempUnit = D.getElementById('temp-unit').value;
+            const speedUnit = D.getElementById('speed-unit').value;
+            
+            // Convert everything to Imperial (F, mph) for calculation
+            let temp_F = (tempUnit === 'C') ? temp * 1.8 + 32 : temp;
+            let wind_mph = (speedUnit === 'kmh') ? wind * 0.621371 : wind;
+
+            // Input Validation & Edge Cases per NWS
+            if (isNaN(temp_F) || isNaN(wind_mph) || temp_F > 50 || wind_mph < 3) {
+                 clearResults();
+                 if(temp_F > 50) els.warning.textContent = 'Wind chill is only defined for temperatures at or below 50 °F.';
+                 if(wind_mph < 3) els.warning.textContent = 'Wind chill is only defined for wind speeds above 3 mph.';
+                 return;
+            }
+
+            // NWS Wind Chill Formula
+            const windChill_F = 35.74 + (0.6215 * temp_F) - (35.75 * Math.pow(wind_mph, 0.16)) + (0.4275 * temp_F * Math.pow(wind_mph, 0.16));
+            
+            lastResult = {
+                inputTemp: temp, tempUnit, inputWind: wind, speedUnit,
+                windChill_F: windChill_F
+            };
+            
+            updateUI();
+
+        } catch (e) {
+            clearResults();
+            console.error("Calculation Error:", e);
+        }
+    };
+    
+    // --- UI Update & Helpers ---
+    const updateUI = () => {
+        const tempUnit = D.getElementById('temp-unit').value;
+        const displayValue = (tempUnit === 'C') 
+            ? ((lastResult.windChill_F - 32) / 1.8).toFixed(1)
+            : lastResult.windChill_F.toFixed(1);
+
+        els.resultValue.textContent = `${displayValue} °${tempUnit}`;
+        updateWarning(lastResult.windChill_F);
+    };
+    
+    const updateWarning = (wc_F) => {
+        let text, color, bgColor;
+        if (wc_F > -10) { text = "Low risk. Dress appropriately."; color="var(--primary-color)"; bgColor="rgba(67,56,202,0.1)"; }
+        else if (wc_F > -27) { text = "Frostbite possible in 30 minutes. Cover exposed skin."; color="var(--accent-color)"; bgColor="rgba(249,115,22,0.1)";} 
+        else if (wc_F > -48) { text = "DANGER: Frostbite possible in 10 minutes."; color="white"; bgColor="var(--accent-color)";} 
+        else { text = "EXTREME DANGER: Frostbite in under 5 minutes."; color="white"; bgColor="red";}
+        
+        els.warning.textContent = text;
+        els.warning.style.color = color;
+        els.warning.style.background = bgColor;
+    };
+    
+    const clearResults = () => {
+         const tempUnit = D.getElementById('temp-unit').value;
+         els.resultValue.textContent = `N/A °${tempUnit}`;
+         els.warning.textContent = 'Enter valid conditions to calculate.';
+         els.warning.style.background = 'transparent';
+         els.warning.style.color = 'var(--text-color)';
+         lastResult = {};
+    };
+
+    // --- Event Listeners & Init ---
+    els.form.addEventListener('input', calculateWindChill);
+    
+    els.themeToggle.onclick = () => {
+        const theme = D.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        D.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('windChillTheme', theme);
+    };
+
+    const init = () => {
+        const theme = localStorage.getItem('windChillTheme') || 'light';
+        D.documentElement.setAttribute('data-theme', theme);
+        calculateWindChill();
+    };
+
+    // --- Actions ---
+    const generateSummary = (format = 'txt') => {
+        if (!lastResult.windChill_F) return "No calculation performed.";
+        const displayValue = (lastResult.tempUnit === 'C') ? ((lastResult.windChill_F - 32) / 1.8).toFixed(1) : lastResult.windChill_F.toFixed(1);
+
+        const data = [
+            `Input Temperature: ${lastResult.inputTemp} °${lastResult.tempUnit}`,
+            `Input Wind Speed: ${lastResult.inputWind} ${lastResult.speedUnit}`,
+            `Calculated Wind Chill: ${displayValue} °${lastResult.tempUnit}`
+        ];
+        return `Wind Chill Calculation Report:\n` + data.join('\n');
+    };
+
+    D.getElementById('printBtn').onclick = (e) => { e.preventDefault(); window.print(); };
+    D.getElementById('savePdfBtn').onclick = (e) => {
+         e.preventDefault();
+         const { jsPDF } = window.jspdf;
+         html2canvas(D.getElementById('calculator-content')).then(canvas => {
+             const doc = new jsPDF();
+             doc.addImage(canvas.toDataURL('image/png'), 'PNG', 15, 15, 180, 0);
+             doc.save('windchill-report.pdf');
+         });
+    };
+    D.getElementById('saveTxtBtn').onclick = (e) => {
+        e.preventDefault();
+        const blob = new Blob([generateSummary('txt')], {type:'text/plain;charset=utf-8'});
+        const a = D.createElement('a'); a.href = URL.createObjectURL(blob); a.download='windchill-report.txt'; a.click();
+    };
+     D.getElementById('shareBtn').onclick = async () => {
+        const shareData = {
+            title: 'Wind Chill Calculation', text: generateSummary('txt'),
+            url: `${location.origin}${location.pathname}?t=${D.getElementById('temperature').value}&tu=${D.getElementById('temp-unit').value}&w=${D.getElementById('wind-speed').value}&wu=${D.getElementById('speed-unit').value}`
+        };
+        try {
+            await (navigator.share ? navigator.share(shareData) : navigator.clipboard.writeText(shareData.text + `\n${shareData.url}`).then(()=>alert('Results copied!')));
+        } catch(e) { console.error(e); alert('Share failed.');}
+     };
+     
+     // Handle shared links
+     const urlParams = new URLSearchParams(window.location.search);
+     if(urlParams.get('t')) D.getElementById('temperature').value = urlParams.get('t');
+     if(urlParams.get('tu')) D.getElementById('temp-unit').value = urlParams.get('tu');
+     if(urlParams.get('w')) D.getElementById('wind-speed').value = urlParams.get('w');
+     if(urlParams.get('wu')) D.getElementById('speed-unit').value = urlParams.get('wu');
+
+    init();
+});
+</script>
+</body>
+</html>
