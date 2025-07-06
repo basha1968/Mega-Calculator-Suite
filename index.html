@@ -3,1407 +3,900 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator Pro | Your Complete Financial & Mathematical Toolkit</title>
+    <meta name="description" content="160+ free calculators: finance, math, health & more. Instant, accurate tools for everyday calculations. Your complete solution for quick math.">
     
-    <!-- Adquake script (general site ad script) -->
-    <script async src="https://script.adquake.com/js/adquake.js" adquake-key="TAk2wL726Uu77b2hrhWK9g=="></script>
-
-    <!-- Chart.js for graphical visualization (CDN for simplicity) -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
-
-    <!-- =================================================================== -->
-    <!-- SEO OPTIMIZATION -->
-    <!-- =================================================================== -->
-    <title>Loan Amortization Schedule Calculator - Mega Calculator Suite</title>
-    <meta name="description" content=" Generate a detailed loan amortization schedule, calculate monthly payments, total interest, and visualize your debt repayment plan for mortgages, car loans, and more.">
-    <meta name="keywords" content=" amortization calculator, loan payment, loan schedule, interest breakdown, principal payment, debt calculator, financial planning, free online calculator">
-    <link rel="canonical" href="https://your-website-url.com/amortization-calculator.html"> <!-- IMPORTANT: Update canonical URL specific to this calculator page -->
-
-    <!-- Structured Data (JSON-LD) for SEO -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Loan Amortization Schedule Calculator",
-      "description": "A tool to create a detailed amortization schedule for various types of loans.",
-      "applicationCategory": "BrowserApplication",
-      "operatingSystem": "All",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
-    }
-    </script>
-
-    <!-- =================================================================== -->
-    <!-- EMBEDDED CSS STYLES -->
-    <!-- =================================================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* --- General Styling & Variables --- */
         :root {
-            --primary-color: #005A9C; /* A professional blue */
-            --secondary-color: #f4f4f4;
-            --font-color: #333;
-            --border-color: #ddd;
-            --header-bg: #004071;
-            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+            --primary-color: #3b82f6; /* Blue 500 */
+            --primary-dark: #2563eb; /* Blue 600 */
+            --secondary-color: #1e293b; /* Slate 800 */
+            --light-bg: #f1f5f9; /* Slate 100 */
+            --light-card: #ffffff;
+            --text-dark: #0f172a; /* Slate 900 */
+            --text-light: #94a3b8; /* Slate 400 */
+            --border-color: #e2e8f0; /* Slate 200 */
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+            
+            /* Dark mode variables */
+            --dark-bg: #0f172a;
+            --dark-card: #1e293b;
+            --dark-text: #e2e8f0;
+            --dark-border: #334155;
+            
+            /* Theme transition */
+            --transition-speed: 0.3s;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color var(--transition-speed) ease, 
+                        color var(--transition-speed) ease,
+                        border-color var(--transition-speed) ease;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            font-family: 'Inter', system-ui, sans-serif;
             line-height: 1.6;
-            margin: 0;
-            background-color: #f9f9f9;
-            color: var(--font-color);
-        }
-
-        .container {
-            display: flex;
-            max-width: 1400px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-
-        /* --- Header & Footer --- */
-        .main-header, .main-footer {
-            background-color: var(--header-bg);
-            color: white;
-            text-align: center;
-            padding: 1rem;
-        }
-        .main-header h1 { margin: 0; }
-        .main-header p { margin: 5px 0 0; opacity: 0.9; }
-
-        /* --- Sidebar Navigation --- */
-        .sidebar {
-            width: 280px;
-            flex-shrink: 0;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            height: fit-content;
-        }
-
-        .sidebar h2 {
-            margin-top: 0;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-
-        .sidebar details {
-            margin-bottom: 10px;
-        }
-
-        .sidebar summary {
-            font-weight: bold;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 5px;
-            transition: background-color 0.2s;
-        }
-        .sidebar summary:hover {
-            background-color: var(--secondary-color);
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0 0 0 15px;
-            margin-top: 5px;
-        }
-
-        .sidebar li a {
-            display: block;
-            color: var(--font-color);
-            text-decoration: none;
-            padding: 8px;
-            border-radius: 5px;
-            transition: background-color 0.2s, color 0.2s;
-        }
-
-        .sidebar li a:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        /* --- Main Content & Calculator --- */
-        .main-content {
-            flex-grow: 1;
-            margin-left: 20px;
-        }
-
-        .calculator-wrapper {
-            display: none; /* Hidden by default */
-            background: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            animation: fadeIn 0.5s;
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+        
+        main {
+            margin-top: 69px; /* Space for the fixed header */
         }
 
-        .calculator-wrapper.active {
-            display: block; /* Show the selected calculator */
-        }
-
-        .calculator-wrapper h2 {
-            margin-top: 0;
-            color: var(--primary-color);
-            position: relative; /* For the home button */
-            padding-right: 120px; /* Space for the home button */
-        }
-
-        .calculator-wrapper .home-button {
-            position: absolute;
-            right: 0;
+        /* --- HEADER --- */
+        .header {
+            background: var(--light-card);
+            box-shadow: var(--shadow);
+            padding: 0 2rem;
+            position: fixed;
             top: 0;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: background-color 0.2s;
-            text-decoration: none; /* If it's an anchor */
-        }
-
-        .calculator-wrapper .home-button:hover {
-            background-color: #004071; /* Darker primary */
-        }
-
-        .calc-description {
-            font-size: 0.95em;
-            margin-bottom: 20px;
-            color: #555;
-            line-height: 1.5;
-        }
-
-        .calc-form {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            position: relative; /* For tooltips */
-        }
-
-        .form-group label {
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 0.9em;
-            cursor: help; /* Indicate tooltip */
-        }
-        
-        /* Tooltip styling */
-        .form-group label[title]:hover::after {
-            content: attr(title);
-            position: absolute;
-            bottom: 100%; /* Position above label */
-            left: 0;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.8em;
-            white-space: nowrap;
-            z-index: 10;
-            margin-bottom: 5px; /* Space between tooltip and label */
-        }
-
-
-        .form-group input, .form-group select {
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            font-size: 1em;
-            color: var(--font-color);
-        }
-
-        .calc-result {
-            margin-top: 25px;
-            padding: 20px;
-            background-color: var(--secondary-color);
-            border-left: 5px solid var(--primary-color);
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-
-        .calc-result h3 {
-            margin-top: 0;
-            color: var(--primary-color);
-        }
-
-        .calc-result p {
-            font-size: 1.8em;
-            font-weight: bold;
-            margin: 0;
-            color: var(--primary-color);
-        }
-
-        /* 401K specific results layout */
-        .results-401k {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .results-401k > div {
-            background-color: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 1px 5px rgba(0,0,0,0.05);
-        }
-        .results-401k > div h4 {
-            color: var(--primary-color);
-            margin-top: 0;
-            margin-bottom: 5px;
-            font-size: 1.1em;
-        }
-        .results-401k > div p {
-            font-size: 1.5em; /* Smaller for detailed results */
-            font-weight: bold;
-            margin: 0;
-        }
-        .results-401k #k401-projected-balance-inflation-adj {
-            font-size: 1em; /* Smaller for sub-text */
-            font-weight: normal;
-            color: #666;
-            margin-top: 5px;
-        }
-
-        /* Amortization specific results layout */
-        .amort-schedule-container {
-            max-height: 400px;
-            overflow-y: auto;
-            margin-top: 20px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 10px;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .amort-schedule-container h3 {
-            color: var(--primary-color);
-            margin-top: 0;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        .amort-schedule-container table {
             width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9em;
-        }
-        .amort-schedule-container th, .amort-schedule-container td {
-            padding: 8px 12px;
-            border: 1px solid #eee;
-            text-align: left;
-            white-space: nowrap; /* Prevent breaking numeric data */
-        }
-        .amort-schedule-container thead th {
-            background-color: var(--primary-color);
-            color: white;
-            font-weight: bold;
-            position: sticky;
-            top: -10px; /* Adjust if padding pushes it off */
-            z-index: 1;
-        }
-        .amort-schedule-container tbody tr:nth-child(even) {
-            background-color: #f8f8f8;
-        }
-
-
-        .chart-container {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-        }
-        canvas {
-            max-width: 100%;
-            height: auto;
+            z-index: 1000;
         }
         
-        /* Export/Print Button */
-        .export-buttons {
-            text-align: center;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-        .export-buttons button {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.2s;
-            margin: 5px;
-        }
-        .export-buttons button:hover {
-            background-color: #004071;
-        }
-        
-        /* Security Notice */
-        .security-notice {
-            background-color: #ffeccf; /* Light yellow background */
-            border: 1px solid #ffcb8d; /* Orange-yellow border */
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 25px;
-            font-size: 0.9em;
-            color: #7a5000; /* Darker orange text */
-            line-height: 1.5;
-        }
-        .security-notice strong {
-            color: #5a3c00;
+        body.dark-mode .header {
+            background: var(--dark-card);
+            border-bottom: 1px solid var(--dark-border);
         }
 
-        /* --- Advertisement Slots --- */
-        .ad-slot {
-            background-color: #e9e9e9;
-            border: 1px dashed var(--border-color);
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
-            flex-direction: column; 
+            justify-content: space-between;
+            align-items: center;
+            height: 68px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo svg { width: 28px; height: 28px; }
+        
+        .main-nav ul {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        .main-nav ul a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            padding: 0.5rem 0.25rem;
+            position: relative;
+            transition: color 0.2s;
+        }
+        body.dark-mode .main-nav ul a {
+            color: var(--dark-text);
+        }
+        .main-nav ul a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-color);
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        .main-nav ul a:hover {
+            color: var(--primary-color);
+        }
+        .main-nav ul a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        
+        #mobile-menu-btn, #theme-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        #mobile-menu-btn svg, #theme-toggle svg {
+            width: 28px;
+            height: 28px;
+            color: var(--text-dark);
+        }
+        body.dark-mode #mobile-menu-btn svg, 
+        body.dark-mode #theme-toggle svg {
+            color: var(--dark-text);
+        }
+        
+        #theme-toggle {
+            display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
-            text-align: center;
-            padding: 10px; 
-            min-height: 90px; /* Base for ad banners */
-        }
-        .ad-slot-sidebar { min-height: 250px; }
-        .ad-label { color: #999; font-size: 0.8em; margin-bottom: 5px; }
-
-        /* Specific styles for Adsterra/Yllix banners - often their code handles sizing */
-        .ad-adsterra-banner { /* Add specific classes for each ad network if needed */ }
-        .ad-yllix-banner { /* Add specific classes for each ad network if needed */ }
-
-
-        /* --- Responsive Design --- */
-        @media (max-width: 900px) {
-            .container {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-                box-sizing: border-box;
-                margin-bottom: 20px;
-            }
-            .main-content {
-                margin-left: 0;
-            }
-            .calculator-wrapper h2 {
-                padding-right: 0; 
-                display: flex;
-                flex-wrap: wrap; 
-                align-items: center;
-                justify-content: space-between;
-                gap: 10px; 
-            }
-            .calculator-wrapper .home-button {
-                position: relative; 
-                margin-top: 0; 
-                margin-bottom: 0; 
-                width: auto; 
-            }
-            #welcome-message .category-links {
-                flex-direction: column; 
-            }
-            #welcome-message .category-links a {
-                margin-right: 0;
-                margin-bottom: 10px;
-            }
-            .results-401k {
-                grid-template-columns: 1fr; /* Stack results on smaller screens */
-            }
-            .amort-schedule-container table {
-                font-size: 0.8em; /* Smaller font for readability on mobile */
-            }
-        }
-
-        @media (max-width: 480px) {
-            .calc-form {
-                grid-template-columns: 1fr;
-            }
-            .calc-result p {
-                font-size: 1.5em;
-            }
-            .container {
-                padding: 0 10px; 
-            }
-            .calculator-wrapper {
-                padding: 15px; 
-            }
-        }
-
-        /*
-        ====================================================================
-        HOME PAGE ENHANCEMENTS (UI/UX Designer Modifications)
-        ====================================================================
-        */
-        
-        /* Subtle background pattern for a unique texture */
-        #welcome-message {
-            position: relative;
-            overflow: hidden; /* Ensures pseudo-elements don't overflow */
-            background-color: #ffffff;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23005a9c' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            padding: 40px; /* More generous padding */
         }
         
-        /* Gradient text effect for the main title */
-        #welcome-message h2 {
-            font-size: 2.5em;
-            font-weight: 700;
-            background: linear-gradient(45deg, var(--header-bg), var(--primary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
-            margin-bottom: 15px;
-            text-align: center;
+        #mobile-menu {
+            display: none;
+            position: absolute;
+            top: 68px;
+            left: 0;
+            width: 100%;
+            background: var(--light-card);
+            box-shadow: var(--shadow);
+            padding: 1rem 2rem 2rem;
         }
-
-        /* Improved styling for the description */
-        #welcome-message > .calc-description {
-            font-size: 1.1em;
-            color: #444;
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 25px auto;
+        body.dark-mode #mobile-menu {
+            background: var(--dark-card);
+            border-top: 1px solid var(--dark-border);
         }
-        
-        /* Custom styled horizontal rule */
-        .fancy-divider {
-            border: 0;
-            height: 1px;
-            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 90, 156, 0.5), rgba(0, 0, 0, 0));
-            margin: 40px auto;
-            width: 80%;
-        }
-
-        /* Bolder, shorter underline for section titles */
-        #welcome-message .section-title {
-            color: var(--header-bg);
-            margin-top: 40px;
-            margin-bottom: 25px;
-            font-size: 1.6em;
-            text-align: center;
-            border-bottom: 3px solid var(--primary-color);
-            padding-bottom: 8px;
-            display: inline-block; /* To make border only as wide as text */
-            width: auto;
-        }
-        
-        /* Center the section title container */
-        .section-title-container {
-            text-align: center;
-        }
-
-        /* Custom list styling with icons */
-        #welcome-message ul {
+        #mobile-menu ul {
             list-style: none;
-            padding-left: 0;
+        }
+        #mobile-menu ul a {
+            display: block;
+            padding: 1rem 0;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+        body.dark-mode #mobile-menu ul a {
+            color: var(--dark-text);
+            border-color: var(--dark-border);
+        }
+        #mobile-menu ul a:hover {
+            background-color: var(--light-bg);
+        }
+        body.dark-mode #mobile-menu ul a:hover {
+            background-color: rgba(30, 41, 59, 0.5);
+        }
+
+
+        /* --- HERO SECTION --- */
+        .hero {
+            padding: 5rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
             max-width: 700px;
             margin: 0 auto;
         }
-
-        #welcome-message li {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 15px;
-            font-size: 1.05em;
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-
-        #welcome-message li .icon {
-            flex-shrink: 0;
-            margin-right: 15px;
-            color: var(--primary-color);
-            width: 24px;
-            height: 24px;
-            margin-top: 2px;
+        .hero p {
+            font-size: 1.125rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+        }
+        .search-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .search-icon {
+            position: absolute; left: 1rem; top: 50%;
+            transform: translateY(-50%);
+            color: #64748b; /* slate 500 */
+            pointer-events: none;
+        }
+        #search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 50px;
+            box-shadow: var(--shadow-lg);
+            outline: none;
+            transition: all 0.2s ease-in-out;
+            background: white;
+            color: var(--text-dark);
+        }
+        body.dark-mode #search-input {
+            background: #334155;
+            color: var(--dark-text);
+        }
+        #search-input:focus {
+             box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
         }
         
-        /* Enhanced category links with micro-interactions */
-        #welcome-message .category-links {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
+        /* --- CONTENT SECTIONS --- */
+        .tools-section {
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        body.dark-mode .tools-section {
+            border-color: var(--dark-border);
         }
         
-        #welcome-message .category-links a {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary-color);
+            display: inline-block;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .calculator-card {
+            background: var(--light-card);
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: all 0.2s ease-in-out;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        body.dark-mode .calculator-card {
+            background: var(--dark-card);
+            color: var(--dark-text);
+            border: 1px solid var(--dark-border);
+        }
+        .calculator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        .card-icon {
+            padding: 1.5rem;
+            text-align: center;
             background-color: var(--primary-color);
             color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
+        }
+        .card-icon svg { width: 48px; height: 48px; }
+        .card-content {
+            padding: 1.25rem;
+            flex-grow: 1;
+        }
+        .card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        #no-results {
+            display: none;
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-light);
+            font-size: 1.2rem;
+            grid-column: 1 / -1;
+        }
+        body.dark-mode #no-results {
+            color: #94a3b8;
+        }
+        .search-results-title {
+            display: none;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            background: var(--secondary-color);
+            color: var(--light-bg);
+            padding: 4rem 2rem 2rem;
+            margin-top: 3rem;
+        }
+        body.dark-mode .footer {
+            background: #0a101f;
+        }
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        .footer-about .logo { color: var(--light-card); }
+        .footer-about p { margin-top: 1rem; color: var(--text-light); max-width: 300px; }
+        
+        .footer-col h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--light-card);
+        }
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .footer-col a {
             text-decoration: none;
-            font-weight: bold;
-            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: var(--text-light);
+            transition: color 0.2s, padding-left 0.2s;
+        }
+        .footer-col a:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .footer-socials a {
+            color: var(--text-light);
+            transition: color 0.2s, transform 0.2s;
+        }
+        .footer-socials a:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        .footer-socials svg { width: 24px; height: 24px; }
+        
+        .footer-bottom {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #334155; /* Slate 700 */
+            text-align: center;
+            color: var(--text-light);
         }
         
-        #welcome-message .category-links a:hover {
-            background-color: var(--header-bg);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 64, 113, 0.3);
+        /* Theme toggle button */
+        #theme-toggle {
+            margin-left: 1rem;
         }
         
-        /* Animated arrow icon inside the buttons */
-        #welcome-message .category-links a .arrow-icon {
-            transition: transform 0.2s ease-out;
+        /* RESPONSIVE STYLES */
+        @media (max-width: 768px) {
+            main { margin-top: 68px; }
+            .main-nav { display: none; }
+            #mobile-menu-btn { display: block; }
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .calculator-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+            .footer-container { grid-template-columns: 1fr 1fr; }
+            .footer-about { grid-column: 1 / -1; }
         }
-        #welcome-message .category-links a:hover .arrow-icon {
-            transform: translateX(4px);
-        }
+         @media (max-width: 480px) {
+            .container { padding: 0 1rem; }
+            .calculator-grid { grid-template-columns: 1fr; }
+            .footer-container { grid-template-columns: 1fr; }
+         }
     </style>
 </head>
 <body>
-    
-    <header class="main-header">
-        <h1>Mega Calculator Suite</h1>
-        <p>Your one-stop destination for 161 powerful online calculators.</p>
+    <header class="header">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008Zm0 3h.008v.008H8.25v-.008Zm0 3h.008v.008H8.25v-.008Zm3.75 0h.008v.008h-.008v-.008Zm0-3h.008v.008h-.008v-.008Zm0-3h.008v.008h-.008v-.008Zm0-3h.008v.008h-.008v-.008Zm0-3h.008v.008h-.008v-.008Zm-3.75 0h.008v.008H8.25v-.008ZM8.25 9h5.25M8.25 9h5.25M15 9h.008v.008H15V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.5v-7.5A2.25 2.25 0 0 1 5.25 3.75h13.5A2.25 2.25 0 0 1 21 6v10.5m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/></svg>
+                <span>CalculatorPro</span>
+            </a>
+            
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#financial-tools">Financial</a></li>
+                    <li><a href="#math-tools">Math</a></li>
+                    <li><a href="#other-tools">Other</a></li>
+                </ul>
+            </nav>
+            
+            <div style="display: flex; align-items: center;">
+                <button id="theme-toggle" aria-label="Toggle theme">
+                    <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+                    </svg>
+                    <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="display: none;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+                    </svg>
+                </button>
+                <button id="mobile-menu-btn" aria-label="Open Menu">
+                    <svg id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+                    <svg id="menu-icon-close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+        </div>
+        
+        <div id="mobile-menu">
+            <ul>
+                 <li><a href="#financial-tools">Financial Tools</a></li>
+                 <li><a href="#math-tools">Math Tools</a></li>
+                 <li><a href="#other-tools">Other Tools</a></li>
+            </ul>
+        </div>
     </header>
 
-    <div class="container">
-        <!-- Sidebar Navigation -->
-        <nav class="sidebar">
-            <h2>Calculators</h2>
-
-            <!-- ===== ADVERTISEMENT SLOT 1 (Sidebar) - Adsterra Recommended: Social Bar/Popunder (handled globally) or Direct Link for banner image/native ads (if custom banner) ===== -->
-            <div class="ad-slot ad-slot-sidebar ad-adsterra-sidebar">
-                <p class="ad-label">Advertisement (Adsterra 300x250 or equivalent)</p>
-                <!-- Place your Adsterra 300x250 or responsive sidebar ad code here -->
-                <!-- EXAMPLE Placeholder - REPLACE WITH REAL CODE -->
-                <img src="https://via.placeholder.com/300x250?text=Adsterra+Ad+300x250" alt="Adsterra Sidebar Ad" style="max-width:100%; height:auto; display:block;">
-                <!-- /EXAMPLE Placeholder -->
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>The Ultimate Calculator Suite</h1>
+                <!-- Updated text from 161 to 160 -->
+                <p>160 powerful and easy-to-use tools for finance, math, and everyday life. Find your calculator instantly.</p>
+                <div class="search-container">
+                     <div class="search-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+                    </div>
+                    <input type="text" id="search-input" placeholder="e.g., Mortgage, Percentage, BMI...">
+                </div>
             </div>
-            <!-- ========================================== -->
+        </section>
+
+        <div class="container">
+            <section class="tools-section" id="financial-tools">
+                <h2 class="section-title">Financial Tools</h2>
+                <div class="calculator-grid" id="financial-grid">
+                    <!-- Financial calculators will be inserted here -->
+                </div>
+            </section>
             
-            <details open>
-                <summary>Financial Calculators</summary>
-                <ul>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.1.html" onclick="showCalculator('calc-401k')">401K Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.2.html" onclick="showCalculator('calc-amortization')">Amortization Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.3.html" onclick="showCalculator('calc-annuity')">Annuity Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.4.html" onclick="showCalculator('calc-annuity-payout')">Annuity Payout Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.5.html" onclick="showCalculator('calc-apr')">APR Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.6.html" onclick="showCalculator('calc-auto-lease')">Auto Lease Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.7.html" onclick="showCalculator('calc-auto-loan')">Auto Loan Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.8.html" onclick="showCalculator('calc-average-return')">Average Return Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.9.html" onclick="showCalculator('calc-boat-loan')">Boat Loan Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.10.html" onclick="showCalculator('calc-bond')">Bond Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.11.html" onclick="showCalculator('calc-budget')">Budget Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.12.html" onclick="showCalculator('calc-business-loan')">Business Loan Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.13.html" onclick="showCalculator('calc-canadian-mortgage')">Canadian Mortgage Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.14.html" onclick="showCalculator('calc-cash-back-or-low-interest')">Cash Back or Low Interest</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.15.html" onclick="showCalculator('calc-cd')">CD Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.16.html" onclick="showCalculator('calc-college-cost')">College Cost Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.17.html" onclick="showCalculator('calc-commission')">Commission Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.18.html" onclick="showCalculator('calc-compound-interest')">Compound Interest Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.19.html" onclick="showCalculator('calc-credit-card')">Credit Card Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.20.html" onclick="showCalculator('calc-credit-cards-payoff')">Credit Cards Payoff Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.21.html" onclick="showCalculator('calc-currency')">Currency Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.22.html" onclick="showCalculator('calc-debt-consolidation')">Debt Consolidation Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.23.html" onclick="showCalculator('calc-debt-payoff')">Debt Payoff Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.24.html" onclick="showCalculator('calc-debt-to-income-ratio')">Debt-to-Income Ratio</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.25.html" onclick="showCalculator('calc-depreciation')">Depreciation Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.26.html" onclick="showCalculator('calc-discount')">Discount Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.27.html" onclick="showCalculator('calc-down-payment')">Down Payment Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.28.html" onclick="showCalculator('calc-estate-tax')">Estate Tax Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.29.html" onclick="showCalculator('calc-fha-loan')">FHA Loan Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.30.html" onclick="showCalculator('calc-finance')">Finance Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.31.html" onclick="showCalculator('calc-future-value')">Future Value Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.32.html" onclick="showCalculator('calc-house-affordability')">House Affordability</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.33.html" onclick="showCalculator('calc-income-tax')">Income Tax Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.34.html" onclick="showCalculator('calc-inflation')">Inflation Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.35.html" onclick="showCalculator('calc-interest')">Interest Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.36.html" onclick="showCalculator('calc-interest-rate')">Interest Rate Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.37.html" onclick="showCalculator('calc-investment')">Investment Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.38.html" onclick="showCalculator('calc-ira')">IRA Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.39.html" onclick="showCalculator('calc-irr')">IRR Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.40.html" onclick="showCalculator('calc-lease')">Lease Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.41.html" onclick="showCalculator('calc-loan')">Loan Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.42.html" onclick="showCalculator('calc-margin')">Margin Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.43.html" onclick="showCalculator('calc-marriage-tax')">Marriage Tax Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.44.html" onclick="showCalculator('calc-mortgage-amortization')">Mortgage Amortization</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.45.html" onclick="showCalculator('calc-mortgage')">Mortgage Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.46.html" onclick="showCalculator('calc-mortgage-uk')">Mortgage Calculator UK</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.47.html" onclick="showCalculator('calc-mortgage-payoff')">Mortgage Payoff Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.48.html" onclick="showCalculator('calc-payback-period')">Payback Period Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.49.html" onclick="showCalculator('calc-payment')">Payment Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.50.html" onclick="showCalculator('calc-pension')">Pension Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.51.html" onclick="showCalculator('calc-percent-off')">Percent Off Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.52.html" onclick="showCalculator('calc-personal-loan')">Personal Loan Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.53.html" onclick="showCalculator('calc-present-value')">Present Value Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.54.html" onclick="showCalculator('calc-real-estate')">Real Estate Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.55.html" onclick="showCalculator('calc-refinance')">Refinance Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.56.html" onclick="showCalculator('calc-rent')">Rent Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.57.html" onclick="showCalculator('calc-rent-vs-buy')">Rent vs. Buy Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.58.html" onclick="showCalculator('calc-rental-property')">Rental Property Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.59.html" onclick="showCalculator('calc-repayment')">Repayment Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.60.html" onclick="showCalculator('calc-retirement')">Retirement Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.61.html" onclick="showCalculator('calc-rmd')">RMD Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.62.html" onclick="showCalculator('calc-roi')">ROI Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.63.html" onclick="showCalculator('calc-roth-ira')">Roth IRA Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.64.html" onclick="showCalculator('calc-salary')">Salary Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.65.html" onclick="showCalculator('calc-sales-tax')">Sales Tax Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.66.html" onclick="showCalculator('calc-savings')">Savings Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.67.html" onclick="showCalculator('calc-simple-interest')">Simple Interest Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.68.html" onclick="showCalculator('calc-social-security')">Social Security Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.69.html" onclick="showCalculator('calc-student-loan')">Student Loan Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.70.html" onclick="showCalculator('calc-take-home-paycheck')">Take-Home-Paycheck</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.71.html" onclick="showCalculator('calc-va-mortgage')">VA Mortgage Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/1.72.html" onclick="showCalculator('calc-vat')">VAT Calculator</a></li>
-                </ul>
-            </details>
-            <details>
-                <summary>Math Calculators</summary>
-                <ul>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.1.html" onclick="showCalculator('calc-area')">Area Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.2.html" onclick="showCalculator('calc-army-body-fat')">Army Body Fat Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.3.html" onclick="showCalculator('calc-average')">Average Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.4.html" onclick="showCalculator('calc-bac')">BAC Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.5.html" onclick="showCalculator('calc-basic')">Basic Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.6.html" onclick="showCalculator('calc-binary')">Binary Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.7.html" onclick="showCalculator('calc-bmr')">BMR Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.8.html" onclick="showCalculator('calc-body-type')">Body Type Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.9.html" onclick="showCalculator('calc-calorie')">Calorie Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.10.html" onclick="showCalculator('calc-calories-burned')">Calories Burned Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.11.html" onclick="showCalculator('calc-circle')">Circle Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.12.html" onclick="showCalculator('calc-due-date')">Due Date Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.13.html" onclick="showCalculator('calc-fat-intake')">Fat Intake Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.14.html" onclick="showCalculator('calc-gcf')">Greatest Common Factor</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.15.html" onclick="showCalculator('calc-half-life')">Half-Life Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.16.html" onclick="showCalculator('calc-ideal-weight')">Ideal Weight Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.17.html" onclick="showCalculator('calc-lean-body-mass')">Lean Body Mass Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.18.html" onclick="showCalculator('calc-mean-median-mode')">Mean, Median, Mode</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.19.html" onclick="showCalculator('calc-ovulation')">Ovulation Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.20.html" onclick="showCalculator('calc-percent-error')">Percent Error Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.21.html" onclick="showCalculator('calc-percentage')">Percentage Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.22.html" onclick="showCalculator('calc-period')">Period Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.23.html" onclick="showCalculator('calc-pregnancy-weight-gain')">Pregnancy Weight Gain</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.24.html" onclick="showCalculator('calc-prime-factorization')">Prime Factorization</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.25.html" onclick="showCalculator('calc-probability')">Probability Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.26.html" onclick="showCalculator('calc-pythagorean-theorem')">Pythagorean Theorem</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.27.html" onclick="showCalculator('calc-random-number')">Random Number Generator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.28.html" onclick="showCalculator('calc-ratio')">Ratio Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.26.html" onclick="showCalculator('calc-root')">Root Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.30.html" onclick="showCalculator('calc-rounding')">Rounding Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.31.html" onclick="showCalculator('calc-scientific')">Scientific Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.32.html" onclick="showCalculator('calc-scientific-notation')">Scientific Notation</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.33.html" onclick="showCalculator('calc-slope')">Slope Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.34.html" onclick="showCalculator('calc-target-heart-rate')">Target Heart Rate</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.35.html" onclick="showCalculator('calc-volume')">Volume Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.36.html" onclick="showCalculator('calc-ww-points')">Weight Watcher Points</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/2.37.html" onclick="showCalculator('calc-z-score')">Z-score Calculator</a></li>
-                </ul>
-            </details>
-            <details>
-                <summary>Other Calculators</summary>
-                <ul>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.1.html" onclick="showCalculator('calc-age')">Age Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.2.html" onclick="showCalculator('calc-bandwidth')">Bandwidth Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.3.html" onclick="showCalculator('calc-bra-size')">Bra Size Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.4.html" onclick="showCalculator('calc-btu')">BTU Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.5.html" onclick="showCalculator('calc-concrete')">Concrete Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.6.html" onclick="showCalculator('calc-conversion')">Conversion Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.7.html" onclick="showCalculator('calc-date')">Date Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.8.html" onclick="showCalculator('calc-day-counter')">Day Counter</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.9.html" onclick="showCalculator('calc-day-of-week')">Day of the Week Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.10.html" onclick="showCalculator('calc-density')">Density Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.11.html" onclick="showCalculator('calc-dew-point')">Dew Point Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.12.html" onclick="showCalculator('calc-dice-roller')">Dice Roller</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.13.html" onclick="showCalculator('calc-electricity')">Electricity Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.14.html" onclick="showCalculator('calc-engine-horsepower')">Engine Horsepower</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.15.html" onclick="showCalculator('calc-fuel-cost')">Fuel Cost Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.16.html" onclick="showCalculator('calc-gas-mileage')">Gas Mileage Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.17.html" onclick="showCalculator('calc-gdp')">GDP Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.18.html" onclick="showCalculator('calc-golf-handicap')">Golf Handicap Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.19.html" onclick="showCalculator('calc-gpa')">GPA Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.20.html" onclick="showCalculator('calc-grade')">Grade Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.21.html" onclick="showCalculator('calc-gravel')">Gravel Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.22.html" onclick="showCalculator('calc-heat-index')">Heat Index Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.23.html" onclick="showCalculator('calc-height')">Height Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.24.html" onclick="showCalculator('calc-horsepower')">Horsepower Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.25.html" onclick="showCalculator('calc-hours')">Hours Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.26.html" onclick="showCalculator('calc-ip-subnet')">IP Subnet Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.27.html" onclick="showCalculator('calc-love')">Love Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.28.html" onclick="showCalculator('calc-mass')">Mass Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.29.html" onclick="showCalculator('calc-mileage')">Mileage Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.30.html" onclick="showCalculator('calc-molarity')">Molarity Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.31.html" onclick="showCalculator('calc-molecular-weight')">Molecular Weight</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.32.html" onclick="showCalculator('calc-mulch')">Mulch Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.33.html" onclick="showCalculator('calc-ohms-law')">Ohm's Law Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.34.html" onclick="showCalculator('calc-password-generator')">Password Generator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.35.html" onclick="showCalculator('calc-resistor')">Resistor Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.36.html" onclick="showCalculator('calc-roman-numeral')">Roman Numeral Converter</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.37.html" onclick="showCalculator('calc-roofing')">Roofing Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.38.html" onclick="showCalculator('calc-shoe-size')">Shoe Size Conversion</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.39.html" onclick="showCalculator('calc-sleep')">Sleep Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.40.html" onclick="showCalculator('calc-speed')">Speed Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.41.html" onclick="showCalculator('calc-square-footage')">Square Footage Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.42.html" onclick="showCalculator('calc-stair')">Stair Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.43.html" onclick="showCalculator('calc-tile')">Tile Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.44.html" onclick="showCalculator('calc-time')">Time Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.45.html" onclick="showCalculator('calc-time-card')">Time Card Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.46.html" onclick="showCalculator('calc-time-duration')">Time Duration Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.47.html" onclick="showCalculator('calc-time-zone')">Time Zone Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.48.html" onclick="showCalculator('calc-tip')">Tip Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.49.html" onclick="showCalculator('calc-tire-size')">Tire Size Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.50.html" onclick="showCalculator('calc-voltage-drop')">Voltage Drop Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.51.html" onclick="showCalculator('calc-weight')">Weight Calculator</a></li>
-                    <li><a href="https://basha1968.github.io/Mega-Calculator-Suite/3.52.html" onclick="showCalculator('calc-wind-chill')">Wind Chill Calculator</a></li>
-                </ul>
-            </details>
-        </nav>
+            <section class="tools-section" id="math-tools">
+                 <h2 class="section-title">Math & Science Tools</h2>
+                <div class="calculator-grid" id="math-grid">
+                    <!-- Math calculators will be inserted here -->
+                </div>
+            </section>
+            
+            <section class="tools-section" id="other-tools" style="border-bottom:none;">
+                <h2 class="section-title">Health & Lifestyle Tools</h2>
+                <div class="calculator-grid" id="other-grid">
+                     <!-- Other calculators will be inserted here -->
+                </div>
+            </section>
+            
+            <section id="search-results-section" style="display:none;">
+                 <h2 class="section-title search-results-title">Search Results</h2>
+                 <div class="calculator-grid" id="search-grid">
+                     <!-- Search results will be inserted here -->
+                 </div>
+                 <div id="no-results">
+                    <h3>No calculators found for your search.</h3>
+                    <p>Try a different term or browse the categories above.</p>
+                </div>
+            </section>
+        </div>
+    </main>
 
-        <!-- Main Content Area -->
-        <main class="main-content">
-            <!-- ===== ADVERTISEMENT SLOT 2 (Top Banner) - Adsterra Recommended: 728x90 Banner or similar responsive display ===== -->
-            <div class="ad-slot ad-slot-banner ad-adsterra-banner">
-                <p class="ad-label">Advertisement (Adsterra 728x90 Banner)</p>
-                <!-- Place your Adsterra 728x90 or responsive banner ad code here -->
-                <!-- EXAMPLE Placeholder - REPLACE WITH REAL CODE -->
-                <img src="https://via.placeholder.com/728x90?text=Adsterra+Ad+728x90" alt="Adsterra Banner Ad" style="max-width:100%; height:auto; display:block;">
-                <!-- /EXAMPLE Placeholder -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col footer-about">
+                 <a href="#" class="logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008Zm0 3h.008v.008H8.25v-.008Zm0 3h.008v.008H8.25v-.008Zm3.75 0h.008v.008h-.008v-.008Zm0-3h.008v.008h-.008v-.008Zm0-3h.008v.008h-.008v-.008Zm0-3h.008v.008h-.008v-.008Zm0-3h.008v.008h-.008v-.008Zm-3.75 0h.008v.008H8.25v-.008ZM8.25 9h5.25M8.25 9h5.25M15 9h.008v.008H15V9z"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.5v-7.5A2.25 2.25 0 0 1 5.25 3.75h13.5A2.25 2.25 0 0 1 21 6v10.5m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/></svg>
+                    <span>CalculatorPro</span>
+                </a>
+                <p>Providing a comprehensive suite of accurate and free online tools to simplify your calculations.</p>
+                <div class="footer-socials">
+                    <a href="#" aria-label="Twitter"><svg fill="currentColor" viewBox="0 0 16 16"><path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"/></svg></a>
+                    <a href="#" aria-label="Github"><svg fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg></a>
+                    <a href="#" aria-label="LinkedIn"><svg fill="currentColor" viewBox="0 0 16 16"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/></svg></a>
+                </div>
             </div>
-            <!-- ============================================ -->
-
-            <div id="calculator-container">
-                <!-- ================================================================================= -->
-                <!-- UPDATED & ENHANCED WELCOME MESSAGE / HOME PAGE -->
-                <!-- ================================================================================= -->
-                <div id="welcome-message" class="calculator-wrapper active">
-                    <h2>Welcome to the Mega Calculator Suite!</h2>
-                    <p class="calc-description">
-                        Your ultimate hub for a vast array of free online calculators. Whether you're managing finances, solving complex math problems, or optimizing your health, our comprehensive suite provides accurate and instant results.
-                    </p>
-
-                    <hr class="fancy-divider">
-
-                    <div class="section-title-container">
-                        <h3 class="section-title">Why Choose Our Calculators?</h3>
-                    </div>
-                    <ul>
-                        <li>
-                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
-                            <span><strong>Comprehensive:</strong> Access 161 specialized calculators spanning Financial, Math, and General categories.</span>
-                        </li>
-                        <li>
-                           <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 1-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 1 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 1 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 1-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" /></svg>
-                            <span><strong>User-Friendly:</strong> Enjoy a clean, intuitive design engineered for effortless navigation and input.</span>
-                        </li>
-                        <li>
-                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg>
-                            <span><strong>Fully Responsive:</strong> Seamlessly switch between any device – desktop, tablet, or mobile – without compromise.</span>
-                        </li>
-                        <li>
-                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
-                            <span><strong>Accurate & Reliable:</strong> Benefit from tools developed with precision and trusted algorithms for dependable results.</span>
-                        </li>
-                    </ul>
-
-                    <div class="section-title-container">
-                        <h3 class="section-title">Explore by Category</h3>
-                    </div>
-                    <div class="category-links">
-                        <!-- CORRECTED onlick HANDLERS -->
-                        <a href="#" onclick="return expandAndFocusCategory(1);">
-                            Financial Calculators 
-                            <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/></svg>
-                        </a>
-                        <a href="#" onclick="return expandAndFocusCategory(2);">
-                            Math Calculators
-                            <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/></svg>
-                        </a>
-                        <a href="#" onclick="return expandAndFocusCategory(3);">
-                            Other Calculators
-                            <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/></svg>
-                        </a>
-                    </div>
-                </div>
-                <!-- ================================================================================= -->
-                <!-- END OF HOME PAGE ENHANCEMENTS -->
-                <!-- ================================================================================= -->
-
-                <!-- 
-                ====================================================================
-                IMPLEMENTED: Amortization Calculator (Financial)
-                ====================================================================
-                -->
-                <div id="calc-amortization" class="calculator-wrapper">
-                    <h2>Amortization Calculator <a href="#" class="home-button" onclick="return goHome()">Home</a></h2>
-                    <p class="calc-description">Visualize your loan repayment journey with a detailed amortization schedule, showing how much principal and interest you pay with each installment.</p>
-
-                    <!-- ===== ADVERTISEMENT SLOT for YLLIX Banner (can be inside specific calculators) ===== -->
-                    <div class="ad-slot ad-yllix-banner">
-                        <p class="ad-label">Advertisement (Yllix Banner 728x90 or responsive)</p>
-                        <!-- Place your Yllix banner ad code here --> <ins style="width: 728px;height:90px" data-width="728" data-height="90" class="bc7507a3dff" data-domain="//data963.click" data-affquery="/cd7aa3640ecfe9f59023/c7507a3dff/?placementName=default"><script src="//data963.click/js/responsive.js" async></script></ins>
-                        <!-- EXAMPLE Placeholder - REPLACE WITH REAL CODE -->
-                        <img src="https://via.placeholder.com/728x90?text=Yllix+Ad+Amortization" alt="Yllix Banner Ad" style="max-width:100%; height:auto; display:block;">
-                        <!-- /EXAMPLE Placeholder -->
-                    </div>
-                    <!-- ============================================================== -->
-
-                    <div class="calc-form">
-                        <div class="form-group">
-                            <label for="amort-amount" title="The total amount of the loan.">Loan Amount ($)</label>
-                            <input type="number" id="amort-amount" value="200000" min="0" oninput="calculateAmortization()">
-                        </div>
-                        <div class="form-group">
-                            <label for="amort-interest" title="The annual interest rate for the loan.">Interest Rate (%)</label>
-                            <input type="number" id="amort-interest" value="6.5" min="0" step="0.01" oninput="calculateAmortization()">
-                        </div>
-                        <div class="form-group">
-                            <label for="amort-term" title="The total number of years over which the loan will be repaid.">Loan Term (Years)</label>
-                            <input type="number" id="amort-term" value="30" min="1" max="60" oninput="calculateAmortization()">
-                        </div>
-                    </div>
-
-                    <div class="calc-result">
-                        <h3>Summary:</h3>
-                        <p id="amort-monthly-payment">Monthly Payment: $0.00</p>
-                        <p id="amort-total-interest">Total Interest Paid: $0.00</p>
-                        <p id="amort-total-payments">Total Payments: $0.00</p>
-                    </div>
-
-                    <div class="amort-schedule-container" role="region" aria-labelledby="amort-schedule-table-title" tabindex="0">
-                        <h3 id="amort-schedule-table-title">Amortization Schedule:</h3>
-                        <table id="amort-schedule-table">
-                            <thead>
-                                <tr>
-                                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Payment No.</th>
-                                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Payment</th>
-                                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Principal</th>
-                                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Interest</th>
-                                    <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Balance</th>
-                                </tr>
-                            </thead>
-                            <tbody id="amort-schedule-tbody">
-                                <!-- Schedule rows will be inserted here by JavaScript -->
-                            </tbody>
-                        </table>
-                        <p id="amort-no-results-msg" style="text-align: center; color: #777; margin-top: 15px;">Enter loan details to generate schedule.</p>
-                    </div>
-
-                    <div class="export-buttons">
-                        <button onclick="window.print()">Print Schedule</button>
-                        <button onclick="copyAmortizationResults()">Copy Results</button>
-                    </div>
-
-                    <div class="security-notice" role="alert" aria-live="polite">
-                        <p><strong>Privacy and Security Notice:</strong> This Amortization Calculator operates entirely on your web browser. All calculations are performed client-side, meaning your personal financial data is <strong>never stored on our servers, transmitted, or shared with third parties</strong>. Your input stays confidential to your browser session. For sensitive data input, please ensure you are using a secure internet connection (HTTPS, which this site provides). This tool offers estimates only and should not replace professional financial advice.</p>
-                    </div>
-                </div>
-
-                <!-- 
-                ====================================================================
-                IMPLEMENTED: 401(k) Retirement Calculator (Financial)
-                ====================================================================
-                -->
-                <div id="calc-401k" class="calculator-wrapper">
-                    <h2>401(k) Retirement Calculator <a href="#" class="home-button" onclick="return goHome()">Home</a></h2>
-                    <p class="calc-description">
-                        Project your 401(k) balance at retirement. This calculator helps you visualize your future savings by
-                        accounting for current balance, annual contributions, expected returns, and inflation.
-                    </p>
-
-                    <!-- ===== ADVERTISEMENT SLOT for YLLIX Banner (can be inside specific calculators) ===== -->
-                    <div class="ad-slot ad-yllix-banner">
-                        <p class="ad-label">Advertisement (Yllix Banner 728x90 or responsive)</p>
-                        <!-- Place your Yllix banner ad code here -->
-                        <!-- EXAMPLE Placeholder - REPLACE WITH REAL CODE -->
-                        <img src="https://via.placeholder.com/728x90?text=Yllix+Ad+728x90" alt="Yllix Banner Ad" style="max-width:100%; height:auto; display:block;">
-                        <!-- /EXAMPLE Placeholder -->
-                    </div>
-                    <!-- ============================================================== -->
-
-                    <div class="calc-form">
-                        <div class="form-group">
-                            <label for="k401-current-age" title="Your current age in years.">Current Age</label>
-                            <input type="number" id="k401-current-age" value="30" min="18" max="60" oninput="calculate401k()">
-                        </div>
-                        <div class="form-group">
-                            <label for="k401-retirement-age" title="The age you plan to retire.">Retirement Age</label>
-                            <input type="number" id="k401-retirement-age" value="65" min="30" max="90" oninput="calculate401k()">
-                        </div>
-                        <div class="form-group">
-                            <label for="k401-current-balance" title="Your current 401(k) balance.">Current 401(k) Balance ($)</label>
-                            <input type="number" id="k401-current-balance" value="50000" min="0" oninput="calculate401k()">
-                        </div>
-                        <div class="form-group">
-                            <label for="k401-annual-salary" title="Your current gross annual salary.">Annual Salary ($)</label>
-                            <input type="number" id="k401-annual-salary" value="70000" min="0" oninput="calculate401k()">
-                        </div>
-                        <div class="form-group">
-                            <label for="k401-contribution-perc" title="Your personal contribution percentage (e.g., 6 for 6%).">Employee Contribution (%)</label>
-                            <input type="number" id="k401-contribution-perc" value="6" min="0" max="100" step="0.1" oninput="calculate401k()">
-                        </div>
-                         <div class="form-group">
-                            <label for="k401-employer-match-perc" title="Your employer's matching contribution percentage (e.g., 3 for 3%).">Employer Match (%)</label>
-                            <input type="number" id="k401-employer-match-perc" value="3" min="0" max="100" step="0.1" oninput="calculate401k()">
-                        </div>
-                        <div class="form-group">
-                            <label for="k401-expected-return" title="Expected annual return on investments (e.g., 7 for 7%). This is a nominal rate.">Expected Annual Return (%)</label>
-                            <input type="number" id="k401-expected-return" value="7" min="-50" max="50" step="0.1" oninput="calculate401k()">
-                        </div>
-                        <div class="form-group">
-                            <label for="k401-inflation-rate" title="Expected average annual inflation rate (e.g., 2.5 for 2.5%). Used for real return calculations.">Inflation Rate (%)</label>
-                            <input type="number" id="k401-inflation-rate" value="2.5" min="-10" max="10" step="0.1" oninput="calculate401k()">
-                        </div>
-                    </div>
-
-                    <div class="calc-result">
-                        <h3>Projected Balance at Retirement:</h3>
-                        <p id="k401-projected-balance">$0.00</p>
-                        <p id="k401-projected-balance-inflation-adj">( $0.00 in today's dollars )</p>
-                    </div>
-
-                    <div class="results-401k">
-                        <div>
-                            <h4>Total Contributions:</h4>
-                            <p id="k401-total-contributions">$0.00</p>
-                        </div>
-                        <div>
-                            <h4>Total Earnings:</h4>
-                            <p id="k401-total-earnings">$0.00</p>
-                        </div>
-                        <div>
-                            <h4>Years Until Retirement:</h4>
-                            <p id="k401-years-to-retirement">0 Years</p>
-                        </div>
-                    </div>
-                    
-                    <div class="chart-container">
-                        <h3>Growth Projection Chart</h3>
-                        <canvas id="k401Chart" aria-label="401k Growth Projection Chart" role="img"></canvas>
-                        <p style="font-size:0.8em; color:#777; margin-top:10px;">This chart illustrates the growth of your 401(k) balance over time, displaying both nominal value and inflation-adjusted (real) value.</p>
-                    </div>
-
-                    <div class="export-buttons">
-                        <button onclick="window.print()">Print Results</button>
-                        <button onclick="copyResults()">Copy Results</button>
-                    </div>
-
-                    <div class="security-notice" role="alert" aria-live="polite">
-                        <p><strong>Privacy and Security Notice:</strong> This 401(k) Calculator operates entirely on your web browser. All calculations are performed client-side, meaning your personal financial data is <strong>never stored on our servers, transmitted, or shared with third parties</strong>. Your input stays confidential to your browser session. For sensitive data input, please ensure you are using a secure internet connection (HTTPS, which this site provides). This tool offers estimates only and should not replace professional financial advice.</p>
-                    </div>
-                </div>
-
-
-                <!-- EXAMPLE 1: Mortgage Calculator (Financial) - FULLY WORKING (original code for reference) -->
-                <div id="calc-mortgage" class="calculator-wrapper">
-                    <h2>Mortgage Calculator <a href="#" class="home-button" onclick="return goHome()">Home</a></h2>
-                    <p class="calc-description">
-                        Estimate your monthly mortgage payments with ease. Simply enter your loan amount, interest rate, and term to see your estimated payment schedule and total cost.
-                    </p>
-                    <div class="calc-form">
-                        <div class="form-group">
-                            <label for="mortgage-amount" title="The total amount of the loan you are seeking.">Loan Amount ($)</label>
-                            <input type="number" id="mortgage-amount" placeholder="e.g., 300000" oninput="calculateMortgage()">
-                        </div>
-                        <div class="form-group">
-                            <label for="mortgage-interest" title="The annual interest rate of the loan.">Interest Rate (%)</label>
-                            <input type="number" id="mortgage-interest" placeholder="e.g., 6.5" oninput="calculateMortgage()">
-                        </div>
-                        <div class="form-group">
-                            <label for="mortgage-term" title="The number of years over which you will repay the loan.">Loan Term (Years)</label>
-                            <input type="number" id="mortgage-term" placeholder="e.g., 30" oninput="calculateMortgage()">
-                        </div>
-                    </div>
-                    <div class="calc-result">
-                        <h3>Your Monthly Payment:</h3>
-                        <p id="mortgage-result">$0.00</p>
-                    </div>
-                </div>
-
-                <!-- EXAMPLE 2: Percentage Calculator (Math) - FULLY WORKING (original code for reference) -->
-                <div id="calc-percentage" class="calculator-wrapper">
-                    <h2>Percentage Calculator <a href="#" class="home-button" onclick="return goHome()">Home</a></h2>
-                    <p class="calc-description">
-                        Quickly calculate any percentage of a given number. Ideal for discounts, tips, grades, and financial calculations where proportions matter.
-                    </p>
-                    <div class="calc-form">
-                        <div class="form-group">
-                            <label for="percentage-value" title="The percentage value you want to calculate (e.g., 5 for 5%).">What is</label>
-                            <input type="number" id="percentage-value" placeholder="e.g., 5" oninput="calculatePercentage()">
-                        </div>
-                        <div class="form-group">
-                            <label for="percentage-of" title="The total amount from which you want to calculate the percentage.">% of</label>
-                            <input type="number" id="percentage-of" placeholder="e.g., 150" oninput="calculatePercentage()">
-                        </div>
-                    </div>
-                    <div class="calc-result">
-                        <h3>Result:</h3>
-                        <p id="percentage-result">0</p>
-                    </div>
-                </div>
-                
-                <!-- EXAMPLE 3: Age Calculator (Other) - FULLY WORKING (original code for reference) -->
-                <div id="calc-age" class="calculator-wrapper">
-                    <h2>Age Calculator <a href="#" class="home-button" onclick="return goHome()">Home</a></h2>
-                    <p class="calc-description">
-                        Find out your precise age in years, months, and days based on your birth date, or calculate the time difference between two dates.
-                    </p>
-                    <div class="calc-form">
-                        <div class="form-group">
-                            <label for="birth-date" title="Enter your date of birth.">Your Date of Birth</label>
-                            <input type="date" id="birth-date" oninput="calculateAge()">
-                        </div>
-                    </div>
-                    <div class="calc-result">
-                        <h3>Your Age Is:</h3>
-                        <p id="age-result">-- years, -- months, -- days</p>
-                    </div>
-                </div>
-
-                <!-- ... Add divs for all 158 other calculators here using the same format ... -->
-                <div id="calc-vat" class="calculator-wrapper"><h2>VAT Calculator <a href="#" class="home-button" onclick="return goHome()">Home</a></h2><p class="calc-description">Quickly calculate Value Added Tax (VAT) to determine prices with or without tax included.</p><p>The form and logic for this calculator need to be implemented.</p></div>
-                
+            <div class="footer-col">
+                <h4>Categories</h4>
+                <ul>
+                    <li><a href="#financial-tools">Financial Tools</a></li>
+                    <li><a href="#math-tools">Math Tools</a></li>
+                    <li><a href="#other-tools">Lifestyle Tools</a></li>
+                </ul>
             </div>
-             <!-- ===== ADVERTISEMENT SLOT 3 (Bottom Banner) - YLLIX Recommended: 728x90 Banner or Popunder (globally) ===== -->
-            <div class="ad-slot ad-slot-banner ad-yllix-bottom-banner">
-                <p class="ad-label">Advertisement (Yllix Banner 728x90)</p>
-                <!-- Place your Yllix banner ad code here -->
-                <!-- EXAMPLE Placeholder - REPLACE WITH REAL CODE -->
-                <img src="https://via.placeholder.com/728x90?text=Yllix+Bottom+Ad" alt="Yllix Bottom Banner Ad" style="max-width:100%; height:auto; display:block;">
-                <!-- /EXAMPLE Placeholder -->
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
             </div>
-            <!-- ============================================ -->
-        </main>
-    </div>
-
-    <footer class="main-footer">
-        <p>© 2023 Mega Calculator Suite. All Rights Reserved. <span class="disclaimer" style="font-size:0.8em; opacity:0.8;">Disclaimer: Calculations are estimates and should not be considered financial advice.</span></p>
+        </div>
+        <div class="footer-bottom">
+            © 2025 CalculatorPro | All rights reserved.
+        </div>
     </footer>
+    
 
-    <!-- =================================================================== -->
-    <!-- EMBEDDED JAVASCRIPT LOGIC -->
-    <!-- =================================================================== -->
     <script>
-    // Global variable for the chart instance
-    let k401ChartInstance;
+    document.addEventListener('DOMContentLoaded', function () {
+        // --- DATA ---
+        const calculators = [
+            // Financial (72)
+            { name: '401K Calculator', category: 'Financial', link: 'The-Ultimate-Free-Calculator-Suite/1.2.html/', tags: 'retirement savings investment' },
+            { name: 'Amortization Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.2.html', tags: 'loan mortgage payment schedule' },
+            { name: 'Annuity Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.3.html', tags: 'retirement investment' },
+            { name: 'Annuity Payout Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.4.html', tags: 'retirement income' },
+            { name: 'APR Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.5.html', tags: 'interest loan credit card' },
+            { name: 'Auto Lease Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.6.html', tags: 'car vehicle leasing' },
+            { name: 'Auto Loan Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.7.html', tags: 'car vehicle payment' },
+            { name: 'Average Return Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.8.html', tags: 'investment stocks' },
+            { name: 'Boat Loan Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.9.html', tags: 'loan payment' },
+            { name: 'Bond Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.10.html', tags: 'investment fixed income' },
+            { name: 'Budget Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.11.html', tags: 'personal finance spending' },
+            { name: 'Business Loan Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.12.html', tags: 'corporate finance' },
+            { name: 'Canadian Mortgage Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.13.html', tags: 'home loan canada' },
+            { name: 'Cash Back or Low Interest', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.14.html', tags: 'rewards credit card apr' },
+            { name: 'CD Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.15.html', tags: 'certificate of deposit savings' },
+            { name: 'College Cost Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.16.html', tags: 'education savings tuition' },
+            { name: 'Commission Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.17.html', tags: 'sales salary income' },
+            { name: 'Compound Interest Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.18.html', tags: 'savings investment future value' },
+            { name: 'Credit Card Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.19.html', tags: 'debt payment payoff' },
+            { name: 'Credit Cards Payoff Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.20.html', tags: 'debt snowball avalanche' },
+            { name: 'Currency Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.21.html', tags: 'exchange rate money conversion' },
+            { name: 'Debt Consolidation Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.22.html', tags: 'loan payment interest' },
+            { name: 'Debt Payoff Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.23.html', tags: 'credit card personal finance' },
+            { name: 'Debt-to-Income Ratio', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.24.html', tags: 'dti mortgage lending' },
+            { name: 'Depreciation Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.25.html', tags: 'asset value accounting' },
+            { name: 'Discount Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.26.html', tags: 'sale savings percentage off' },
+            { name: 'Down Payment Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.27.html', tags: 'mortgage home buying' },
+            { name: 'Estate Tax Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.28.html', tags: 'inheritance wealth planning' },
+            { name: 'FHA Loan Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.29.html', tags: 'mortgage home buying' },
+            { name: 'Finance Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.30.html', tags: 'general purpose money' },
+            { name: 'Future Value Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.31.html', tags: 'investment savings fv' },
+            { name: 'House Affordability', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.32.html', tags: 'mortgage home buying income' },
+            { name: 'Income Tax Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.33.html', tags: 'salary irs paycheck' },
+            { name: 'Inflation Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.34.html', tags: 'purchasing power money value' },
+            { name: 'Interest Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.35.html', tags: 'loan savings simple compound' },
+            { name: 'Interest Rate Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.36.html', tags: 'loan savings apr' },
+            { name: 'Investment Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.37.html', tags: 'roi stocks growth' },
+            { name: 'IRA Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.38.html', tags: 'retirement savings investment' },
+            { name: 'IRR Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.39.html', tags: 'internal rate return investment' },
+            { name: 'Lease Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.40.html', tags: 'auto property payment' },
+            { name: 'Loan Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.41.html', tags: 'payment interest apr' },
+            { name: 'Margin Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.42.html', tags: 'profit business sales' },
+            { name: 'Marriage Tax Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.43.html', tags: 'irs filing bonus penalty' },
+            { name: 'Mortgage Amortization', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.44.html', tags: 'home loan payment schedule' },
+            { name: 'Mortgage Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.45.html', tags: 'home loan payment pmi' },
+            { name: 'Mortgage Calculator UK', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.46.html', tags: 'home loan united kingdom' },
+            { name: 'Mortgage Payoff Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.47.html', tags: 'extra payments early payoff' },
+            { name: 'Payback Period Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.48.html', tags: 'investment business project' },
+            { name: 'Payment Calculator', category: 'Financial', link: '#https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.49.html', tags: 'loan mortgage apr' },
+            { name: 'Pension Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.50.html', tags: 'retirement income savings' },
+            { name: 'Percent Off Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.51.html', tags: 'discount sale shopping' },
+            { name: 'Personal Loan Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.52.html', tags: 'unsecured apr payment' },
+            { name: 'Present Value Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.53.html', tags: 'investment savings pv' },
+            { name: 'Real Estate Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.54.html', tags: 'property investment cap rate' },
+            { name: 'Refinance Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.55.html', tags: 'mortgage loan savings' },
+            { name: 'Rent Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.56.html', tags: 'lease apartment payment' },
+            { name: 'Rent vs. Buy Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.57.html', tags: 'home ownership decision' },
+            { name: 'Rental Property Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.58.html', tags: 'investment real estate landlord' },
+            { name: 'Repayment Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.59.html', tags: 'loan debt schedule' },
+            { name: 'Retirement Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.60.html', tags: 'savings investment 401k' },
+            { name: 'RMD Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.61.html', tags: 'required minimum distribution ira' },
+            { name: 'ROI Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.62.html', tags: 'return on investment profit' },
+            { name: 'Roth IRA Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.63.html', tags: 'retirement savings tax' },
+            { name: 'Salary Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.64.html', tags: 'income paycheck taxes' },
+            { name: 'Sales Tax Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.65.html', tags: 'shopping vat purchase' },
+            { name: 'Savings Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.66.html', tags: 'investment goal planning' },
+            { name: 'Simple Interest Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.67.html', tags: 'loan savings principle' },
+            { name: 'Social Security Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.68.html', tags: 'retirement benefits government' },
+            { name: 'Student Loan Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.69.html',tags: 'education debt repayment' },
+            { name: 'Take-Home-Paycheck', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.70.html', tags: 'salary net income taxes' },
+            { name: 'VA Mortgage Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.71.html', tags: 'veteran home loan' },
+            { name: 'VAT Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.72.html', tags: 'value added tax sales' },
 
-    // --- Core Functionality: Show/Hide Calculators ---
-    function showCalculator(calculatorId) {
-        // Hide all calculator wrappers
-        const wrappers = document.querySelectorAll('.calculator-wrapper');
-        wrappers.forEach(wrapper => {
-            wrapper.classList.remove('active');
-        });
-
-        // Show the selected calculator wrapper
-        const selectedCalculator = document.getElementById(calculatorId);
-        if (selectedCalculator) {
-            selectedCalculator.classList.add('active');
-            // If the 401k calculator is activated, ensure it calculates on load and updates the chart
-            if (calculatorId === 'calc-401k') {
-                calculate401k(); // Ensure initial calculation/chart load with default values
-            } else if (calculatorId === 'calc-amortization') { // NEW: for amortization
-                calculateAmortization(); // Ensure initial calculation for amortization table
-            }
-            // Scroll to the calculator for better UX on mobile
-            if (window.innerWidth < 900) {
-                 selectedCalculator.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-        // Return false to prevent the default link behavior
-        return false;
-    }
-
-    // --- Core Functionality: Go back to Home/Welcome Message ---
-    function goHome() {
-        // Hide all calculator wrappers
-        const wrappers = document.querySelectorAll('.calculator-wrapper');
-        wrappers.forEach(wrapper => {
-            wrapper.classList.remove('active');
-        });
-
-        // Show the welcome message
-        document.getElementById('welcome-message').classList.add('active');
-         // Scroll to the top of the content area
-        document.querySelector('.main-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        return false;
-    }
-
-    // --- NEW: Function to handle "Explore by Category" links ---
-    function expandAndFocusCategory(categoryIndex) {
-        // The ':nth-of-type' selector is 1-based, perfect for this.
-        const targetDetails = document.querySelector(`.sidebar details:nth-of-type(${categoryIndex})`);
-        
-        if (targetDetails) {
-            // Open the details dropdown
-            targetDetails.open = true;
+            // Math (37)
+            { name: 'Area Calculator', category: 'Math', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/2.1.html', tags: 'geometry shape square circle' },
+            { name: 'Army Body Fat Calculator', category: 'Math', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/2.2.htm', tags: 'health fitness military' },
+            { name: 'Average Calculator', category: 'Math', link: '#', tags: 'mean statistics numbers' },
+            { name: 'BAC Calculator', category: 'Math', link: '#', tags: 'blood alcohol content health' },
+            { name: 'Basic Calculator', category: 'Math', link: '#', tags: 'add subtract multiply divide' },
+            { name: 'Binary Calculator', category: 'Math', link: '#', tags: 'computer science base2' },
+            { name: 'BMR Calculator', category: 'Math', link: '#', tags: 'basal metabolic rate calorie health' },
+            { name: 'Body Type Calculator', category: 'Math', link: '#', tags: 'health fitness somatotype' },
+            { name: 'Calorie Calculator', category: 'Math', link: '#', tags: 'diet nutrition weight health' },
+            { name: 'Calories Burned Calculator', category: 'Math', link: '#', tags: 'exercise fitness activity' },
+            { name: 'Circle Calculator', category: 'Math', link: '#', tags: 'geometry radius diameter area' },
+            { name: 'Due Date Calculator', category: 'Math', link: '#', tags: 'pregnancy baby health' },
+            { name: 'Fat Intake Calculator', category: 'Math', link: '#', tags: 'diet nutrition health' },
+            { name: 'Greatest Common Factor', category: 'Math', link: '#', tags: 'gcf gcd math numbers' },
+            { name: 'Half-Life Calculator', category: 'Math', link: '#', tags: 'chemistry physics decay' },
+            { name: 'Ideal Weight Calculator', category: 'Math', link: '#', tags: 'bmi health fitness' },
+            { name: 'Lean Body Mass Calculator', category: 'Math', link: '#', tags: 'fitness health body fat' },
+            { name: 'Mean Median Mode Range', category: 'Math', link: '#', tags: 'statistics average set' },
+            { name: 'Ovulation Calculator', category: 'Math', link: '#', tags: 'fertility period health' },
+            { name: 'Percent Error Calculator', category: 'Math', link: '#', tags: 'science experiment accuracy' },
+            { name: 'Percentage Calculator', category: 'Math', link: '#', tags: 'fraction proportion math' },
+            { name: 'Period Calculator', category: 'Math', link: '#', tags: 'menstrual cycle health' },
+            { name: 'Pregnancy Weight Gain', category: 'Math', link: '#', tags: 'health baby expectant' },
+            { name: 'Prime Factorization', category: 'Math', link: '#', tags: 'number theory factors' },
+            { name: 'Probability Calculator', category: 'Math', link: '#', tags: 'statistics chance odds' },
+            { name: 'Pythagorean Theorem', category: 'Math', link: '#', tags: 'geometry triangle hypotenuse' },
+            { name: 'Random Number Generator', category: 'Math', link: '#', tags: 'rng randomizer utility' },
+            { name: 'Ratio Calculator', category: 'Math', link: '#', tags: 'proportion math fractions' },
+            { name: 'Root Calculator', category: 'Math', link: '#', tags: 'square cube math algebra' },
+            { name: 'Rounding Calculator', category: 'Math', link: '#', tags: 'numbers decimal rounding' },
+            { name: 'Scientific Calculator', category: 'Math', link: '#', tags: 'trigonometry log exponent' },
+            { name: 'Scientific Notation', category: 'Math', link: '#', tags: 'exponent engineering' },
+            { name: 'Slope Calculator', category: 'Math', link: '#', tags: 'geometry algebra coordinates' },
+            { name: 'Target Heart Rate Calculator', category: 'Math', link: '#', tags: 'exercise fitness health' },
+            { name: 'Volume Calculator', category: 'Math', link: '#', tags: 'geometry cube sphere cylinder' },
+            { name: 'Weight Watcher Points', category: 'Math', link: '#', tags: 'diet health ww' },
+            { name: 'Z-score Calculator', category: 'Math', link: '#', tags: 'statistics standard deviation' },
             
-            // Scroll the sidebar into view so the user can see the expanded list
-            targetDetails.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start' 
+            // Other (52)
+            { name: 'Age Calculator', category: 'Other', link: '#', tags: 'birthday date time' },
+            { name: 'Bandwidth Calculator', category: 'Other', link: '#', tags: 'internet speed network' },
+            { name: 'Bra Size Calculator', category: 'Other', link: '#', tags: 'apparel clothing health' },
+            { name: 'BTU Calculator', category: 'Other', link: '#', tags: 'hvac cooling heating' },
+            { name: 'Concrete Calculator', category: 'Other', link: '#', tags: 'construction materials diy' },
+            { name: 'Conversion Calculator', category: 'Other', link: '#', tags: 'units measurement imperial metric' },
+            { name: 'Date Calculator', category: 'Other', link: '#', tags: 'time calendar duration' },
+            { name: 'Day Counter', category: 'Other', link: '#', tags: 'time calendar duration' },
+            { name: 'Day of the Week', category: 'Other', link: '#', tags: 'calendar date whatday' },
+            { name: 'Density Calculator', category: 'Other', link: '#', tags: 'science physics chemistry' },
+            { name: 'Dew Point Calculator', category: 'Other', link: '#', tags: 'weather humidity temperature' },
+            { name: 'Dice Roller', category: 'Other', link: '#', tags: 'games random utility' },
+            { name: 'Electricity Calculator', category: 'Other', link: '#', tags: 'cost power energy' },
+            { name: 'Engine Horsepower', category: 'Other', link: '#', tags: 'car auto performance' },
+            { name: 'Fuel Cost Calculator', category: 'Other', link: '#', tags: 'travel car gas price' },
+            { name: 'Gas Mileage Calculator', category: 'Other', link: '#', tags: 'mpg car fuel efficiency' },
+            { name: 'GDP Calculator', category: 'Other', link: '#', tags: 'economics country finance' },
+            { name: 'Golf Handicap Calculator', category: 'Other', link: '#', tags: 'sports game score' },
+            { name: 'GPA Calculator', category: 'Other', link: '#', tags: 'education school grade' },
+            { name: 'Grade Calculator', category: 'Other', link: '#', tags: 'school student exam' },
+            { name: 'Gravel Calculator', category: 'Other', link: '#', tags: 'landscaping materials diy' },
+            { name: 'Heat Index Calculator', category: 'Other', link: '#', tags: 'weather temperature humidity' },
+            { name: 'Height Calculator', category: 'Other', link: '#', tags: 'prediction health child' },
+            { name: 'Horsepower Calculator', category: 'Other', link: '#', tags: 'engine car auto performance' },
+            { name: 'Hours Calculator', category: 'Other', link: '#', tags: 'time duration work' },
+            { name: 'IP Subnet Calculator', category: 'Other', link: '#', tags: 'network computer technology' },
+            { name: 'Love Calculator', category: 'Other', link: '#', tags: 'fun relationship compatibility' },
+            { name: 'Mass Calculator', category: 'Other', link: '#', tags: 'science physics conversion' },
+            { name: 'Mileage Calculator', category: 'Other', link: '#', tags: 'fuel cost travel driving' },
+            { name: 'Molarity Calculator', category: 'Other', link: '#', tags: 'chemistry solution concentration' },
+            { name: 'Molecular Weight', category: 'Other', link: '#', tags: 'chemistry science compound' },
+            { name: 'Mulch Calculator', category: 'Other', link: '#', tags: 'landscaping garden diy' },
+            { name: "Ohm's Law Calculator", category: 'Other', link: '#', tags: 'electronics electricity physics' },
+            { name: 'Password Generator', category: 'Other', link: '#', tags: 'security utility random' },
+            { name: 'Resistor Calculator', category: 'Other', link: '#', tags: 'electronics color code' },
+            { name: 'Roman Numeral Converter', category: 'Other', link: '#', tags: 'math history numbers' },
+            { name: 'Roofing Calculator', category: 'Other', link: '#', tags: 'construction diy materials' },
+            { name: 'Shoe Size Conversion', category: 'Other', link: '#', tags: 'apparel shopping' },
+            { name: 'Sleep Calculator', category: 'Other', link: '#', tags: 'health bedtime cycle' },
+            { name: 'Speed Calculator', category: 'Other', link: '#', tags: 'distance time physics' },
+            { name: 'Square Footage Calculator', category: 'Other', link: '#', tags: 'area construction real estate' },
+            { name: 'Stair Calculator', category: 'Other', link: '#', tags: 'construction diy measurement' },
+            { name: 'Tile Calculator', category: 'Other', link: '#', tags: 'construction flooring diy' },
+            { name: 'Time Calculator', category: 'Other', link: '#', tags: 'add subtract duration' },
+            { name: 'Time Card Calculator', category: 'Other', link: '#', tags: 'work salary payroll' },
+            { name: 'Time Duration Calculator', category: 'Other', link: '#', tags: 'time difference between dates' },
+            { name: 'Time Zone Calculator', category: 'Other', link: '#', tags: 'world clock travel' },
+            { name: 'Tip Calculator', category: 'Other', link: '#', tags: 'restaurant gratuity food' },
+            { name: 'Tire Size Calculator', category: 'Other', link: '#', tags: 'auto car vehicle' },
+            { name: 'Voltage Drop Calculator', category: 'Other', link: '#', tags: 'electricity electronics wiring' },
+            { name: 'Weight Calculator', category: 'Other', link: '#', tags: 'mass conversion health' },
+            { name: 'Wind Chill Calculator', category: 'Other', link: '#', tags: 'weather temperature' }
+        ];
+
+        function getIcon(name) {
+             const n = name.toLowerCase();
+            // Financial Icons
+            if (n.includes('loan') || n.includes('mortgage') || n.includes('payment') || n.includes('debt') || n.includes('refinance')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V6.375c0-.621.504-1.125 1.125-1.125h.375m18 3.75v.75a.75.75 0 01-.75.75h-.75a.75.75 0 01-.75-.75v-.75m0 0h.375c.621 0 1.125.504 1.125 1.125v.75c0 .621-.504 1.125-1.125 1.125h-.375m0 0a1.125 1.125 0 01-1.125 1.125H3.375a1.125 1.125 0 01-1.125 1.125m18 0v-7.5a1.125 1.125 0 00-1.125-1.125h-.375a1.125 1.125 0 00-1.125 1.125v7.5m0 0v-7.5a.75.75 0 00-.75-.75H3.75a.75.75 0 00-.75.75v7.5m18 0a.75.75 0 00.75.75h.75a.75.75 0 00.75-.75v-.75m0 0v-1.5A.75.75 0 0021 12h-.75a.75.75 0 00-.75.75v1.5m-3 0a.75.75 0 00.75.75h.75a.75.75 0 00.75-.75v-.75m0 0v-1.5a.75.75 0 00-.75-.75h-.75a.75.75 0 00-.75.75v1.5m-3 0A.75.75 0 0015 15h.75a.75.75 0 00.75-.75v-1.5a.75.75 0 00-.75-.75h-.75a.75.75 0 00-.75.75v1.5m-3 0A.75.75 0 0012 15h.75a.75.75 0 00.75-.75v-1.5a.75.75 0 00-.75-.75h-.75a.75.75 0 00-.75.75v1.5M9 15a.75.75 0 00.75.75h.75a.75.75 0 00.75-.75v-1.5A.75.75 0 0010.5 12h-.75a.75.75 0 00-.75.75v1.5m-3 0A.75.75 0 006 15h.75a.75.75 0 00.75-.75v-1.5A.75.75 0 006.75 12H6a.75.75 0 00-.75.75v1.5m-3 0A.75.75 0 003 15h.75a.75.75 0 00.75-.75v-1.5A.75.75 0 003.75 12H3a.75.75 0 00-.75.75v1.5" /></svg>`;
+            if (n.includes('tax') || n.includes('paycheck') || n.includes('gdp')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" /></svg>`;
+            if (n.includes('investment') || n.includes('interest') || n.includes('401') || n.includes('ira') || n.includes('roi') || n.includes('savings')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+            if (n.includes('house') || n.includes('estate') || n.includes('rental') || n.includes('rent')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m-3-1l-3-1m-9 1.636L2.25 9m5.026 15L9 18.502 11.25 21H9.002z" /></svg>`;
+            if (n.includes('currency') || n.includes('discount')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0011.667 0l3.182-3.182m0 0a8.25 8.25 0 00-11.667 0l-3.182 3.182M2.985 16.652L6.166 13.47m6.834-6.834L19.015 10.5" /></svg>`;
+            if (n.includes('credit card')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>`;
+            if (n.includes('budget')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 3a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 3V9" /></svg>`;
+            if (n.includes('math') || n.includes('basic') || n.includes('mean') || n.includes('average')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7.5l3 4.5m0 0l3-4.5M12 12v5.25M15 12H9m6 3H9m12-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+            if (n.includes('scientific') || n.includes('root') || n.includes('pythagorean') || n.includes('slope') || n.includes('half-life')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008Zm0 3h.008v.008H8.25v-.008Zm0 3h.008v.008H8.25v-.008Zm3.75 0h.008v.008h-.008v-.008Zm0-3h.008v.008h-.008v-.008Zm0-3h.008v.008h-.008v-.008Zm0-3h.008v.008h-.008v-.008Zm0-3h.008v.008h-.008v-.008Zm-3.75 0h.008v.008H8.25v-.008ZM8.25 9h5.25M15 9h.008v.008H15V9zM3.75 3.75v16.5a2.25 2.25 0 002.25 2.25h13.5a2.25 2.25 0 002.25-2.25V3.75a2.25 2.25 0 00-2.25-2.25H6a2.25 2.25 0 00-2.25 2.25z" /></svg>`;
+            if (n.includes('percent')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14.25l6-6m4.5-3.493V6.75l-3.75 3.75M9 14.25v-3.75h3.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+            if (n.includes('body') || n.includes('bmr') || n.includes('fat') || n.includes('calorie') || n.includes('weight') || n.includes('health') || n.includes('bmi')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" /></svg>`;
+            if (n.includes('pregnancy') || n.includes('due date') || n.includes('ovulation') || n.includes('period')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" /></svg>`;
+            if (n.includes('time') || n.includes('date') || n.includes('day') || n.includes('calendar')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>`;
+            if (n.includes('conversion') || n.includes('unit')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 3.75H6A2.25 2.25 0 003.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0120.25 6v1.5m0 9V18A2.25 2.25 0 0118 20.25h-1.5m-9 0H6A2.25 2.25 0 013.75 18v-1.5M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>`;
+            if (n.includes('car') || n.includes('auto') || n.includes('vehicle') || n.includes('mileage')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" /></svg>`;
+            if (n.includes('construction') || n.includes('concrete') || n.includes('gravel') || n.includes('tile')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z" /></svg>`;
+            if (n.includes('weather') || n.includes('temperature') || n.includes('humidity')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z" /></svg>`;
+            if (n.includes('calculator')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm3.75 0h.008v.008h-.008v-.008zm0-3h.008v.008h-.008v-.008zm0-3h.008v.008h-.008v-.008zm0-3h.008v.008h-.008v-.008zm0-3h.008v.008h-.008v-.008zm-3.75 0h.008v.008H8.25v-.008zm0-3h.008v.008H8.25v-.008zM8.25 9h5.25M8.25 9h5.25M15 9h.008v.008H15V9z" /></svg>`;
+            
+            // Default icon
+            return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm3.75 0h.008v.008h-.008v-.008zm0-3h.008v.008h-.008v-.008zm0-3h.008v.008h-.008v-.008zm0-3h.008v.008h-.008v-.008zm0-3h.008v.008h-.008v-.008zm-3.75 0h.008v.008H8.25v-.008zm0-3h.008v.008H8.25v-.008zM8.25 9h5.25M8.25 9h5.25M15 9h.008v.008H15V9z" /></svg>`;
+        }
+
+        function createCalculatorCard(calc) {
+            return `
+                <a href="${calc.link}" class="calculator-card">
+                    <div class="card-icon">
+                        ${getIcon(calc.name)}
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">${calc.name}</h3>
+                    </div>
+                </a>
+            `;
+        }
+
+        // Render calculators by category
+        function renderCalculators() {
+            const financialGrid = document.getElementById('financial-grid');
+            const mathGrid = document.getElementById('math-grid');
+            const otherGrid = document.getElementById('other-grid');
+            
+            financialGrid.innerHTML = '';
+            mathGrid.innerHTML = '';
+            otherGrid.innerHTML = '';
+            
+            calculators.forEach(calc => {
+                const card = createCalculatorCard(calc);
+                if (calc.category === 'Financial') {
+                    financialGrid.innerHTML += card;
+                } else if (calc.category === 'Math') {
+                    mathGrid.innerHTML += card;
+                } else {
+                    otherGrid.innerHTML += card;
+                }
             });
         }
         
-        // Prevent the link's default behavior
-        return false;
-    }
-
-    // ===================================================================
-    //  CALCULATOR LOGIC IMPLEMENTATIONS
-    // ===================================================================
-
-    // --- NEW: Amortization Calculator ---
-    function calculateAmortization() {
-        const loanAmount = parseFloat(document.getElementById('amort-amount').value);
-        const annualInterestRate = parseFloat(document.getElementById('amort-interest').value);
-        const loanTermYears = parseFloat(document.getElementById('amort-term').value);
-        const monthlyPaymentElem = document.getElementById('amort-monthly-payment');
-        const totalInterestElem = document.getElementById('amort-total-interest');
-        const totalPaymentsElem = document.getElementById('amort-total-payments');
-        const scheduleTbody = document.getElementById('amort-schedule-tbody');
-        const noResultsMsg = document.getElementById('amort-no-results-msg');
-
-        scheduleTbody.innerHTML = '';
-        monthlyPaymentElem.textContent = 'Monthly Payment: $0.00';
-        totalInterestElem.textContent = 'Total Interest Paid: $0.00';
-        totalPaymentsElem.textContent = 'Total Payments: $0.00';
-
-        if (isNaN(loanAmount) || loanAmount <= 0 || isNaN(annualInterestRate) || annualInterestRate < 0 || isNaN(loanTermYears) || loanTermYears <= 0) {
-            noResultsMsg.style.display = 'block';
-            return;
-        }
-
-        const monthlyInterestRate = (annualInterestRate / 100) / 12;
-        const numberOfPayments = loanTermYears * 12;
-        let fixedMonthlyPayment; 
-
-        if (monthlyInterestRate === 0) {
-            fixedMonthlyPayment = loanAmount / numberOfPayments;
-        } else {
-            fixedMonthlyPayment = loanAmount * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
-                                (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+        // Search functionality
+        const searchInput = document.getElementById('search-input');
+        const searchResultsSection = document.getElementById('search-results-section');
+        const searchGrid = document.getElementById('search-grid');
+        const noResults = document.getElementById('no-results');
+        const resultsTitle = document.querySelector('.search-results-title');
+        const categorySections = document.querySelectorAll('.tools-section');
+        
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim().toLowerCase();
+            
+            if (query === '') {
+                searchResultsSection.style.display = 'none';
+                categorySections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                return;
+            }
+            
+            // Hide category sections
+            categorySections.forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show search results section
+            searchResultsSection.style.display = 'block';
+            resultsTitle.style.display = 'block';
+            
+            // Filter calculators
+            const filteredCalcs = calculators.filter(calc => {
+                return calc.name.toLowerCase().includes(query) || 
+                       calc.tags.toLowerCase().includes(query);
+            });
+            
+            // Update search results
+            searchGrid.innerHTML = '';
+            
+            if (filteredCalcs.length > 0) {
+                noResults.style.display = 'none';
+                filteredCalcs.forEach(calc => {
+                    searchGrid.innerHTML += createCalculatorCard(calc);
+                });
+            } else {
+                noResults.style.display = 'block';
+            }
+        });
+        
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const moonIcon = document.getElementById('moon-icon');
+        const sunIcon = document.getElementById('sun-icon');
+        const body = document.body;
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+            moonIcon.style.display = 'none';
+            sunIcon.style.display = 'block';
         }
         
-        let remainingBalance = loanAmount;
-        let totalInterestAccrued = 0; 
-        let totalActualPaymentsSum = 0; 
-        let scheduleRows = [];
-
-        for (let i = 1; i <= numberOfPayments; i++) {
-            const interestForMonth = remainingBalance * monthlyInterestRate;
-            let principalForMonth;
-            let currentPaymentAmount;
-
-            if (i === numberOfPayments) {
-                principalForMonth = remainingBalance; 
-                currentPaymentAmount = interestForMonth + principalForMonth;
-                remainingBalance = 0;
+        themeToggle.addEventListener('click', function() {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                moonIcon.style.display = 'none';
+                sunIcon.style.display = 'block';
+                localStorage.setItem('theme', 'dark');
             } else {
-                principalForMonth = fixedMonthlyPayment - interestForMonth;
-                currentPaymentAmount = fixedMonthlyPayment;
-                remainingBalance -= principalForMonth;
-            }
-
-            totalInterestAccrued += interestForMonth;
-            totalActualPaymentsSum += currentPaymentAmount;
-
-            scheduleRows.push(`<tr><td>${i.toLocaleString()}</td><td>$${currentPaymentAmount.toFixed(2)}</td><td>$${principalForMonth.toFixed(2)}</td><td>$${interestForMonth.toFixed(2)}</td><td>$${Math.max(0, remainingBalance).toFixed(2)}</td></tr>`);
-        }
-
-        monthlyPaymentElem.textContent = `Monthly Payment: $${fixedMonthlyPayment.toFixed(2)}`;
-        totalInterestElem.textContent = `Total Interest Paid: $${totalInterestAccrued.toFixed(2)}`;
-        totalPaymentsElem.textContent = `Total Payments: $${totalActualPaymentsSum.toFixed(2)}`;
-        scheduleTbody.innerHTML = scheduleRows.join('');
-        noResultsMsg.style.display = 'none';
-    }
-
-    function copyAmortizationResults() {
-        const loanAmount = parseFloat(document.getElementById('amort-amount').value);
-        const annualInterestRate = parseFloat(document.getElementById('amort-interest').value);
-        const loanTermYears = parseFloat(document.getElementById('amort-term').value);
-
-        let resultsText = "Loan Amortization Calculator Results:\n--------------------------------------\n";
-        resultsText += `Loan Amount: $${loanAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n`;
-        resultsText += `Annual Interest Rate: ${annualInterestRate.toFixed(2)}%\n`;
-        resultsText += `Loan Term: ${loanTermYears} Years\n\n`;
-        resultsText += `${document.getElementById('amort-monthly-payment').textContent}\n`;
-        resultsText += `${document.getElementById('amort-total-interest').textContent}\n`;
-        resultsText += `${document.getElementById('amort-total-payments').textContent}\n\n`;
-        resultsText += "Amortization Schedule:\nPayment No.\tPayment\tPrincipal\tInterest\tBalance\n";
-
-        const rows = document.getElementById('amort-schedule-tbody').querySelectorAll('tr');
-        rows.forEach(row => {
-            const cols = row.querySelectorAll('td');
-            resultsText += `${cols[0].textContent}\t${cols[1].textContent}\t${cols[2].textContent}\t${cols[3].textContent}\t${cols[4].textContent}\n`;
-        });
-
-        navigator.clipboard.writeText(resultsText).then(() => {
-            alert('Amortization schedule copied to clipboard!');
-        }).catch(err => {
-            console.error('Failed to copy results: ', err);
-            alert('Failed to copy results.');
-        });
-    }
-
-    // --- NEW: 401(k) Retirement Calculator ---
-    function calculate401k() {
-        const currentAge = parseInt(document.getElementById('k401-current-age').value);
-        const retirementAge = parseInt(document.getElementById('k401-retirement-age').value);
-        const initialBalance = parseFloat(document.getElementById('k401-current-balance').value);
-        const annualSalary = parseFloat(document.getElementById('k401-annual-salary').value);
-        const employeeContributionPerc = parseFloat(document.getElementById('k401-contribution-perc').value) / 100;
-        const employerMatchPerc = parseFloat(document.getElementById('k401-employer-match-perc').value) / 100;
-        const expectedReturn = parseFloat(document.getElementById('k401-expected-return').value) / 100;
-        const inflationRate = parseFloat(document.getElementById('k401-inflation-rate').value) / 100;
-
-        if (isNaN(currentAge) || isNaN(retirementAge) || isNaN(initialBalance) || isNaN(annualSalary) ||
-            isNaN(employeeContributionPerc) || isNaN(employerMatchPerc) || isNaN(expectedReturn) || isNaN(inflationRate) ||
-            currentAge <= 0 || retirementAge <= 0 || annualSalary < 0 || initialBalance < 0 ||
-            employeeContributionPerc < 0 || employerMatchPerc < 0
-        ) {
-            document.getElementById('k401-projected-balance').textContent = '$0.00';
-            document.getElementById('k401-projected-balance-inflation-adj').textContent = '( $0.00 in today\'s dollars )';
-            document.getElementById('k401-total-contributions').textContent = '$0.00';
-            document.getElementById('k401-total-earnings').textContent = '$0.00';
-            document.getElementById('k401-years-to-retirement').textContent = '0 Years';
-            update401kChart([], [], []);
-            return;
-        }
-
-        const yearsToRetirement = retirementAge - currentAge;
-        if (yearsToRetirement < 0) {
-            document.getElementById('k401-projected-balance').textContent = 'N/A';
-            document.getElementById('k401-projected-balance-inflation-adj').textContent = '( Retirement age must be greater than current age )';
-            document.getElementById('k401-total-contributions').textContent = '$0.00';
-            document.getElementById('k401-total-earnings').textContent = '$0.00';
-            document.getElementById('k401-years-to-retirement').textContent = 'Invalid';
-            update401kChart([], [], []);
-            return;
-        }
-
-        document.getElementById('k401-years-to-retirement').textContent = `${yearsToRetirement} Years`;
-        const totalAnnualContribution = (annualSalary * employeeContributionPerc) + (annualSalary * employerMatchPerc);
-        let currentBalanceNominal = initialBalance;
-        let totalContributionsDuringPeriod = 0;
-        const chartLabels = [], chartDataNominal = [], chartDataReal = [];
-
-        chartLabels.push(currentAge);
-        chartDataNominal.push(initialBalance);
-        chartDataReal.push(initialBalance);
-
-        for (let yearElapsed = 1; yearElapsed <= yearsToRetirement; yearElapsed++) {
-            currentBalanceNominal += totalAnnualContribution;
-            totalContributionsDuringPeriod += totalAnnualContribution;
-            currentBalanceNominal *= (1 + expectedReturn);
-            chartLabels.push(currentAge + yearElapsed);
-            chartDataNominal.push(currentBalanceNominal);
-            chartDataReal.push(currentBalanceNominal / Math.pow(1 + inflationRate, yearElapsed));
-        }
-
-        const finalNominalBalance = currentBalanceNominal;
-        const finalRealBalance = finalNominalBalance / Math.pow(1 + inflationRate, yearsToRetirement); 
-
-        document.getElementById('k401-projected-balance').textContent = `$${finalNominalBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        document.getElementById('k401-projected-balance-inflation-adj').textContent = `( $${finalRealBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} in today's dollars )`;
-        document.getElementById('k401-total-contributions').textContent = `$${totalContributionsDuringPeriod.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        const totalInvestmentEarnings = finalNominalBalance - (initialBalance + totalContributionsDuringPeriod);
-        document.getElementById('k401-total-earnings').textContent = `$${totalInvestmentEarnings.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        update401kChart(chartLabels, chartDataNominal, chartDataReal);
-    }
-
-    function update401kChart(labels, nominalData, realData) {
-        const ctx = document.getElementById('k401Chart').getContext('2d');
-        if (k401ChartInstance) k401ChartInstance.destroy();
-        if (!labels || labels.length === 0 || !nominalData || nominalData.length === 0) return;
-        k401ChartInstance = new Chart(ctx, {
-            type: 'line',
-            data: { labels, datasets: [
-                { label: 'Projected Balance (Nominal)', data: nominalData, borderColor: varToRgb('--primary-color'), backgroundColor: 'rgba(0, 90, 156, 0.2)', fill: true, tension: 0.1, pointRadius: 3 },
-                { label: 'Projected Balance (Inflation-Adjusted)', data: realData, borderColor: '#4CAF50', backgroundColor: 'rgba(76, 175, 80, 0.2)', fill: true, tension: 0.1, pointRadius: 3 }
-            ]},
-            options: { responsive: true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: $${c.raw.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`}}, title: { display: false }, legend: { labels: { color: varToRgb('--font-color') }}}, scales: { x: { title: { display: true, text: 'Age', color: varToRgb('--font-color') }, ticks: { color: varToRgb('--font-color') }}, y: { title: { display: true, text: 'Balance ($)', color: varToRgb('--font-color')}, beginAtZero: true, ticks: { callback: v => `$${v.toLocaleString()}`, color: varToRgb('--font-color') }}}
+                moonIcon.style.display = 'block';
+                sunIcon.style.display = 'none';
+                localStorage.setItem('theme', 'light');
             }
         });
-    }
-
-    function varToRgb(varName) {
-        const color = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
-        if (color.startsWith('#')) {
-            const hex = color.slice(1), r = parseInt(hex.substring(0,2), 16), g = parseInt(hex.substring(2,4), 16), b = parseInt(hex.substring(4,6), 16);
-            return `rgb(${r}, ${g}, ${b})`;
-        }
-        return color;
-    }
-
-    function copyResults() {
-        let resultsText = "401(k) Retirement Calculator Results:\n--------------------------------------\n";
-        resultsText += `Projected Balance at Retirement: ${document.getElementById('k401-projected-balance').textContent}\n`;
-        resultsText += `Inflation-Adjusted Balance: ${document.getElementById('k401-projected-balance-inflation-adj').textContent}\n`;
-        resultsText += `Total Contributions (during projection): ${document.getElementById('k401-total-contributions').textContent}\n`;
-        resultsText += `Total Investment Earnings: ${document.getElementById('k401-total-earnings').textContent}\n`;
-        resultsText += `Years Until Retirement: ${document.getElementById('k401-years-to-retirement').textContent}\n\nInputs:\n`;
-        resultsText += `Current Age: ${document.getElementById('k401-current-age').value} years\n`;
-        resultsText += `Retirement Age: ${document.getElementById('k401-retirement-age').value} years\n`;
-        resultsText += `Current 401(k) Balance: $${parseFloat(document.getElementById('k401-current-balance').value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n`;
-        resultsText += `Annual Salary: $${parseFloat(document.getElementById('k401-annual-salary').value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n`;
-        resultsText += `Employee Contribution: ${document.getElementById('k401-contribution-perc').value}%\n`;
-        resultsText += `Employer Match: ${document.getElementById('k401-employer-match-perc').value}%\n`;
-        resultsText += `Expected Annual Return: ${document.getElementById('k401-expected-return').value}%\n`;
-        resultsText += `Inflation Rate: ${document.getElementById('k401-inflation-rate').value}%\n`;
-        navigator.clipboard.writeText(resultsText).then(() => alert('Results copied to clipboard!')).catch(err => alert('Failed to copy results.'));
-    }
-
-    // --- EXAMPLE 1: Mortgage Calculator ---
-    function calculateMortgage() {
-        const P = parseFloat(document.getElementById('mortgage-amount').value), r = parseFloat(document.getElementById('mortgage-interest').value) / 100 / 12, n = parseFloat(document.getElementById('mortgage-term').value) * 12;
-        const resultElement = document.getElementById('mortgage-result');
-        if (P > 0 && r >= 0 && n > 0) resultElement.textContent = `$${(r === 0 ? P/n : P * (r * Math.pow(1+r, n)) / (Math.pow(1+r, n) - 1)).toFixed(2)}`;
-        else resultElement.textContent = '$0.00';
-    }
-
-    // --- EXAMPLE 2: Percentage Calculator ---
-    function calculatePercentage() {
-        const val = parseFloat(document.getElementById('percentage-value').value), of = parseFloat(document.getElementById('percentage-of').value);
-        const resultElement = document.getElementById('percentage-result');
-        if (!isNaN(val) && !isNaN(of)) resultElement.textContent = ((val / 100) * of).toLocaleString();
-        else resultElement.textContent = '0';
-    }
-
-    // --- EXAMPLE 3: Age Calculator ---
-    function calculateAge() {
-        const birthDateInput = document.getElementById('birth-date'), ageResult = document.getElementById('age-result');
-        if (!birthDateInput.value) { ageResult.textContent = "-- years, -- months, -- days"; return; }
-        const birthDate = new Date(birthDateInput.value), today = new Date();
-        if (birthDate > today) { ageResult.textContent = "Birth date cannot be in the future."; return; }
-        let years = today.getFullYear() - birthDate.getFullYear(), months = today.getMonth() - birthDate.getMonth(), days = today.getDate() - birthDate.getDate();
-        if (days < 0) { months--; days += new Date(today.getFullYear(), today.getMonth(), 0).getDate(); }
-        if (months < 0) { years--; months += 12; }
-        ageResult.textContent = `${years} years, ${months} months, ${days} days`;
-    }
-    
-    document.addEventListener('DOMContentLoaded', () => {
-        const currentActiveCalc = document.querySelector('.calculator-wrapper.active');
-        if (currentActiveCalc && currentActiveCalc.id === 'calc-401k') calculate401k();
-        else if (currentActiveCalc && currentActiveCalc.id === 'calc-amortization') calculateAmortization();
-        else showCalculator('welcome-message');
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuOpenIcon = document.getElementById('menu-icon-open');
+        const menuCloseIcon = document.getElementById('menu-icon-close');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            const isOpen = mobileMenu.style.display === 'block';
+            
+            if (isOpen) {
+                mobileMenu.style.display = 'none';
+                menuOpenIcon.style.display = 'block';
+                menuCloseIcon.style.display = 'none';
+            } else {
+                mobileMenu.style.display = 'block';
+                menuOpenIcon.style.display = 'none';
+                menuCloseIcon.style.display = 'block';
+            }
+        });
+        
+        // Close mobile menu when clicking a link
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.style.display = 'none';
+                menuOpenIcon.style.display = 'block';
+                menuCloseIcon.style.display = 'none';
+            });
+        });
+        
+        // Initialize the page
+        renderCalculators();
     });
-
     </script>
-
 </body>
 </html>
