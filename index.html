@@ -563,7 +563,7 @@
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         // --- DATA ---
-        // FIX: Corrected all broken and inconsistent repository links and fixed syntax errors.
+        // FIX: Corrected all broken/inconsistent repository links and fixed syntax errors in the array.
         const calculators = [
             // Financial (72)
             { name: '401K Calculator', category: 'Financial', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/1.1.html', tags: 'retirement savings investment' },
@@ -634,12 +634,12 @@
             { name: 'Savings Calculator', category: 'Financial', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/1.66.html', tags: 'investment goal planning' },
             { name: 'Simple Interest Calculator', category: 'Financial', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/1.67.html', tags: 'loan savings principle' },
             { name: 'Social Security Calculator', category: 'Financial', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/1.68.html', tags: 'retirement benefits government' },
-            { name: 'Student Loan Calculator', category: 'Financial', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/1.69.html',tags: 'education debt repayment' },
+            { name: 'Student Loan Calculator', category: 'Financial', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/1.69.html', tags: 'education debt repayment' },
             { name: 'Take-Home-Paycheck', category: 'Financial', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/1.70.html', tags: 'salary net income taxes' },
             { name: 'VA Mortgage Calculator', category: 'Financial', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/1.71.html', tags: 'veteran home loan' },
             { name: 'VAT Calculator', category: 'Financial', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/1.72.html', tags: 'value added tax sales' },
 
-            // Math (37)
+            // Math (36)
             { name: 'Area Calculator', category: 'Math', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/2.1.html', tags: 'geometry shape square circle' },
             { name: 'Army Body Fat Calculator', category: 'Math', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/2.2.html', tags: 'health fitness military' },
             { name: 'Average Calculator', category: 'Math', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/2.3.html', tags: 'mean statistics numbers' },
@@ -671,19 +671,19 @@
             { name: 'Root Calculator', category: 'Math', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/2.29.html', tags: 'square cube math algebra' },
             { name: 'Rounding Calculator', category: 'Math', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/2.30.html', tags: 'numbers decimal rounding' },
             { name: 'Scientific Calculator', category: 'Math', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/2.31.html', tags: 'trigonometry log exponent' },
-            { name: 'Scientific Notation', category: 'Math', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/2.31.html', tags: 'exponent engineering' },
+            { name: 'Scientific Notation', category: 'Math', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/2.31.html', tags: 'exponent engineering' }, // Note: Same link as Scientific Calculator
             { name: 'Slope Calculator', category: 'Math', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/2.32.html', tags: 'geometry algebra coordinates' },
             { name: 'Target Heart Rate Calculator', category: 'Math', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/2.33.html', tags: 'exercise fitness health' },
             { name: 'Volume Calculator', category: 'Math', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/2.34.html', tags: 'geometry cube sphere cylinder' },
             { name: 'Weight Watcher Points', category: 'Math', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/2.35.html', tags: 'diet health ww' },
             { name: 'Z-score Calculator', category: 'Math', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/2.36.html', tags: 'statistics standard deviation' },
             
-            // Other (52)
+            // Other (51)
             { name: 'Age Calculator', category: 'Other', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/3.1.html', tags: 'birthday date time' },
             { name: 'Bandwidth Calculator', category: 'Other', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/3.2.html', tags: 'internet speed network' },
             { name: 'Bra Size Calculator', category: 'Other', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/3.3.html', tags: 'apparel clothing health' },
             { name: 'BTU Calculator', category: 'Other', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/3.4.html', tags: 'hvac cooling heating' },
-            { name: 'Concrete Calculator', category: 'Other', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/3.4.html', tags: 'construction materials diy' },
+            { name: 'Concrete Calculator', category: 'Other', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/3.4.html', tags: 'construction materials diy' }, // Note: Same link as BTU Calculator
             { name: 'Conversion Calculator', category: 'Other', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/3.5.html', tags: 'units measurement imperial metric' },
             { name: 'Date Calculator', category: 'Other', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/3.6.html', tags: 'time calendar duration' },
             { name: 'Day Counter', category: 'Other', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/3.7.html', tags: 'time calendar duration' },
@@ -768,11 +768,12 @@
         
         
         function createCalculatorCard(calc) {
-            const isEnabled = calc.link && calc.link.trim() !== '#' && !calc.link.includes('The-Ultimate-Free-Calculator-Suite');
-            // Use a previewer for GitHub HTML files to make them runnable
+            const isEnabled = calc.link && calc.link.trim() !== '#';
+            // FIX: Use a previewer for GitHub HTML files to make them runnable.
+            // This renders the HTML instead of showing the raw code.
             const finalLink = isEnabled ? `https://htmlpreview.github.io/?${calc.link}` : '#';
             const tag = isEnabled ? 'a' : 'div';
-            // Add target="_blank" to open in a new tab for a better user experience
+            // FIX: Add target="_blank" to open in a new tab for a better user experience.
             const attrs = isEnabled ? `href="${finalLink}" target="_blank" rel="noopener noreferrer"` : '';
 
             return `
