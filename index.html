@@ -306,9 +306,14 @@
             color: var(--dark-text);
             border: 1px solid var(--dark-border);
         }
-        .calculator-card:hover {
+        .calculator-card:not(.is-disabled):hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-lg);
+        }
+        /* --- FIX: Styles for disabled cards --- */
+        .calculator-card.is-disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
         .card-icon {
             padding: 1.5rem;
@@ -472,8 +477,8 @@
         <section class="hero">
             <div class="hero-content">
                 <h1>The Ultimate Calculator Suite</h1>
-                <!-- Updated text from 161 to 160 -->
-                <p>160 powerful and easy-to-use tools for finance, math, and everyday life. Find your calculator instantly.</p>
+                <!-- FIX: Added ID to make the count dynamic -->
+                <p id="hero-subtitle">160 powerful and easy-to-use tools for finance, math, and everyday life. Find your calculator instantly.</p>
                 <div class="search-container">
                      <div class="search-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
@@ -559,11 +564,13 @@
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         // --- DATA ---
+        // FIX: Corrected all broken and inconsistent links. Standardized to a single repository path.
+        // The total count is 161.
         const calculators = [
             // Financial (72)
-            { name: '401K Calculator', category: 'Financial', link: 'https://github.com/basha1968/Mega-Calculator-Suite/1.1.html', tags: 'retirement savings investment' },
-            { name: 'Amortization Calculator', category: 'Financial', link: 'https://github.com/basha1968/Mega-Calculator-Suite/1.2.html', tags: 'loan mortgage payment schedule' },
-            { name: 'Annuity Calculator', category: 'Financial', link: 'https://github.com/basha1968/Mega-Calculator-Suite//1.3.html', tags: 'retirement investment' },
+            { name: '401K Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.1.html', tags: 'retirement savings investment' },
+            { name: 'Amortization Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.2.html', tags: 'loan mortgage payment schedule' },
+            { name: 'Annuity Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.3.html', tags: 'retirement investment' },
             { name: 'Annuity Payout Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.4.html', tags: 'retirement income' },
             { name: 'APR Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.5.html', tags: 'interest loan credit card' },
             { name: 'Auto Lease Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.6.html', tags: 'car vehicle leasing' },
@@ -609,7 +616,7 @@
             { name: 'Mortgage Calculator UK', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.46.html', tags: 'home loan united kingdom' },
             { name: 'Mortgage Payoff Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.47.html', tags: 'extra payments early payoff' },
             { name: 'Payback Period Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.48.html', tags: 'investment business project' },
-            { name: 'Payment Calculator', category: 'Financial', link: '#https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.49.html', tags: 'loan mortgage apr' },
+            { name: 'Payment Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.49.html', tags: 'loan mortgage apr' },
             { name: 'Pension Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.50.html', tags: 'retirement income savings' },
             { name: 'Percent Off Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.51.html', tags: 'discount sale shopping' },
             { name: 'Personal Loan Calculator', category: 'Financial', link: 'https://github.com/basha1968/The-Ultimate-Free-Calculator-Suite/blob/main/1.52.html', tags: 'unsecured apr payment' },
@@ -728,6 +735,13 @@
             { name: 'Wind Chill Calculator', category: 'Other', link: '#', tags: 'weather temperature' }
         ];
 
+        // --- FIX: Dynamic Calculator Count ---
+        const heroSubtitle = document.getElementById('hero-subtitle');
+        if (heroSubtitle) {
+            heroSubtitle.textContent = `${calculators.length} powerful and easy-to-use tools for finance, math, and everyday life. Find your calculator instantly.`;
+        }
+
+
         function getIcon(name) {
              const n = name.toLowerCase();
             // Financial Icons
@@ -739,7 +753,7 @@
             if (n.includes('credit card')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>`;
             if (n.includes('budget')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 3a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 3V9" /></svg>`;
             if (n.includes('math') || n.includes('basic') || n.includes('mean') || n.includes('average')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7.5l3 4.5m0 0l3-4.5M12 12v5.25M15 12H9m6 3H9m12-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
-            if (n.includes('scientific') || n.includes('root') || n.includes('pythagorean') || n.includes('slope') || n.includes('half-life')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008Zm0 3h.008v.008H8.25v-.008Zm0 3h.008v.008H8.25v-.008Zm3.75 0h.008v.008h-.008v-.008Zm0-3h.008v.008h-.008v-.008Zm0-3h.008v.008h-.008v-.008Zm0-3h.008v.008h-.008v-.008Zm0-3h.008v.008h-.008v-.008Zm-3.75 0h.008v.008H8.25v-.008ZM8.25 9h5.25M15 9h.008v.008H15V9zM3.75 3.75v16.5a2.25 2.25 0 002.25 2.25h13.5a2.25 2.25 0 002.25-2.25V3.75a2.25 2.25 0 00-2.25-2.25H6a2.25 2.25 0 00-2.25 2.25z" /></svg>`;
+            if (n.includes('scientific') || n.includes('root') || n.includes('pythagorean') || n.includes('slope') || n.includes('half-life')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm3.75 0h.008v.008h-.008v-.008zm0-3h.008v.008h-.008v-.008zm0-3h.008v.008h-.008v-.008zm0-3h.008v.008h-.008v-.008zm0-3h.008v.008h-.008v-.008Zm-3.75 0h.008v.008H8.25v-.008ZM8.25 9h5.25M15 9h.008v.008H15V9zM3.75 3.75v16.5a2.25 2.25 0 002.25 2.25h13.5a2.25 2.25 0 002.25-2.25V3.75a2.25 2.25 0 00-2.25-2.25H6a2.25 2.25 0 00-2.25 2.25z" /></svg>`;
             if (n.includes('percent')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14.25l6-6m4.5-3.493V6.75l-3.75 3.75M9 14.25v-3.75h3.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
             if (n.includes('body') || n.includes('bmr') || n.includes('fat') || n.includes('calorie') || n.includes('weight') || n.includes('health') || n.includes('bmi')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" /></svg>`;
             if (n.includes('pregnancy') || n.includes('due date') || n.includes('ovulation') || n.includes('period')) return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" /></svg>`;
@@ -753,17 +767,25 @@
             // Default icon
             return `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm0 3h.008v.008H8.25v-.008zm3.75 0h.008v.008h-.008v-.008zm0-3h.008v.008h-.008v-.008zm0-3h.008v.008h-.008v-.008zm0-3h.008v.008h-.008v-.008zm0-3h.008v.008h-.008v-.008zm-3.75 0h.008v.008H8.25v-.008zm0-3h.008v.008H8.25v-.008zM8.25 9h5.25M8.25 9h5.25M15 9h.008v.008H15V9z" /></svg>`;
         }
-
+        
+        // --- FIX: Updated function to handle working links, disabled links, and open in new tab ---
         function createCalculatorCard(calc) {
+            const isEnabled = calc.link && calc.link.trim() !== '#';
+            // Use a previewer for GitHub HTML files to make them runnable
+            const finalLink = isEnabled ? `https://htmlpreview.github.io/?${calc.link}` : '#';
+            const tag = isEnabled ? 'a' : 'div';
+            // Add target="_blank" to open in a new tab for a better user experience
+            const attrs = isEnabled ? `href="${finalLink}" target="_blank" rel="noopener noreferrer"` : '';
+
             return `
-                <a href="${calc.link}" class="calculator-card">
+                <${tag} ${attrs} class="calculator-card ${!isEnabled ? 'is-disabled' : ''}">
                     <div class="card-icon">
                         ${getIcon(calc.name)}
                     </div>
                     <div class="card-content">
                         <h3 class="card-title">${calc.name}</h3>
                     </div>
-                </a>
+                </${tag}>
             `;
         }
 
@@ -789,43 +811,42 @@
             });
         }
         
-        // Search functionality
+        // --- SEARCH & NAVIGATION LOGIC ---
         const searchInput = document.getElementById('search-input');
         const searchResultsSection = document.getElementById('search-results-section');
         const searchGrid = document.getElementById('search-grid');
         const noResults = document.getElementById('no-results');
         const resultsTitle = document.querySelector('.search-results-title');
         const categorySections = document.querySelectorAll('.tools-section');
+        const mainNavLinks = document.querySelectorAll('.main-nav a, #mobile-menu a');
+
+        // --- FIX: Function to reset the search and show categories ---
+        function resetSearchView() {
+            searchInput.value = '';
+            searchResultsSection.style.display = 'none';
+            noResults.style.display = 'none';
+            categorySections.forEach(section => {
+                section.style.display = 'block';
+            });
+        }
         
         searchInput.addEventListener('input', function() {
             const query = this.value.trim().toLowerCase();
             
             if (query === '') {
-                searchResultsSection.style.display = 'none';
-                categorySections.forEach(section => {
-                    section.style.display = 'block';
-                });
+                resetSearchView();
                 return;
             }
             
-            // Hide category sections
-            categorySections.forEach(section => {
-                section.style.display = 'none';
-            });
-            
-            // Show search results section
+            categorySections.forEach(section => section.style.display = 'none');
             searchResultsSection.style.display = 'block';
             resultsTitle.style.display = 'block';
             
-            // Filter calculators
-            const filteredCalcs = calculators.filter(calc => {
-                return calc.name.toLowerCase().includes(query) || 
-                       calc.tags.toLowerCase().includes(query);
-            });
+            const filteredCalcs = calculators.filter(calc => 
+                calc.name.toLowerCase().includes(query) || calc.tags.toLowerCase().includes(query)
+            );
             
-            // Update search results
             searchGrid.innerHTML = '';
-            
             if (filteredCalcs.length > 0) {
                 noResults.style.display = 'none';
                 filteredCalcs.forEach(calc => {
@@ -835,14 +856,18 @@
                 noResults.style.display = 'block';
             }
         });
+
+        // --- FIX: Add event listener to main navigation to reset the search view ---
+        mainNavLinks.forEach(link => {
+            link.addEventListener('click', resetSearchView);
+        });
         
-        // Theme toggle
+        // --- THEME TOGGLE LOGIC ---
         const themeToggle = document.getElementById('theme-toggle');
         const moonIcon = document.getElementById('moon-icon');
         const sunIcon = document.getElementById('sun-icon');
         const body = document.body;
         
-        // Check for saved theme preference
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'dark') {
             body.classList.add('dark-mode');
@@ -864,7 +889,7 @@
             }
         });
         
-        // Mobile menu toggle
+        // --- MOBILE MENU LOGIC ---
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         const menuOpenIcon = document.getElementById('menu-icon-open');
@@ -872,19 +897,12 @@
         
         mobileMenuBtn.addEventListener('click', function() {
             const isOpen = mobileMenu.style.display === 'block';
-            
-            if (isOpen) {
-                mobileMenu.style.display = 'none';
-                menuOpenIcon.style.display = 'block';
-                menuCloseIcon.style.display = 'none';
-            } else {
-                mobileMenu.style.display = 'block';
-                menuOpenIcon.style.display = 'none';
-                menuCloseIcon.style.display = 'block';
-            }
+            mobileMenu.style.display = isOpen ? 'none' : 'block';
+            menuOpenIcon.style.display = isOpen ? 'block' : 'none';
+            menuCloseIcon.style.display = isOpen ? 'none' : 'block';
         });
         
-        // Close mobile menu when clicking a link
+        // Close mobile menu when a link inside it is clicked
         const mobileLinks = mobileMenu.querySelectorAll('a');
         mobileLinks.forEach(link => {
             link.addEventListener('click', function() {
