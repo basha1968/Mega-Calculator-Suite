@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="google-site-verification" content="fn9-TenK2Zr9NmOlh5yQrL93jAPbTSzdcAq9o4Reb6w" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator Pro | Your Complete Financial & Mathematical Toolkit</title>
     <meta name="description" content="160+ free calculators: finance, math, health & more. Instant, accurate tools for everyday calculations. Your complete solution for quick math.">
@@ -563,7 +564,6 @@
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         // --- DATA ---
-        // FIX: Corrected all broken/inconsistent repository links and fixed syntax errors in the array.
         const calculators = [
             // Financial (72)
             { name: '401K Calculator', category: 'Financial', link: 'https://github.com/basha1968/Mega-Calculator-Suite/blob/main/1.1.html', tags: 'retirement savings investment' },
@@ -769,11 +769,9 @@
         
         function createCalculatorCard(calc) {
             const isEnabled = calc.link && calc.link.trim() !== '#';
-            // FIX: Use a previewer for GitHub HTML files to make them runnable.
-            // This renders the HTML instead of showing the raw code.
+            // Use a previewer for GitHub HTML files to make them runnable and open in a new tab.
             const finalLink = isEnabled ? `https://htmlpreview.github.io/?${calc.link}` : '#';
             const tag = isEnabled ? 'a' : 'div';
-            // FIX: Add target="_blank" to open in a new tab for a better user experience.
             const attrs = isEnabled ? `href="${finalLink}" target="_blank" rel="noopener noreferrer"` : '';
 
             return `
